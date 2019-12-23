@@ -60,7 +60,7 @@ SELECT '商品' AS string, 38 AS number, '2009-02-24' AS date,
         product_id, product_name
 FROM Product;
 ```
-- 这样使用常数时, 新增了`string`, `number`和`date`三个列
+- 这样使用常数时, 临时新增了`string`, `number`和`date`三个列
 - 每个列都全部填满了语句中的常数
 
 
@@ -163,7 +163,7 @@ FROM Product
 WHERE regist_date < '2009-09-27';
 ```
 
-连续对比不能连用
+连续对比不能连用, 而是要使用`END`
 ```
 '2009-09-01' < regist_date < '2009-09-20';  -- WRONG
 regist_date < '2009-09-20' AND regist_date > '2009-09-01'; -- RIGHT
