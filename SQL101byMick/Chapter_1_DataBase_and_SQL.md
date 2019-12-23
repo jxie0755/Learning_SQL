@@ -231,7 +231,7 @@ DROP TABLE <表名>;
 
 **表定义的更新使用`ALTER`**
 
-添加Column:
+添加Column使用`ADD COLUMN`:
 ```sql
 ALTER TABLE <表名> ADD COLUMN <列的定义>
 ```
@@ -241,7 +241,7 @@ ALTER TABLE <表名> ADD COLUMN <列的定义>
 ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100) NOT NULL;
 ```
 
-删除Column:
+删除Column使用`DROP COLUMN`:
 ```sql
 ALTER TABLE <表名> DROP COLUMN <列名>;
 ```
@@ -251,13 +251,13 @@ ALTER TABLE <表名> DROP COLUMN <列名>;
 ALTER TABLE product DROP COLUMN product_name_pinyin;
 ```
 
-改Table名:
+改Table名使用`RENAME`:
 ```sql
 ALTER TABLE <表名>
   RENAME TO <新表名>;
 ```
 
-改Column名:
+改Column名使用`RENAME`:
 ```sql
 ALTER TABLE <表名>
   RENAME COLUMN <列名> TO <新列名>;
@@ -280,6 +280,8 @@ BEGIN TRANSACTION;
 ```sql
 INSERT INTO <表名> VALUES (<列1数据>, <列2数据>, <列3数据>, ...)
 ```
+**注意: 对于没有定义Not Null的列， 可以使用`NULL`来占位**
+
 
 最后使用`COMMIT`, 目的是提交, 使得其他用户能看到变化
 ```sql
@@ -300,4 +302,3 @@ INSERT INTO Product VALUES ('0007', '擦菜板', '厨房用具', 880, 790, '2008
 INSERT INTO Product VALUES ('0008', '圆珠笔', '办公用品', 100, NULL, '2009-11-11');
 COMMIT ;
 ```
-
