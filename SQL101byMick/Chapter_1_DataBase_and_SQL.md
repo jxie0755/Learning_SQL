@@ -131,7 +131,7 @@ CREATE DATABASE shop;
 注意:
 - postsql没有`USE`命令,不能在sql中切换databse
 
-[How to indicate in postgreSQL command in which database to execute a script? (simmilar to SQL Server “use” command)](https://stackoverflow.com/a/3909992/8435726)
+[How to indicate in postgreSQL command in which database to execute a script? (similar to SQL Server “use” command)](https://stackoverflow.com/a/3909992/8435726)
 > PostgreSQL doesn't have the USE command. You would most likely use psql with the --dbname option to accomplish this, --dbname takes the database name as a parameter.
 
 [How to switch databases in postgres?](https://stackoverflow.com/a/43670984/8435726)
