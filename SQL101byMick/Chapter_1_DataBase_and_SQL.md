@@ -106,7 +106,8 @@ CREATE DATABASE shop;
 ```
 
 
-**注意不同RDBMS中对于`DATABASE`和`SCHEMA`的区别对待方式:**
+注意:
+- 不同RDBMS中对于`DATABASE`和`SCHEMA`的区别对待方式:
 
     MySQL和PostgresSQL数据库结构略有不同:
     - MySQL/Schemas/Table
@@ -127,7 +128,8 @@ CREATE DATABASE shop;
 
 
 
-**注意: postsql没有`USE`命令,不能在sql中切换databse**
+注意:
+- postsql没有`USE`命令,不能在sql中切换databse
 
 [How to indicate in postgreSQL command in which database to execute a script? (simmilar to SQL Server “use” command)](https://stackoverflow.com/a/3909992/8435726)
 > PostgreSQL doesn't have the USE command. You would most likely use psql with the --dbname option to accomplish this, --dbname takes the database name as a parameter.
@@ -136,8 +138,8 @@ CREATE DATABASE shop;
 > Technically PostgreSQL can't switch databases. You must disconnect and reconnect to the new DB.
 
 
-**注意: 设定`DATABASE`中的schemas**
-```sql
+#### 设定`DATABASE`中的schemas ####
+```
 set search_path = "public" -- 默认设为public
 ```
 
@@ -162,7 +164,7 @@ CREATE TABLE  <表名> (
 <该表的约束 1>，<该表的约束 2>，...）；
 ```
 
-**约束可以在定义列的时 候进行设置，也可以在语句的末尾进行设置**
+- 约束可以在定义列的时 候进行设置，也可以在语句的末尾进行设置
 
 实际样本:
 ```
@@ -221,7 +223,7 @@ CREATE TABLE Product
 ---
 ### 表的更新和删除 ###
 
-**删除Table用`DROP`**
+删除Table用`DROP`
 ```sql
 DROP TABLE <表名>;
 ```
@@ -229,9 +231,7 @@ DROP TABLE <表名>;
 - 执行前务必确认!
 
 
-**表定义的更新使用`ALTER`**
-
-添加Column使用`ADD COLUMN`:
+表定义的更新使用`ALTER`, 添加Column使用`ADD COLUMN`:
 ```sql
 ALTER TABLE <表名> ADD COLUMN <列的定义>
 ```
@@ -271,7 +271,9 @@ ALTER TABLE <表名>
 ```sql
 BEGIN TRANSACTION;
 ```
-**注意: 如果不写,则每条都是单独的`BEGIN TRANSACTION`**
+
+注意:
+- 如果不写,则每条都是单独的`BEGIN TRANSACTION`
 - 如果中间有一条数据出错, 那之前的都被写进去了
 - 如果使用`BEGIN TRANSACTION`, 则只要有一个地方出错, 整块都不会被输入
     - 这样就便于管理和避免混乱
@@ -280,14 +282,18 @@ BEGIN TRANSACTION;
 ```sql
 INSERT INTO <表名> VALUES (<列1数据>, <列2数据>, <列3数据>, ...)
 ```
-**注意: 对于没有定义Not Null的列， 可以使用`NULL`来占位**
+
+注意: 
+- 对于没有定义Not Null的列， 可以使用`NULL`来占位
 
 
 最后使用`COMMIT`, 目的是提交, 使得其他用户能看到变化
 ```sql
 COMMIT;
 ```
-**注意: 不`COMMIT`本用户能看到变化, 但是其他用户看不到**
+
+注意:
+- 不`COMMIT`本用户能看到变化, 但是其他用户看不到
 
 实例
 ```

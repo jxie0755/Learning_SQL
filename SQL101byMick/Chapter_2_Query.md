@@ -37,7 +37,7 @@ FROM <表名>
 - 使用`*`就没没法设定顺序? 此时按照`CREATE TABLE`语句排序
 
 
-**注意:**
+注意:
 - SQL可以随意使用换行
 - 但是不要插入空行
 
@@ -48,6 +48,7 @@ SELECT product_id     AS id,
        purchase_price AS "进货价格"
 FROM Product;
 ```
+注意:
 - 这样在显示出来的table中,列名就被换成了别名
 - 使用中文时注意使用双引号`"中文"`
     - Jetbrains的IDE貌似不需要
@@ -163,13 +164,15 @@ FROM Product
 WHERE regist_date < '2009-09-27';
 ```
 
-连续对比不能连用, 而是要使用`END`
+- 连续对比不能连用, 而是要使用`END`
 ```
 '2009-09-01' < regist_date < '2009-09-20';  -- WRONG
 regist_date < '2009-09-20' AND regist_date > '2009-09-01'; -- RIGHT
 ```
 
-**注意: 对字符串使用不等号**
+注意: 
+- 对字符串使用不等号
+
 ```
 SELECT chr
 FROM Chars 
@@ -179,7 +182,9 @@ WHERE chr > '2';
 -- 因为字符按字典顺序排列: 1, 10, 11, 2, 222, 3
 ```
 
-**注意: `NULL`不能被比较**
+注意: 
+- `NULL`不能被比较
+
 ```
 SELECT product_name, purchase_price
 FROM Product
