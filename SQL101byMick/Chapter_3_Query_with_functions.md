@@ -81,3 +81,25 @@ FROM Product;
 ---
 ### 3-2 对表进行分组 ###
 
+#### 使用`GROUP BY`语句进行汇总 ####
+
+GROUP BY语法:
+```
+SELECT <列名1>, <列名2>, <列名3>...
+FROM <表名>
+GROUP BY <列名1>, <列名2>, <列名3>...;
+```
+
+实例: 按照商品种类统计数据行数
+```
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type;
+```
+解释:
+- 这里提取`product_type`的数据列, 然后统计数目
+- 前提是必须按照`product_type`分组才能统计, 不然的话会报错, 因为`Count(*)`无法执行.
+- 因为是`Count(*) GROUP BY` Something.
+
+
+
