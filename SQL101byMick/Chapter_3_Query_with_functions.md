@@ -101,3 +101,4 @@ GROUP BY product_type;
 - 前提是必须按照`product_type`分组才能统计, 不然的话会报错, 因为`Count(*)`无法执行.
 - 因为是`Count(*) GROUP BY` Something.
 
+
