@@ -64,8 +64,10 @@ FROM Product;
 ```
 SELECT COUNT(DISTINCT product_type)
 FROM Product;
->>> 3  -- 也就是说有三种product type的类型: 衣服, 办公用品, 厨房用具
+>>> 3
 ```
+
+- 也就是说有三种`product_type`的类型: 衣服, 办公用品, 厨房用具
 
 注意:
 - 如果这一列全是`NULL`, 那么返回的`MAX`,`MIN`,`AVG`也是`NULL`
