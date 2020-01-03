@@ -76,9 +76,12 @@ FROM Product;
 ```
 SELECT DISTINCT COUNT(product_type)
 FROM Product;
->>> 8, 因为这里面对整列进行统计, 所以得到的是8条完全不同的, 除非有两行完全相同
-  # 但在这张table里不可能 因为product_id是Primary Key主键约束导致不能重复
+>>> 8
 ```
+
+- 因为这里面对整列进行统计, 所以得到的是8条完全不同的, 除非有两行完全相同
+- 但在这张table里不可能 因为`product_id`是Primary Key主键约束导致不能重复
+
 
 ---
 ### 3-2 对表进行分组 ###
@@ -204,8 +207,8 @@ GROUP BY product_type;
 - 对多列使用时也会得到完全相同的结果
 - 执行速度也基本上差不多 
 
-但其实这个问题本身就是本末倒置的，我们应该考虑的是该 SELECT 语是否满足需求
+但其实这个问题本身就是本末倒置的，我们应该考虑的是该 `SELECT` 语是否满足需求
 - **想要删除选择结果中的重复记录** 使用`DISTINCT`
 - **想要计算汇总结果** 使用`GROUP BY`
-- 不使用`COUNT`等聚合函数，而只使用`GROUP BY`子句的SELECT语句, 容易产生疑问: 为什么要分组呢?
+- 不使用`COUNT`等聚合函数，而只使用`GROUP BY`子句的`SELECT`语句, 容易产生疑问: 为什么要分组呢?
 
