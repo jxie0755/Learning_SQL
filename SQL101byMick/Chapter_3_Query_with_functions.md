@@ -47,7 +47,7 @@ FROM Product;
 
 注意: 
 - 包含`NULL`也可以计算,直接忽略,平均时也不计入被除总数目N
-- 可以强行把NULL包含进去作为分母的一部分,见Chapter 6
+- 可以强行把`NULL`包含进去作为分母的一部分,见Chapter 6
 
 #### 计算最大值和最小值 ####
 
@@ -69,7 +69,7 @@ FROM Product;
 
 注意:
 - 如果这一列全是`NULL`, 那么返回的`MAX`,`MIN`,`AVG`也是`NULL`
-- 这里得先对product type去重再统计行数, 如果不这么做:
+- 这里得先对`product_type`去重再统计行数, 如果不这么做:
 
 ```
 SELECT DISTINCT COUNT(product_type)
@@ -119,8 +119,8 @@ GROUP BY purchase_price;
 ```
 
 注意:
-- 这里NULL也会作为一个Item被统计, 出现了2次
-- NULL作为条目可能展示为空白
+- 这里`NULL`也会作为一个Item被统计, 出现了2次
+- `NULL`作为条目可能展示为空白
 
 
 #### 使用`WHERE` + `GROUP BY` ####
@@ -144,7 +144,7 @@ GROUP BY purchase_price;
 - `GROUP BY`子句指定的列名(聚合键) (可多选)
 
 
-错误1: 把聚合键之外的列名书写在 SELECT 子句之中
+错误1: 把聚合键之外的列名书写在 `SELECT` 子句之中
 ```
 SELECT product_name, purchase_price, COUNT(*)  
 FROM Product
@@ -198,7 +198,7 @@ FROM Product
 GROUP BY product_type;
 ```
 
-- 都会把 NULL 作为一个独立的结果返回
+- 都会把 `NULL` 作为一个独立的结果返回
 - 对多列使用时也会得到完全相同的结果
 - 执行速度也基本上差不多 
 
