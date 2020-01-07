@@ -23,6 +23,7 @@ FROM Product;
 - `COUNT(*)`统计所有行数
 - `COUNT(<列名>)`统计该列非空行的行数
 
+
 #### 计算合计值 ####
  
 实例: 计算SUM
@@ -81,6 +82,24 @@ FROM Product;
 
 - 因为这里面对整列进行统计, 所以得到的是8条完全不同的, 除非有两行完全相同
 - 但在这张table里不可能 因为`product_id`是Primary Key主键约束导致不能重复
+
+
+额外例子:如果没有primary key作为区分, 则可以合并那些完全相同的行
+```
+SELECT DISTINCT *
+FROM Product_x;
+```
+- 这样只会显示12行, 因为打孔器有很多完全重复的行
+
+如何统计有多少行呢? 使用复合用法:
+```
+SELECT Count(*)
+FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
+>>> 12
+```
+
+注意:
+- 这里必须使用alias对新生成的Table取名
 
 
 ---
@@ -146,7 +165,7 @@ GROUP BY purchase_price;
 的限制:
 - 常数
 - 聚合函数
-- `GROUP BY`子句指定的列名(聚合键) (可多选)
+- `GROUP BY`子句指定的列名(聚合键)(可多选)
 
 
 错误1: 把聚合键之外的列名书写在 `SELECT` 子句之中
@@ -210,9 +229,107 @@ GROUP BY product_type;
 但其实这个问题本身就是本末倒置的，我们应该考虑的是该 `SELECT` 语是否满足需求
 - **想要删除选择结果中的重复记录** 使用`DISTINCT`
 - **想要计算汇总结果** 使用`GROUP BY`
-- 不使用`COUNT`等聚合函数，而只使用`GROUP BY`子句的`SELECT`语句, 容易产生疑问: 为什么要分组呢?
+- 不使用`COUNT`等聚合函数, 而只使用`GROUP BY`子句的`SELECT`语句, 容易产生疑问: 为什么要分组呢?
 
 ---
 ### 3-3 为聚合结果指定条件 ###
 
+#### HAVING子句 ####
+
+使用`GROUP BY`分组后, 如何能够单独提取特定的组呢? 使用`HAVING`就可以实现
+
+
+`HAVING`语法:
+```
+SELECT <列名1>, <列名2>, <列名3>, ……
+FROM <表名>
+GROUP BY <列名1>, <列名2>, <列名3>, ……
+HAVING <分组结果对应的条件>
+```
+
+注意:
+- `HAVING` 子句**必须**写在 `GROUP BY` 子句之后, 其在 DBMS 内部的
+执行顺序也排在 `GROUP BY` 子句之后
+
+
+实例: 从按照商品种类进行分组后的结果中, 取出“包含的数据行数为2
+行”的组
+```
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type
+HAVING COUNT(*) = 2;
+```
+
+实例:使用`HAVING`子句设定条件的情况
+```
+SELECT product_type, AVG(sale_price)
+FROM Product
+GROUP BY product_type
+HAVING AVG(sale_price) >= 2500;
+```
+
+解释:
+- 首先把table按照`product type`分组
+- 然后对每个组的`sale_price`进行平均数计算
+- 最后只显示平均售价超过2500的`product_type`行
+- 不能用`WHERE`应为它是用于对`FROM`的过滤, 在分组之前
+- `HAVING`则是在分组之后的额外过滤手段
+
+实例:销售单价的平均值大于等于2500日元
+```
+
+```
+
+额外例子: 统计每种类型的产品有几种价位(`Product_x`)
+```
+SELECT product_type, AVG(sale_price)
+FROM Product
+GROUP BY product_type
+HAVING AVG(sale_price) >= 2500;
+```
+
+-此表中, 每种类型的产品有重叠价位, 所以必须要使用**`DISTINCT`**加以区分
+
+
+#### HAVING 子句的构成要素 ####
+
+`HAVING`子句中能够使用的3种要素如下所示:
+- 常数
+- 聚合函数
+- `GROUP BY`子句中指定的列名(即聚合键)
+
+常见错误:
+
+错误1: 
+```
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type
+HAVING product_name = '圆珠笔';
+```
+
+- 此处`product_name`没有包含在`GROUP BY`中, 也不是一个聚合函数
+
+
+#### 相对于HAVING子句, 更适合写在WHERE子句中的条件 ####
+
+两组代码得到相同结果:
+```
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type
+HAVING product_type = '衣服';
+```
+
+```
+SELECT product_type, COUNT(*)
+FROM Product
+WHERE product_type = '衣服'
+GROUP BY product_type;
+```
+
+聚合键所对应的条件还是应该书写在 WHERE 子句之中:
+1. 根本原因是 `WHERE` 子句和 `HAVING` 子句的作用不同(个人不认同, 因为要提取衣服的数目, 必须要按类型分组, 再对组进行筛选提取数据更符合逻辑. 不然的话, 筛选行就已经限定类型必须是衣服了, 然后又根据衣服类型来分组是什么意思呢?)
+2. `WHERE`和`HAVING`的执行速度有区别(不深入介绍)
 
