@@ -341,4 +341,20 @@ GROUP BY product_type;
 
 #### ORDER BY 子句 ####
 
+一般的`SELECT`语句显示出来的结果排序是随机的(就算偶尔显示的时候似乎像是排过序)
+在`SELECT`语句末尾添加`ORDER BY`就可以使得显示时强制排序
+
+`ORDER BY`基本语法:
+```
+SELECT < 列名 1>, < 列名 2>, < 列名 3>, ……
+FROM < 表名 >
+ORDER BY < 排序基准列 1>, < 排序基准列 2>, ……
+```
+
+- 至此, 子句书写顺序变成:
+`SELECT` → `FROM` → `WHERE` → `GROUP BY` → `HAVING` → `ORDER BY`
+- 多个排序键则依主次顺序, 先确保按照主列排序, 然后在主列同数值范围内按次列排序
+
+
+
 
