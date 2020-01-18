@@ -397,6 +397,8 @@ ORDER BY sale_price, product_id;
 #### 在排序中使用显示用的别名 ####
 
 与`GROUP BY`不得使用别名不同, `ORDER BY`是允许使用别名的
+- 一定要记住 `SELECT` 子 句的执行顺序在 `GROUP BY` 子句之后， `ORDER BY` 子句之前
+    - 因此, `GROUP BY`在执行时不理解别名, 因为`SELECT`还没有被执行
 
 实例:
 ```
@@ -404,3 +406,4 @@ SELECT product_id AS id, product_name, sale_price AS sp, purchase_price
 FROM Product 
 ORDER BY sp, id;
 ```
+
