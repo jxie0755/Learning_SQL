@@ -351,10 +351,56 @@ FROM < 表名 >
 ORDER BY < 排序基准列 1>, < 排序基准列 2>, ……
 ```
 
+实例: 按照销售单价由低到高（升序）进行排列
+```
+SELECT product_id, product_name, sale_price, purchase_price 
+FROM Product 
+ORDER BY sale_price;
+```
+
 - 至此, 子句书写顺序变成:
 `SELECT` → `FROM` → `WHERE` → `GROUP BY` → `HAVING` → `ORDER BY`
-- 多个排序键则依主次顺序, 先确保按照主列排序, 然后在主列同数值范围内按次列排序
 
 #### 指定升序或降序 ####
 
 默认为升序排列, 如果需要降序则需要使用`DESC`关键字
+
+实例: 按照销售单价由高到低（降序）进行排列 (与上一例排序相反)
+```
+SELECT product_id, product_name, sale_price, purchase_price 
+FROM Product 
+ORDER BY sale_price DESC;
+```
+
+
+#### 指定多个排序 ####
+
+- 多个排序键则依主次顺序, 先确保按照主列排序, 然后在主列同数值范围内按次列排序
+- 规则是优先使用左侧的键，如果该列存在相同值的话，再接着参考右侧的键
+
+实例: 
+```
+SELECT product_id, product_name, sale_price, purchase_price 
+FROM Product 
+ORDER BY sale_price, product_id;
+```
+
+#### NULL的顺序 ####
+
+**首先要明确不能对`NULL`使用比较符**
+- 不能对`NULL`和数字进行排列
+- 也不能对`NULL`和字符串和日期比较大小
+- NULL会在结果的开头或结尾显示
+    - 按照不同的SQL语言可能有所不同
+        - pSQL中`NULL`会被排在最后
+        
+#### 在排序中使用显示用的别名 ####
+
+与`GROUP BY`不得使用别名不同, `ORDER BY`是允许使用别名的
+
+实例:
+```
+SELECT product_id AS id, product_name, sale_price AS sp, purchase_price 
+FROM Product 
+ORDER BY sp, id;
+```
