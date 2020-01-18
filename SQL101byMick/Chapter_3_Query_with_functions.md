@@ -43,7 +43,7 @@ FROM product;
 SELECT AVG(sale_price), AVG(purchase_price)
 FROM Product;
 >>> 2097.5  2035
-# 这里sale price是除以8, 而purchase_price中有两条是NULL, 所以只除以6
+-- 这里sale price是除以8, 而purchase_price中有两条是NULL, 所以只除以6
 ```
 
 注意: 
@@ -407,3 +407,49 @@ FROM Product
 ORDER BY sp, id;
 ```
 
+#### ORDER BY子句中可以使用的列 ####
+
+由于相同的原因, `ORDER BY`中可以使用的列也不受`SELECT`限制
+- `ORDER BY`可以使用`SELECT`中没有包含的列
+- `ORDER BY`也还可以使用聚合函数
+
+实例: `SELECT` 子句中未包含的列也可以在 `ORDER BY` 子句中使用
+```
+SELECT product_name, sale_price, purchase_price 
+FROM Product 
+ORDER BY product_id;
+```
+
+实例: `ORDER BY` 子句中也可以使用聚合函数
+```
+SELECT product_type, COUNT(*) 
+FROM Product 
+GROUP BY product_type 
+ORDER BY COUNT(*);
+```
+
+#### 不要使用列编号 ####
+
+列编号
+- SELECT 子句中的列按照从左到 右的顺序进行排列时所对应的编号（1, 2, 3, ...)
+
+
+虽然列编号使用起来非常方便，但我们并不推荐使用，原因有以下两点:
+1. 代码阅读起来比较难
+2. 这也是最根本的问题，实际上，在 SQL-92 A中已经明确指出该排序功能将来会被删除, 随着 DBMS 的版本升级，可能原本能够正常执行的 SQL 突然就会出错
+
+
+实例: 不使用列编号
+```
+SELECT product_id, product_name, sale_price, purchase_price 
+FROM Product 
+ORDER BY sale_price DESC, product_id;
+```
+
+实例: 使用列编号
+```
+SELECT product_id, product_name, sale_price, purchase_price 
+--          1           2            3            4 
+FROM Product 
+ORDER BY 3 DESC, 1;
+```
