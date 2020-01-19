@@ -118,8 +118,8 @@ GROUP BY <列名1>, <列名2>, <列名3>...;
 ```
 
 子句的顺序（暂定）: 
-- 书写顺序: `SELECT` → `FROM` → `WHERE` → `GROUP BY`
-- 执行顺序: `FROM` → `WHERE` → `GROUP BY` → `SELECT`
+- 书写顺序: `SELECT` -> `FROM` -> `WHERE` -> `GROUP BY`
+- 执行顺序: `FROM` -> `WHERE` -> `GROUP BY` -> `SELECT`
 
 实例: 按照商品种类统计数据行数
 ```
@@ -358,8 +358,11 @@ FROM Product
 ORDER BY sale_price;
 ```
 
-- 至此, 子句书写顺序变成:
-`SELECT` → `FROM` → `WHERE` → `GROUP BY` → `HAVING` → `ORDER BY`
+至此:
+- 子句书写顺序
+`SELECT` -> `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `ORDER BY`
+- 真实执行顺序
+`FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `SELECT` -> `ORDER BY`
 
 #### 指定升序或降序 ####
 
