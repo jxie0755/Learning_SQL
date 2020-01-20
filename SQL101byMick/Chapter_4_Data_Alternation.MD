@@ -14,7 +14,33 @@
 ---
 ### 4-1 数据的插入 ###
 
+首先创建一个空表ProductIns用于试验:
+```
+CREATE TABLE ProductIns
+(product_id      CHAR(4)      NOT NULL,
+ product_name    VARCHAR(100) NOT NULL,
+ product_type    VARCHAR(32)  NOT NULL,
+ sale_price      INTEGER      DEFAULT 0,
+ purchase_price  INTEGER,
+ regist_date     DATE,
+ PRIMARY KEY (product_id));
+```
 
+#### INSERT语句基本语法 ####
+```
+INSERT INTO <表名> (列1, 列2, 列3 , ...) VALUES (值1, 值2, 值3, ...);
+```
+
+实例: 插入一条数据
+```
+INSERT INTO ProductIns
+    (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
+VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
+```
+
+- 将列名和值用逗号隔开，分别括在`()`内，这种形式称为清单
+- 其中列与值得顺序必须对应起来
+    - 如果没有值, 且没有规定为`NOT NULL`则需要用`null`来填补空缺
 
 
 
