@@ -172,9 +172,9 @@ CREATE TABLE Product
 (product_id      CHAR(4)      NOT NULL,
  product_name    VARCHAR(100) NOT NULL,
  product_type    VARCHAR(32)  NOT NULL,
- sale_price      INTEGER ,
- purchase_price  INTEGER ,
- regist_date     DATE ,
+ sale_price      INTEGER,
+ purchase_price  INTEGER,
+ regist_date     DATE,
  PRIMARY KEY (product_id));
 ```
 
@@ -204,6 +204,7 @@ CREATE TABLE Product
 
 - `VARCHAR`
     - 可变字符
+    - 指定最大长度
         - 不到最大长度不会使用半角空格补足
 
 - `DATE`
