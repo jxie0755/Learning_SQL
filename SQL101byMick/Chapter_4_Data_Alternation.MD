@@ -41,6 +41,32 @@ VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 - 将列名和值用逗号隔开，分别括在`()`内，这种形式称为清单
 - 其中列与值得顺序必须对应起来
     - 如果没有值, 且没有规定为`NOT NULL`则需要用`null`来填补空缺
+- 原则上, 执行一次`INSERT`语句则会插入一行数据
+
+
+#### 列清单的省略 ####
+
+对表进行全列 INSERT 时，可以省略表名后的列清单:
+```
+INSERT INTO ProductIns 
+VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
+```
+
+**注意, 这里列的顺序, 取决于创建列表时的顺序, 数据库软件可以修改列表的中列的显示顺序, 但是这个顺序可能未必是真实顺序, 但是使用清单式就不会出现这样的问题**
+
+引申:
+如果创建一个`TABLE`后, 再想添加列或者改变列的顺序, 是无法直接实现的. 可行的方法有:
+
+> https://stackoverflow.com/a/23837910/8435726
+> 1. You can do it by creating a new table, copy all the data over, drop the old table, then renaming the new one to replace the old one
+> 2. You could also add new columns to the table, copy the column by column data over, drop the old columns, then rename new columns to match the old ones
+
+
+#### 插入NULL ####
+
+`INSERT`语句中想给某一列赋予`NULL`值时，可以直接在`VALUES`子句的值清单中写入`NULL`
+- 想要插入`NULL`的列一定不能设置`NOT NULL`约束
+
 
 
 
