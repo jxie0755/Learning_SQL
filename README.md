@@ -1,5 +1,5 @@
 # Learning_SQL #
 
-学习笔记
+Study Notes
 SQL基础教程, 2nd Edition
 by Mick
