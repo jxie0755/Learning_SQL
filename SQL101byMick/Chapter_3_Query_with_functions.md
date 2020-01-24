@@ -2,9 +2,9 @@
 ## Chapter 3 聚合与查询 ##
 
 学习重点:
-- 使用聚合函数对表中的列进行计算合计值或者平均值等的汇总操作. 
+- 使用聚合函数对表中的列进行计算合计值或者平均值等的汇总操作.
 - 通常，聚合函数会对`NULL`以外的对象进行汇总.
-- 但是只有`COUNT`函数例外, 使用`COUNT(*)`可以查出包含NULL在内的全部数据的行数. 
+- 但是只有`COUNT`函数例外, 使用`COUNT(*)`可以查出包含NULL在内的全部数据的行数.
 - 使用`DISTINCT`关键字删除重复值.
 
 
@@ -32,7 +32,7 @@ FROM Product;
 
 
 #### 计算合计值 ####
- 
+
 实例: 计算SUM
 ```
 SELECT SUM(sale_price), SUM(purchase_price)
@@ -40,7 +40,7 @@ FROM product;
 >>> 16780   12210
 ```
 
-注意: 
+注意:
 - 包含`NULL`也可以计算,直接忽略(不是等于0)
 
 #### 计算平均值 ####
@@ -53,7 +53,7 @@ FROM Product;
 -- 这里sale price是除以8, 而purchase_price中有两条是NULL, 所以只除以6
 ```
 
-注意: 
+注意:
 - 包含`NULL`也可以计算,直接忽略,平均时也不计入被除总数目N
 - 可以强行把`NULL`包含进去作为分母的一部分,见Chapter 6
 
@@ -124,7 +124,7 @@ WHERE
 GROUP BY <列名1>, <列名2>, <列名3>...;
 ```
 
-子句的顺序（暂定）: 
+子句的顺序（暂定）:
 - 书写顺序: `SELECT` -> `FROM` -> `WHERE` -> `GROUP BY`
 - 执行顺序: `FROM` -> `WHERE` -> `GROUP BY` -> `SELECT`
 
@@ -177,7 +177,7 @@ GROUP BY purchase_price;
 
 错误1: 把聚合键之外的列名书写在 `SELECT` 子句之中
 ```
-SELECT product_name, purchase_price, COUNT(*)  
+SELECT product_name, purchase_price, COUNT(*)
 FROM Product
 GROUP BY purchase_price;
 ```
@@ -231,7 +231,7 @@ GROUP BY product_type;
 
 - 都会把 `NULL` 作为一个独立的结果返回
 - 对多列使用时也会得到完全相同的结果
-- 执行速度也基本上差不多 
+- 执行速度也基本上差不多
 
 但其实这个问题本身就是本末倒置的，我们应该考虑的是该 `SELECT` 语是否满足需求
 - **想要删除选择结果中的重复记录** 使用`DISTINCT`
@@ -308,7 +308,7 @@ HAVING AVG(sale_price) >= 2500;
 
 常见错误:
 
-错误1: 
+错误1:
 ```
 SELECT product_type, COUNT(*)
 FROM Product
@@ -339,7 +339,7 @@ GROUP BY product_type;
 聚合键所对应的条件还是应该书写在 WHERE 子句之中:
 1. 根本原因是 `WHERE` 子句和 `HAVING` 子句的作用不同(个人不认同, 因为要提取衣服的数目, 必须要按类型分组, 再对组进行筛选提取数据更符合逻辑. 不然的话, 筛选行就已经限定类型必须是衣服了, 然后又根据衣服类型来分组是什么意思呢?)
 2. `WHERE`和`HAVING`的执行速度有区别
-    
+
     - 聚合函数可能需要对整个数据进行排序
     - 先使用WHERE可以减少参与排序的数据总量
 
@@ -360,8 +360,8 @@ ORDER BY < 排序基准列 1>, < 排序基准列 2>, ……
 
 实例: 按照销售单价由低到高（升序）进行排列
 ```
-SELECT product_id, product_name, sale_price, purchase_price 
-FROM Product 
+SELECT product_id, product_name, sale_price, purchase_price
+FROM Product
 ORDER BY sale_price;
 ```
 
@@ -377,8 +377,8 @@ ORDER BY sale_price;
 
 实例: 按照销售单价由高到低（降序）进行排列 (与上一例排序相反)
 ```
-SELECT product_id, product_name, sale_price, purchase_price 
-FROM Product 
+SELECT product_id, product_name, sale_price, purchase_price
+FROM Product
 ORDER BY sale_price DESC;
 ```
 
@@ -388,10 +388,10 @@ ORDER BY sale_price DESC;
 - 多个排序键则依主次顺序, 先确保按照主列排序, 然后在主列同数值范围内按次列排序
 - 规则是优先使用左侧的键，如果该列存在相同值的话，再接着参考右侧的键
 
-实例: 
+实例:
 ```
-SELECT product_id, product_name, sale_price, purchase_price 
-FROM Product 
+SELECT product_id, product_name, sale_price, purchase_price
+FROM Product
 ORDER BY sale_price, product_id;
 ```
 
@@ -403,7 +403,7 @@ ORDER BY sale_price, product_id;
 - NULL会在结果的开头或结尾显示
     - 按照不同的SQL语言可能有所不同
         - pSQL中`NULL`会被排在最后
-        
+
 #### 在排序中使用显示用的别名 ####
 
 与`GROUP BY`不得使用别名不同, `ORDER BY`是允许使用别名的
@@ -412,8 +412,8 @@ ORDER BY sale_price, product_id;
 
 实例:
 ```
-SELECT product_id AS id, product_name, sale_price AS sp, purchase_price 
-FROM Product 
+SELECT product_id AS id, product_name, sale_price AS sp, purchase_price
+FROM Product
 ORDER BY sp, id;
 ```
 
@@ -425,16 +425,16 @@ ORDER BY sp, id;
 
 实例: `SELECT` 子句中未包含的列也可以在 `ORDER BY` 子句中使用
 ```
-SELECT product_name, sale_price, purchase_price 
-FROM Product 
+SELECT product_name, sale_price, purchase_price
+FROM Product
 ORDER BY product_id;
 ```
 
 实例: `ORDER BY` 子句中也可以使用聚合函数
 ```
-SELECT product_type, COUNT(*) 
-FROM Product 
-GROUP BY product_type 
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type
 ORDER BY COUNT(*);
 ```
 
@@ -451,15 +451,15 @@ ORDER BY COUNT(*);
 
 实例: 不使用列编号
 ```
-SELECT product_id, product_name, sale_price, purchase_price 
-FROM Product 
+SELECT product_id, product_name, sale_price, purchase_price
+FROM Product
 ORDER BY sale_price DESC, product_id;
 ```
 
 实例: 使用列编号
 ```
-SELECT product_id, product_name, sale_price, purchase_price 
---          1           2            3            4 
-FROM Product 
+SELECT product_id, product_name, sale_price, purchase_price
+--          1           2            3            4
+FROM Product
 ORDER BY 3 DESC, 1;
 ```
