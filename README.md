@@ -1,8 +1,9 @@
 # Learning_SQL #
 
-Study Notes
+## Study Notes ##
 
-SQL基础教程, 2nd Edition
+<SQL基础教程, 2nd Edition>
+
 by Mick
 
 [Buy Book](https://www.ituring.com.cn/book/1880 "图灵社区")
