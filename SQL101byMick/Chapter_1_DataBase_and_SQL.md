@@ -237,7 +237,7 @@ DROP TABLE <表名>;
 ALTER TABLE <表名> ADD COLUMN <列的定义>
 ```
 
-例如
+实例:
 ```
 ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100) NOT NULL;
 ```
@@ -247,7 +247,7 @@ ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100) NOT NULL;
 ALTER TABLE <表名> DROP COLUMN <列名>;
 ```
 
-例如
+实例:
 ```
 ALTER TABLE product DROP COLUMN product_name_pinyin;
 ```
@@ -282,19 +282,15 @@ BEGIN TRANSACTION;
 随后使用
 ```sql
 INSERT INTO <表名> VALUES (<列1数据>, <列2数据>, <列3数据>, ...)
-```
-
-注意: 
-- 对于没有定义Not Null的列， 可以使用`NULL`来占位
+``` 
+>- 对于没有定义Not Null的列， 可以使用`NULL`来占位
 
 
 最后使用`COMMIT`, 目的是提交, 使得其他用户能看到变化
 ```sql
 COMMIT;
 ```
-
-注意:
-- 不`COMMIT`本用户能看到变化, 但是其他用户看不到
+>- 不`COMMIT`本用户能看到变化, 但是其他用户看不到
 
 实例
 ```

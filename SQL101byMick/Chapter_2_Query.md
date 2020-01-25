@@ -32,9 +32,9 @@ FROM <表名>;
 SELECT product_id, product_name, purchase_price
     FROM Product;
 ```
-- 用逗号`,`分隔多列
-- 列的顺序和`SELECT`子句中顺序相同(不一定,但可以额外设置)
-- 列中的数据没有固定的顺序
+>- 用逗号`,`分隔多列
+>- 列的顺序和`SELECT`子句中顺序相同(不一定,但可以额外设置)
+>- 列中的数据没有固定的顺序
 
 #### 查询所有列 ####
 
@@ -42,8 +42,8 @@ SELECT product_id, product_name, purchase_price
 SELECT *
 FROM <表名>
 ```
-- `*`号代表所有
-- 使用`*`就没没法设定顺序? 此时按照`CREATE TABLE`语句排序
+>- `*`号代表所有
+>- 使用`*`就没没法设定顺序? 此时按照`CREATE TABLE`语句排序
 
 
 注意:
@@ -57,10 +57,9 @@ SELECT product_id     AS id,
        purchase_price AS "进货价格"
 FROM Product;
 ```
-注意:
-- 这样在显示出来的table中,列名就被换成了别名
-- 使用中文时注意使用双引号`"中文"`
-    - Jetbrains的IDE貌似不需要
+>- 这样在显示出来的table中,列名就被换成了别名
+>- 使用中文时注意使用双引号`"中文"`
+>    - Jetbrains的IDE貌似不需要
 
 
 #### 常数的查询 ####
@@ -70,8 +69,8 @@ SELECT '商品' AS string, 38 AS number, '2009-02-24' AS date,
         product_id, product_name
 FROM Product;
 ```
-- 这样使用常数时, 临时新增了`string`, `number`和`date`三个列
-- 每个列都全部填满了语句中的常数
+>- 这样使用常数时, 临时新增了`string`, `number`和`date`三个列
+>- 每个列都全部填满了语句中的常数
 
 
 #### 删除重复行 ####
@@ -79,18 +78,18 @@ FROM Product;
 SELECT DISTINCT purchase_price
 FROM Product;
 ```
-- 这样就会显示无重复的列数据
-- `NULL`也会被视为一类数据
+>- 这样就会显示无重复的列数据
+>- `NULL`也会被视为一类数据
 
 如果出现多个列
 ```
 SELECT DISTINCT product_type, regist_date
 FROM product;
 ```
-- `DISTINCT` 必须用在第一个列名之前
-- 这里`product_type`出现重复, 因为他们`regist_date`不同个
-    - 所以`DISTINCT`多个类, 只要有一列不同, 就算不同
-    - 也就是只有两行中所有列的数据都相同才会被合并
+>- `DISTINCT` 必须用在第一个列名之前
+>- 这里`product_type`出现重复, 因为他们`regist_date`不同个
+>    - 所以`DISTINCT`多个类, 只要有一列不同, 就算不同
+>    - 也就是只有两行中所有列的数据都相同才会被合并
 
 
 #### WHERE 语句 ####
@@ -120,8 +119,8 @@ SELECT product_name, product_type, sale_price
 FROM Product
 WHERE sale_price = 1000;
 ```
-- 未必筛选的信息需要被`SELECT`
-- `WHERE`必须在`FROM`之后
+>- 未必筛选的信息需要被`SELECT`
+>- `WHERE`必须在`FROM`之后
 
 
 ---
@@ -137,18 +136,17 @@ SELECT
     sale_price * 2 AS "sale_price_x2"
 FROM Product;
 ```
-
-- 主要运算符包括`+`, `-`, `*`, `/`
-- 支持使用括号作为运算优先级的法则
-- 只要数据中存在`NULL`, 任何`NULL`参与的运算结果都是`NULL`
-    - 甚至是`NULL / 0`
+>- 主要运算符包括`+`, `-`, `*`, `/`
+>- 支持使用括号作为运算优先级的法则
+>- 只要数据中存在`NULL`, 任何`NULL`参与的运算结果都是`NULL`
+>    - 甚至是`NULL / 0`
 
 实例, 直接使用SQL中的`SELECT`进行简单运算
 ```
 SELECT (100+200)*3 AS calculation;
 ```
-- 但是这个操作并不常用
-- 并不是每种数据库都允许省略`FROM`的使用
+>- 但是这个操作并不常用
+>- 并不是每种数据库都允许省略`FROM`的使用
 
 
 #### 比较运算符 ####
@@ -159,6 +157,8 @@ SELECT product_name, product_type, sale_price
 FROM Product
 WHERE sale_price <> 1000;
 ```
+
+SQL中的Boolean比较符
 - `=` 等于
 - `<>` 不等于
 - `<` 小于
@@ -172,41 +172,38 @@ SELECT product_name, product_type, regist_date
 FROM Product 
 WHERE regist_date < '2009-09-27';
 ```
+>- 连续对比不能连用, 而是要使用`END`
 
-- 连续对比不能连用, 而是要使用`END`
 ```
 '2009-09-01' < regist_date < '2009-09-20';  -- WRONG
 regist_date < '2009-09-20' AND regist_date > '2009-09-01'; -- RIGHT
-```
-
-注意: 
-- 对字符串使用不等号
+``` 
+>- 对字符串使用不等号
 
 ```
 SELECT chr
 FROM Chars 
 WHERE chr > '2';
--- 只显示3和222
--- 为什么不显示3,10,11和22?
--- 因为字符按字典顺序排列: 1, 10, 11, 2, 222, 3
 ```
+>- 只显示3和222
+>- 为什么不显示3,10,11和22?
+>- 因为字符按字典顺序排列: 1, 10, 11, 2, 222, 3 
 
-注意: 
-- `NULL`不能被比较
+注意: `NULL`不能被比较
 
 ```
 SELECT product_name, purchase_price
 FROM Product
 WHERE purchase_price <> 2800;
 ```
-- 由于`叉子`和`圆珠笔`的`purchase_price`是`NULL`, 所以就算不等于2800也不会被显示
+>- 由于`叉子`和`圆珠笔`的`purchase_price`是`NULL`, 所以就算不等于2800也不会被显示
 
 ```
 SELECT product_name, purchase_price
 FROM Product
 WHERE purchase_price = NULL;
 ```
-- 使得`purchase_price = NULL`同样无法得到`叉子`和`圆珠笔`
+>- 使得`purchase_price = NULL`同样无法得到`叉子`和`圆珠笔`
 
 正确的方式:
 ```
@@ -214,8 +211,8 @@ SELECT product_name, purchase_price
 FROM Product
 WHERE purchase_price IS NULL;
 ```
-- 使用`IS NULL`
-- 反之, 使用`IS NOT NULL`
+>- 使用`IS NULL`
+>- 反之, 使用`IS NOT NULL`
 
 
 ---
