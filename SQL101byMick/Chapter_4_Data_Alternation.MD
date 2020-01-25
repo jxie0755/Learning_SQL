@@ -37,11 +37,10 @@ INSERT INTO ProductIns
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
 VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 ```
-
-- 将列名和值用逗号隔开，分别括在`()`内，这种形式称为清单
-- 其中列与值得顺序必须对应起来
-    - 如果没有值, 且没有规定为`NOT NULL`则需要用`null`来填补空缺
-- 原则上, 执行一次`INSERT`语句则会插入一行数据
+>- 将列名和值用逗号隔开，分别括在`()`内，这种形式称为清单
+>- 其中列与值得顺序必须对应起来
+>    - 如果没有值, 且没有规定为`NOT NULL`则需要用`null`来填补空缺
+>- 原则上, 执行一次`INSERT`语句则会插入一行数据
 
 
 #### 列清单的省略 ####
@@ -68,7 +67,69 @@ VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
 - 想要插入`NULL`的列一定不能设置`NOT NULL`约束
 
 
+#### 插入默认值 ####
 
+在创建`TABLE`的时候, 可以向表中插入默认值(初始值)
+- 通过设置`DEFAULT`来约束 
+
+实例: 在创建`ProductIns`这个列表时,`sale_price`这列就有一个默认为0的初始值
+```
+CREATE TABLE ProductIns
+(略
+ sale_price      INTEGER      DEFAULT 0,
+ 略
+ PRIMARY KEY (product_id));,
+```
+
+如果在创建`TABLE`时赋予了默认值, 那么插入数据时也可以插入默认值
+
+实例: 显式方法插入默认值
+```
+INSERT INTO productins
+    (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
+VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
+```
+>- 在对应`sale_price`列的值区插入`DEFAULT`
+
+实例: 隐式方法插入默认值
+
+```
+INSERT INTO productins
+    (product_id, product_name, product_type, purchase_price, regist_date)
+VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
+```
+>- 把`sale_price`列过滤掉,把对应的`DEFAULT`也直接略过
+>- 不建议这么做, 容易引起混乱
+
+
+实例: 列清单的省略之后必须用显示方法
+```
+INSERT INTO productins
+VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
+```
+>- 此处写入`DEFAULT`: 插入默认值成功
+
+
+```
+INSERT INTO productins
+VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
+-- >>> ERROR
+```
+>- 此处省略`DEFAULT`: 插入默认值失败
+
+
+实例: 未设定默认值
+```
+INSERT INTO productins (product_id, product_name, product_type, sale_price, regist_date)
+VALUES ('0008', '圆珠笔', '办公用品', 100, '2009-12-12');
+```
+>- 如果省略一个列, 也不赋值, 会自动设成默认值,如果不存在默认值,则会赋予`NULL`值
+
+```
+INSERT INTO productins (product_id, product_type, sale_price, purchase_price, regist_date)
+VALUES ('0008', '办公用品', 1000, 500, '2009-12-12');
+```
+> - 但是如果省略的列是被设为`NOT NULL`的话就会出错
 
 ---
 ### 4-2 数据的删除 ###
