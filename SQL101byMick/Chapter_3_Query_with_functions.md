@@ -106,7 +106,7 @@ FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
 
 在 `GROUP BY` 子句中指定的列称为聚合键或者分组列
 
-GROUP BY语法:
+`GROUP BY`语法:
 ```
 SELECT <列名1>, <列名2>, <列名3>...
 FROM <表名>
