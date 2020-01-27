@@ -273,7 +273,7 @@ SELECT product_type, count(DISTINCT sale_price)
 FROM product_x
 GROUP BY product_type;
 ```
->-**此表中, 每种类型的产品有重叠价位, 所以必须要对`COUNT()`的参数使用`DISTINCT`加以区分**
+>- **此表中, 每种类型的产品有重叠价位, 所以必须要对`COUNT()`的参数使用`DISTINCT`加以区分**
 
 
 #### HAVING 子句的构成要素 ####

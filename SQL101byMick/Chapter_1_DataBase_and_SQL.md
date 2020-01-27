@@ -145,9 +145,9 @@ set search_path = "public" -- 默认设为public
 
 [How to select a schema in postgres when using psql?](https://stackoverflow.com/a/34098414/8435726)
 > And to put the new schema in the path, you could use:
-> SET search_path TO myschema;
-> Or if you want multiple schemas:
-> SET search_path TO myschema, public;
+> - SET search_path TO myschema;
+> - Or if you want multiple schemas:
+> - SET search_path TO myschema, public;
 
 
 ---
