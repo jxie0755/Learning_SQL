@@ -194,7 +194,7 @@ GROUP BY product_type;
 >- 想要指定选择条件时就要用到 `WHERE` 子句，初学者通常会想到使用这招
 >- 只有 `SELECT` 子句和 `HAVING` 子句（以及之后将要学到的`ORDER BY` 子句）中能够使用 `COUNT` 等聚合函数
 
-#### 专栏: `DISTINCT` vs.`GROUP BY` ####
+#### 专栏: `DISTINCT` vs. `GROUP BY` ####
 
 以下两端代码等效
 ```
