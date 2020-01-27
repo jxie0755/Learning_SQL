@@ -138,7 +138,7 @@ CREATE DATABASE shop;
 > Technically PostgreSQL can't switch databases. You must disconnect and reconnect to the new DB.
 
 
-#### 设定`DATABASE`中的schemas ####
+#### 设定DATABASE中的schemas ####
 ```
 set search_path = "public" -- 默认设为public
 ```
@@ -282,7 +282,7 @@ BEGIN TRANSACTION;
 随后使用
 ```sql
 INSERT INTO <表名> VALUES (<列1数据>, <列2数据>, <列3数据>, ...)
-``` 
+```
 >- 对于没有定义Not Null的列， 可以使用`NULL`来占位
 
 

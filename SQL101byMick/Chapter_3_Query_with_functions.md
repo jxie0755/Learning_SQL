@@ -102,7 +102,7 @@ FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
 ---
 ### 3-2 对表进行分组 ###
 
-#### `GROUP BY`子句进行分类 ####
+#### GROUP BY子句进行分类 ####
 
 在 `GROUP BY` 子句中指定的列称为聚合键或者分组列
 
@@ -129,7 +129,7 @@ GROUP BY product_type;
 >- 因为是`Count(*) GROUP BY` Something.
 
 
-#### `GROUP BY`子句中包含`NULL` ####
+#### GROUP BY子句中包含NULL ####
 
 实例: 如果包含`NULL`
 ```
@@ -141,9 +141,9 @@ GROUP BY purchase_price;
 >- `NULL`作为条目可能展示为空白
 
 
-#### 使用`WHERE` + `GROUP BY` ####
+#### 使用WHERE + GROUP BY ####
 
-实例: 使用WHERE+ GROUP BY
+实例: 使用`WHERE` + `GROUP` BY
 
 ```
 SELECT purchase_price, COUNT(*)
@@ -153,7 +153,7 @@ GROUP BY purchase_price;
 ```
 
 
-#### 使用`GROUP BY`子句的常见错误 ####
+#### 使用GROUP BY子句的常见错误 ####
 
 在使用 `COUNT` 这样的聚合函数时， `SELECT` 子句中的元素有严格
 的限制:
@@ -194,7 +194,7 @@ GROUP BY product_type;
 >- 想要指定选择条件时就要用到 `WHERE` 子句，初学者通常会想到使用这招
 >- 只有 `SELECT` 子句和 `HAVING` 子句（以及之后将要学到的`ORDER BY` 子句）中能够使用 `COUNT` 等聚合函数
 
-#### 专栏: `DISTINCT` vs. `GROUP BY` ####
+#### 专栏: DISTINCT vs. GROUP BY ####
 
 以下两端代码等效
 ```
