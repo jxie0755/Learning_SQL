@@ -15,7 +15,7 @@
 ### 4-1 数据的插入 ###
 
 首先创建一个空表ProductIns用于试验:
-```
+```sql
 CREATE TABLE ProductIns
 (product_id      CHAR(4)      NOT NULL,
  product_name    VARCHAR(100) NOT NULL,
@@ -32,7 +32,7 @@ INSERT INTO <表名> (列1, 列2, 列3 , ...) VALUES (值1, 值2, 值3, ...);
 ```
 
 实例: 插入一条数据
-```
+```sql
 INSERT INTO ProductIns
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
 VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
@@ -46,7 +46,7 @@ VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 #### 列清单的省略 ####
 
 对表进行全列 INSERT 时，可以省略表名后的列清单:
-```
+```sql
 INSERT INTO ProductIns 
 VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
 ```
@@ -73,7 +73,7 @@ VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
 - 通过设置`DEFAULT`来约束
 
 实例: 在创建`ProductIns`这个列表时,`sale_price`这列就有一个默认为0的初始值
-```
+```sql
 CREATE TABLE ProductIns
 (略
  sale_price      INTEGER      DEFAULT 0,
@@ -84,7 +84,7 @@ CREATE TABLE ProductIns
 如果在创建`TABLE`时赋予了默认值, 那么插入数据时也可以插入默认值
 
 实例: 显式方法插入默认值
-```
+```sql
 INSERT INTO productins
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
 VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
@@ -93,7 +93,7 @@ VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 
 实例: 隐式方法插入默认值
 
-```
+```sql
 INSERT INTO productins
     (product_id, product_name, product_type, purchase_price, regist_date)
 VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
@@ -103,14 +103,14 @@ VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 
 
 实例: 列清单的省略之后必须用显示方法
-```
+```sql
 INSERT INTO productins
 VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 ```
 >- 此处写入`DEFAULT`: 插入默认值成功
 
 
-```
+```sql
 INSERT INTO productins
 VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 -- >>> ERROR
@@ -119,13 +119,13 @@ VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 
 
 实例: 未设定默认值
-```
+```sql
 INSERT INTO productins (product_id, product_name, product_type, sale_price, regist_date)
 VALUES ('0008', '圆珠笔', '办公用品', 100, '2009-12-12');
 ```
 >- 如果省略一个列, 也不赋值, 会自动设成默认值,如果不存在默认值,则会赋予`NULL`值
 
-```
+```sql
 INSERT INTO productins (product_id, product_type, sale_price, purchase_price, regist_date)
 VALUES ('0008', '办公用品', 1000, 500, '2009-12-12');
 ```

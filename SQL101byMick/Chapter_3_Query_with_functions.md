@@ -22,7 +22,7 @@
 #### 计算表中数据的行数 ####
 
 实例: 统计Product列表的行数
-```
+```sql
 SELECT COUNT(*)
 FROM Product;
 >>> 8
@@ -34,7 +34,7 @@ FROM Product;
 #### 计算合计值 ####
 
 实例: 计算SUM
-```
+```sql
 SELECT SUM(sale_price), SUM(purchase_price)
 FROM product;
 >>> 16780   12210
@@ -44,7 +44,7 @@ FROM product;
 #### 计算平均值 ####
 
 实例: 计算AVG
-```
+```sql
 SELECT AVG(sale_price), AVG(purchase_price)
 FROM Product;
 >>> 2097.5  2035
@@ -56,7 +56,7 @@ FROM Product;
 #### 计算最大值和最小值 ####
 
 实例: 计算MAX和MIN
-```
+```sql
 SELECT MAX(sale_price), MIN(purchase_price)
 FROM Product;
 >>> 6800  320
@@ -65,7 +65,7 @@ FROM Product;
 #### 使用聚合函数结合去重(关键字`DISTINCT`) ####
 
 实例: 计算去重后的行数
-```
+```sql
 SELECT COUNT(DISTINCT product_type)
 FROM Product;
 >>> 3
@@ -74,7 +74,7 @@ FROM Product;
 >- 如果这一列全是`NULL`, 那么返回的`MAX`,`MIN`,`AVG`也是`NULL`
 >- 这里得先对`product_type`去重再统计行数, 如果不这么做:
 
-```
+```sql
 SELECT DISTINCT COUNT(product_type)
 FROM Product;
 >>> 8
@@ -84,14 +84,14 @@ FROM Product;
 
 
 额外例子:如果没有primary key作为区分, 则可以合并那些完全相同的行
-```
+```sql
 SELECT DISTINCT *
 FROM Product_x;
 ```
 >- 这样只会显示12行, 因为打孔器有很多完全重复的行
 
 如何统计有多少行呢? 使用复合用法:
-```
+```sql
 SELECT Count(*)
 FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
 >>> 12
@@ -107,7 +107,7 @@ FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
 在 `GROUP BY` 子句中指定的列称为聚合键或者分组列
 
 `GROUP BY`语法:
-```
+```sql
 SELECT <列名1>, <列名2>, <列名3>...
 FROM <表名>
 WHERE
@@ -119,7 +119,7 @@ GROUP BY <列名1>, <列名2>, <列名3>...;
 - 执行顺序: `FROM` -> `WHERE` -> `GROUP BY` -> `SELECT`
 
 实例: 按照商品种类统计数据行数
-```
+```sql
 SELECT product_type, COUNT(*)
 FROM Product
 GROUP BY product_type;
@@ -132,7 +132,7 @@ GROUP BY product_type;
 #### GROUP BY子句中包含NULL ####
 
 实例: 如果包含`NULL`
-```
+```sql
 SELECT purchase_price, COUNT(*)
 FROM Product
 GROUP BY purchase_price;
@@ -145,7 +145,7 @@ GROUP BY purchase_price;
 
 实例: 使用`WHERE` + `GROUP` BY
 
-```
+```sql
 SELECT purchase_price, COUNT(*)
 FROM Product
 WHERE product_type = '衣服'
@@ -163,7 +163,7 @@ GROUP BY purchase_price;
 
 
 错误1: 把聚合键之外的列名书写在 `SELECT` 子句之中
-```
+```sql
 SELECT product_name, purchase_price, COUNT(*)
 FROM Product
 GROUP BY purchase_price;
@@ -172,7 +172,7 @@ GROUP BY purchase_price;
 >- 原因是, 根据`purchase_price`分组后, 行数减少, 而`product_name`行数没变, 导致不能一一对应
 
 错误2: 在`GROUP BY`子句中写了列的别名
-```
+```sql
 SELECT product_type AS pt, COUNT(*)
 FROM Product
 GROUP BY pt;
@@ -185,7 +185,7 @@ GROUP BY pt;
 - 甚至只要是`SELECT`得语句得到的结果顺序也都是随机的
 
 错误4: 在`WHERE`子句中使用聚合函数
-```
+```sql
 SELECT product_type, COUNT(*)
 FROM Product
 WHERE COUNT(*) = 2
@@ -197,12 +197,12 @@ GROUP BY product_type;
 #### 专栏: DISTINCT vs. GROUP BY ####
 
 以下两端代码等效
-```
+```sql
 SELECT DISTINCT product_type
 FROM Product;
 ```
 
-```
+```sql
 SELECT product_type
 FROM Product
 GROUP BY product_type;
@@ -227,7 +227,7 @@ GROUP BY product_type;
 
 
 `HAVING`语法:
-```
+```sql
 SELECT <列名1>, <列名2>, <列名3>, ……
 FROM <表名>
 GROUP BY <列名1>, <列名2>, <列名3>, ……
@@ -239,7 +239,7 @@ HAVING <分组结果对应的条件>
 
 实例: 从按照商品种类进行分组后的结果中, 取出“包含的数据行数为2
 行”的组
-```
+```sql
 SELECT product_type, COUNT(*)
 FROM Product
 GROUP BY product_type
@@ -247,7 +247,7 @@ HAVING COUNT(*) = 2;
 ```
 
 实例:使用`HAVING`子句设定条件的情况
-```
+```sql
 SELECT product_type, AVG(sale_price)
 FROM Product
 GROUP BY product_type
@@ -260,7 +260,7 @@ HAVING AVG(sale_price) >= 2500;
 >- `HAVING`则是在分组之后的额外过滤手段
 
 实例:销售单价的平均值大于等于2500日元
-```
+```sql
 SELECT product_type, AVG(sale_price)
 FROM Product
 GROUP BY product_type
@@ -268,7 +268,7 @@ HAVING AVG(sale_price) >= 2500;
 ```
 
 额外例子: 统计每种类型的产品有几种价位(`Product_x`)
-```
+```sql
 SELECT product_type, count(DISTINCT sale_price)
 FROM product_x
 GROUP BY product_type;
@@ -286,7 +286,7 @@ GROUP BY product_type;
 常见错误:
 
 错误1:
-```
+```sql
 SELECT product_type, COUNT(*)
 FROM Product
 GROUP BY product_type
@@ -298,14 +298,14 @@ HAVING product_name = '圆珠笔';
 #### 相对于HAVING子句, 更适合写在WHERE子句中的条件 ####
 
 两组代码得到相同结果:
-```
+```sql
 SELECT product_type, COUNT(*)
 FROM Product
 GROUP BY product_type
 HAVING product_type = '衣服';
 ```
 
-```
+```sql
 SELECT product_type, COUNT(*)
 FROM Product
 WHERE product_type = '衣服'
@@ -327,14 +327,14 @@ GROUP BY product_type;
 在`SELECT`语句末尾添加`ORDER BY`就可以使得显示时强制排序
 
 `ORDER BY`基本语法:
-```
+```sql
 SELECT < 列名 1>, < 列名 2>, < 列名 3>, ……
 FROM < 表名 >
 ORDER BY < 排序基准列 1>, < 排序基准列 2>, ……
 ```
 
 实例: 按照销售单价由低到高（升序）进行排列
-```
+```sql
 SELECT product_id, product_name, sale_price, purchase_price
 FROM Product
 ORDER BY sale_price;
@@ -351,7 +351,7 @@ ORDER BY sale_price;
 默认为升序排列, 如果需要降序则需要使用`DESC`关键字
 
 实例: 按照销售单价由高到低（降序）进行排列 (与上一例排序相反)
-```
+```sql
 SELECT product_id, product_name, sale_price, purchase_price
 FROM Product
 ORDER BY sale_price DESC;
@@ -364,7 +364,7 @@ ORDER BY sale_price DESC;
 - 规则是优先使用左侧的键，如果该列存在相同值的话，再接着参考右侧的键
 
 实例:
-```
+```sql
 SELECT product_id, product_name, sale_price, purchase_price
 FROM Product
 ORDER BY sale_price, product_id;
@@ -386,7 +386,7 @@ ORDER BY sale_price, product_id;
     - 因此, `GROUP BY`在执行时不理解别名, 因为`SELECT`还没有被执行
 
 实例:
-```
+```sql
 SELECT product_id AS id, product_name, sale_price AS sp, purchase_price
 FROM Product
 ORDER BY sp, id;
@@ -399,14 +399,14 @@ ORDER BY sp, id;
 - `ORDER BY`也还可以使用聚合函数
 
 实例: `SELECT` 子句中未包含的列也可以在 `ORDER BY` 子句中使用
-```
+```sql
 SELECT product_name, sale_price, purchase_price
 FROM Product
 ORDER BY product_id;
 ```
 
 实例: `ORDER BY` 子句中也可以使用聚合函数
-```
+```sql
 SELECT product_type, COUNT(*)
 FROM Product
 GROUP BY product_type
@@ -425,14 +425,14 @@ ORDER BY COUNT(*);
 
 
 实例: 不使用列编号
-```
+```sql
 SELECT product_id, product_name, sale_price, purchase_price
 FROM Product
 ORDER BY sale_price DESC, product_id;
 ```
 
 实例: 使用列编号
-```
+```sql
 SELECT product_id, product_name, sale_price, purchase_price
 --          1           2            3            4
 FROM Product

@@ -28,7 +28,7 @@ FROM <表名>;
     - `FROM`  指定表的名称
 
 实例:
-```
+```sql
 SELECT product_id, product_name, purchase_price
     FROM Product;
 ```
@@ -51,7 +51,7 @@ FROM <表名>
 - 但是不要插入空行
 
 #### 为列设定别名 ####
-```
+```sql
 SELECT product_id     AS id,
        product_name   AS name,
        purchase_price AS "进货价格"
@@ -64,7 +64,7 @@ FROM Product;
 
 #### 常数的查询 ####
 
-```
+```sql
 SELECT '商品' AS string, 38 AS number, '2009-02-24' AS date,
         product_id, product_name
 FROM Product;
@@ -74,7 +74,7 @@ FROM Product;
 
 
 #### 删除重复行 ####
-```
+```sql
 SELECT DISTINCT purchase_price
 FROM Product;
 ```
@@ -82,7 +82,7 @@ FROM Product;
 >- `NULL`也会被视为一类数据
 
 如果出现多个列
-```
+```sql
 SELECT DISTINCT product_type, regist_date
 FROM product;
 ```
@@ -101,20 +101,20 @@ WHERE <条件表达式>;
 ```
 
 实例: 选取品类为`衣服`的记录
-```
+```sql
 SELECT product_name, product_type
 FROM Product
 WHERE product_type = '衣服';
 ```
 
-```
+```sql
 SELECT product_name
 FROM Product
 WHERE product_type = '衣服';
 ```
 
 实例2: 选取价格<=1000的商品
-```
+```sql
 SELECT product_name, product_type, sale_price
 FROM Product
 WHERE sale_price = 1000;
@@ -129,7 +129,7 @@ WHERE sale_price = 1000;
 #### 算术运算符 ####
 
 实例: 在显示数据时,对数据进行运算处理
-```
+```sql
 SELECT 
     product_name, 
     sale_price AS "original_sale_price",
@@ -142,7 +142,7 @@ FROM Product;
 >    - 甚至是`NULL / 0`
 
 实例, 直接使用SQL中的`SELECT`进行简单运算
-```
+```sql
 SELECT (100+200)*3 AS calculation;
 ```
 >- 但是这个操作并不常用
@@ -152,7 +152,7 @@ SELECT (100+200)*3 AS calculation;
 #### 比较运算符 ####
 
 实例: 选出sale_price不等于500的记录
-```
+```sql
 SELECT product_name, product_type, sale_price
 FROM Product
 WHERE sale_price <> 1000;
@@ -167,38 +167,38 @@ SQL中的Boolean比较符
 - `>=` 大于等于
 
 实例: 日期的比较
-```
+```sql
 SELECT product_name, product_type, regist_date 
 FROM Product 
 WHERE regist_date < '2009-09-27';
 ```
 >- 连续对比不能连用, 而是要使用`END`
 
-```
+```sql
 '2009-09-01' < regist_date < '2009-09-20';  -- WRONG
 regist_date < '2009-09-20' AND regist_date > '2009-09-01'; -- RIGHT
-``` 
+```
 >- 对字符串使用不等号
 
-```
+```sql
 SELECT chr
 FROM Chars 
 WHERE chr > '2';
 ```
 >- 只显示3和222
 >- 为什么不显示3,10,11和22?
->- 因为字符按字典顺序排列: 1, 10, 11, 2, 222, 3 
+>- 因为字符按字典顺序排列: 1, 10, 11, 2, 222, 3
 
 注意: `NULL`不能被比较
 
-```
+```sql
 SELECT product_name, purchase_price
 FROM Product
 WHERE purchase_price <> 2800;
 ```
 >- 由于`叉子`和`圆珠笔`的`purchase_price`是`NULL`, 所以就算不等于2800也不会被显示
 
-```
+```sql
 SELECT product_name, purchase_price
 FROM Product
 WHERE purchase_price = NULL;
@@ -206,7 +206,7 @@ WHERE purchase_price = NULL;
 >- 使得`purchase_price = NULL`同样无法得到`叉子`和`圆珠笔`
 
 正确的方式:
-```
+```sql
 SELECT product_name, purchase_price
 FROM Product
 WHERE purchase_price IS NULL;
@@ -227,7 +227,7 @@ WHERE purchase_price IS NULL;
 - 也就是反向的`Boolean`
 
 实例: 选取价格小于1000的产品
-```
+```sql
 SELECT product_name, product_type, sale_price
 FROM Product
 WHERE NOT sale_price >= 1000;
@@ -239,7 +239,7 @@ WHERE NOT sale_price >= 1000;
 - 短路?
 
 实例:
-```
+```sql
 SELECT product_name, sale_price
 FROM Product
 WHERE product_type = '厨房用具' OR sale_price >= 3000;
@@ -249,12 +249,12 @@ WHERE product_type = '厨房用具' OR sale_price >= 3000;
 #### 通过括号强化处理 ####
 
 实例: 通过括号改变评价顺序
-```
+```sql
 SELECT product_name, product_type, regist_date
 FROM Product
 WHERE 
 product_type = '办公用品'
-AND 
+  AND 
 (regist_date = '2009-09-11' OR regist_date = '2009-09-20');
 ```
 

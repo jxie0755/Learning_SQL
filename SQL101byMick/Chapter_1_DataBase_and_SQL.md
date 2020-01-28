@@ -167,7 +167,7 @@ CREATE TABLE  <表名> (
 - 约束可以在定义列的时 候进行设置，也可以在语句的末尾进行设置
 
 实际样本:
-```
+```sql
 CREATE TABLE Product
 (product_id      CHAR(4)      NOT NULL,
  product_name    VARCHAR(100) NOT NULL,

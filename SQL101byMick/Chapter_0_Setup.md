@@ -11,17 +11,17 @@
 - `psql.exe -U postgres`  (windows CMD)
 
 连接到数据库后, 第一件事就是确认是否连接,使用命令:
-    
+
 ```sql
 SELECT 1;
 ```
-    
+
 - 若成功便会显示出column 1
 - 注意不要忘记 `;` 符号, 它指示本条命令结束
 
 ### 创见学习用的数据库 ###
 
-```
+```sql
 CREATE DATABASE shop;
 ```
 
@@ -37,4 +37,4 @@ CREATE DATABASE shop;
 
 ```
 psql.exe -U postgres -d shop (windows CMD)
-```   
+```
