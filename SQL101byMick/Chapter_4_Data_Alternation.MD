@@ -115,7 +115,7 @@ VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 ```sql
 INSERT INTO productins
 VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
--- >>> ERROR
+>>> ERROR
 ```
 >- 此处省略`DEFAULT`: 插入默认值失败
 
