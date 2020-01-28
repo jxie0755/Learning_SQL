@@ -21,14 +21,16 @@ CREATE TABLE ProductIns
  product_name    VARCHAR(100) NOT NULL,
  product_type    VARCHAR(32)  NOT NULL,
  sale_price      INTEGER      DEFAULT 0,
- purchase_price  INTEGER,
+ purchase_price  INTEGER,√
  regist_date     DATE,
  PRIMARY KEY (product_id));
 ```
 
 #### INSERT语句基本语法 ####
-```
-INSERT INTO <表名> (列1, 列2, 列3 , ...) VALUES (值1, 值2, 值3, ...);
+```sql
+INSERT INTO <表名> (列1, 列2, 列3 , ...) 
+VALUES 
+    (值1, 值2, 值3, ...);
 ```
 
 实例: 插入一条数据
