@@ -132,10 +132,30 @@ VALUES ('0008', '办公用品', 1000, 500, '2009-12-12');
 > - 但是如果省略的列是被设为`NOT NULL`的话就会出错
 
 
-
-
 #### 从其他表中复制数据 ####
 
+除了使用`VALUES`子句指定具体的数据之外, 还可以从其他表中复制数据
+
+实例: 创建一张复制的表格
+
+```sql
+-- 首先创建一个和原Product表一样的空表格, 只是改了名字叫做ProductCopy
+CREATE TABLE ProductCopy
+(product_id CHAR(4) NOT NULL,
+product_name VARCHAR(100) NOT NULL,
+product_type VARCHAR(32) NOT NULL,
+sale_price     INTEGER,
+purchase_price INTEGER,
+regist_date      DATE,
+PRIMARY KEY (product_id));
+```
+
+```sql
+-- 然后将Product表中的数据复制到ProductCopy表中
+INSERT INTO ProductCopy (product_id, product_name, product_type,sale_price, purchase_price, regist_date)
+SELECT product_id, product_name, product_type, sale_price, purchase_price, regist_date
+FROM Product;
+```
 
 
 
