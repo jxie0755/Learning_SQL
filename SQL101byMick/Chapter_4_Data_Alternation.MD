@@ -159,6 +159,7 @@ SELECT product_id, product_name, product_type, sale_price, purchase_price, regis
 FROM Product;
 ```
 >- 先`INSERT`然后再`SELECT...FROM...`
+ok
 
 
 
