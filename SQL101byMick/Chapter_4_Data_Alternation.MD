@@ -158,6 +158,8 @@ INSERT INTO ProductCopy (product_id, product_name, product_type,sale_price, purc
 SELECT product_id, product_name, product_type, sale_price, purchase_price, regist_date
 FROM Product;
 ```
+>- 先`INSERT`然后再`SELECT....FROM`
+
 
 
 
