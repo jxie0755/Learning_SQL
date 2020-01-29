@@ -155,4 +155,3 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/macos,windows,intellij,database
-.idea/misc.xml

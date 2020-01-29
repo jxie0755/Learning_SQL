@@ -27,8 +27,10 @@ CREATE TABLE ProductIns
 ```
 
 #### INSERT语句基本语法 ####
-```
-INSERT INTO <表名> (列1, 列2, 列3 , ...) VALUES (值1, 值2, 值3, ...);
+```sql
+INSERT INTO <表名> (列1, 列2, 列3 , ...) 
+VALUES 
+    (值1, 值2, 值3, ...);
 ```
 
 实例: 插入一条数据
@@ -113,7 +115,7 @@ VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 ```sql
 INSERT INTO productins
 VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
--- >>> ERROR
+>>> ERROR
 ```
 >- 此处省略`DEFAULT`: 插入默认值失败
 
