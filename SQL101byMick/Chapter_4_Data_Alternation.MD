@@ -159,9 +159,39 @@ SELECT product_id, product_name, product_type, sale_price, purchase_price, regis
 FROM Product;
 ```
 >- 先`INSERT`然后再`SELECT...FROM...`
+>   - 简单的说以前就是`INSERT`指定一张表,`VALUE`则是输入一行数据
+>   - 现在就是`INSERT`一整列到指定一张表, 而这一列是从另一张表中`SELECT`得来
 
+```sql
+-- 测试隐式复制, 也可以通过
+INSERT INTO ProductCopy2  -- 如果是插入全部列, 这里可以省略
+SELECT *
+FROM Product;
 
+-- 这样则不行:
+INSERT INTO ProductCopy2 (*) -- 不需要*号
+SELECT *
+FROM Product;
+```
 
+实例:尝试一下使用包含 GROUP BY 子句的 SELECT 语句进行插入
+```sql
+-- 根据商品种类进行汇总的表 ；
+CREATE TABLE ProductType
+(product_type VARCHAR(32) NOT NULL,
+sum_sale_price INTEGER ,
+sum_purchase_price INTEGER ,
+PRIMARY KEY (product_type));
+-- 此表一共三列, 类型, 售价总和 与 买入价总和
+```
+
+```sql
+-- 插入全三列, 然后下面的SELECT语句则是从Product表中通过聚合函数得出
+INSERT INTO ProductType (product_type, sum_sale_price, sum_purchase_price)
+SELECT product_type, SUM(sale_price), SUM(purchase_price)
+FROM Product
+GROUP BY product_type;
+```
 
 
 ---
