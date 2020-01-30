@@ -235,9 +235,12 @@ DROP TABLE <表名>;
 - 执行前务必确认!
 
 
-表定义的更新使用`ALTER`, 添加Column使用`ADD COLUMN`:
+语法: 表定义的更新使用`ALTER`
+- 添加Column使用`ADD COLUMN`
+- 删除Column使用`DROP COLUMN`
 ```sql
 ALTER TABLE <表名> ADD COLUMN <列的定义>
+ALTER TABLE <表名> DROP COLUMN <列名>;
 ```
 
 实例:
@@ -245,17 +248,12 @@ ALTER TABLE <表名> ADD COLUMN <列的定义>
 ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100) NOT NULL;
 ```
 
-删除Column使用`DROP COLUMN`:
-```sql
-ALTER TABLE <表名> DROP COLUMN <列名>;
-```
-
 实例:
 ```
 ALTER TABLE product DROP COLUMN product_name_pinyin;
 ```
 
-改Table名使用`RENAME`:
+语法: 改Table名使用`RENAME`
 ```sql
 ALTER TABLE <表名>
   RENAME TO <新表名>;
@@ -266,7 +264,6 @@ ALTER TABLE <表名>
 ALTER TABLE <表名>
   RENAME COLUMN <列名> TO <新列名>;
 ```
-
 
 
 #### 向表中插入数据 ####
