@@ -216,6 +216,7 @@ GROUP BY product_type;
 - 如果语句中忘了写 FROM，而是写成了`DELETE <表名>`或者写了多余的列名, 都会出错, 无法正常执行, 请大家特别注意
     - `DELETE <表名>`无法正常执行的原因是删除对象不是表，而是表中的数据行
     - `DELETE * FROM <表名>;`无法正常执行因为`DELETE`语句的对象是行而不是列，所以`DELETE`语句无法只删除部分列的数据
+        - 若要删除列, 参见Chapter 1-5中使用`ALTER` + `ADD COLUMN`/`DROP COLUMN`
 
 ```sql
 DELTE FROM <表名>;
