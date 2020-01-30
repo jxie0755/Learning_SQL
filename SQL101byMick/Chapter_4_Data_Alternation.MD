@@ -27,6 +27,8 @@ CREATE TABLE ProductIns
 ```
 
 #### INSERT语句基本语法 ####
+
+语法: `INSERT`的使用
 ```sql
 INSERT INTO <表名> (列1, 列2, 列3 , ...) 
 VALUES 
@@ -163,7 +165,7 @@ FROM Product;
 >   - 现在就是`INSERT`一整列到指定一张表, 而这一列是从另一张表中`SELECT`得来
 
 ```sql
--- 测试隐式复制, 也可以通过
+-- 测试隐式复制, 也可以通过 (ProductCopy2的创建同ProductCopy)
 INSERT INTO ProductCopy2  -- 如果是插入全部列, 这里可以省略
 SELECT *
 FROM Product;
@@ -198,9 +200,62 @@ GROUP BY product_type;
 ---
 ### 4-2 数据的删除 ###
 
+#### DROP TABLE语句和DELETE语句 ####
+
+两种方法删除数据, 区别:
+- `DROP TABLE`语句可以将表完全删除
+    - `DROP TABLE`语句会完全删除整张表
+    - 删除之后再想插入数据，就必须使用`CREATE TABLE`语句重新创建一张表
+- `DELETE`语句会留下表(容器), 而删除表中的全部数据
+    - `DELETE`语句在删除数据(行)的同时会保留数据表, 因此可以通过`INSERT`语句再次向表中插入数据
 
 
+#### DELETE语句的基本语法 ####
 
+语法: 保留数据表，仅删除全部数据行的`DELETE`
+- 如果语句中忘了写 FROM，而是写成了`DELETE <表名>`或者写了多余的列名, 都会出错, 无法正常执行, 请大家特别注意
+    - `DELETE <表名>`无法正常执行的原因是删除对象不是表，而是表中的数据行
+    - `DELETE * FROM <表名>;`无法正常执行因为`DELETE`语句的对象是行而不是列，所以`DELETE`语句无法只删除部分列的数据
+
+```sql
+DELTE FROM <表名>;
+```
+
+实例:
+```sql
+DELETE FROM Product;
+```
+
+#### 指定删除对象的DELETE语句(搜索型DELTE) ####
+
+- 想要删除部分数据行时，可以像`SELECT`语句那样使用`WHERE`子句指定删除条件.
+- 这种指定了删除对象的`DELETE`语句称为搜索型`DELETE`
+
+语法: 删除部分数据行的搜索型`DELETE`
+- `WHERE`子句的书写方式与此前介绍的`SELECT`语句完全一样
+```sql
+DELETE FROM <表名>
+WHERE <条件>;
+```
+
+实例: 删除销售单价(sale_price)大于等于4000日元的数据
+```sql
+DELETE FROM Product
+WHERE sale_price >= 4000;
+```
+
+注意, 与`SELECT`语句不同的是, `DELETE`语句中:
+- 只能使用`WHERE`子句
+- 不能使用`GROUP BY`, `HAVING`和`ORDER BY`三类子句, 它们起不到什么作用
+    - `GROUP BY`和`HAVING`是从表中选取数据时用来改变抽取数据形式的
+    - `ORDER BY`是用来指定取得结果显示顺序的.
+
+
+#### 专栏: 删除和舍弃 ####
+
+- 标准SQL中用来从表中删除数据的只有`DELETE`语句
+- 但是，很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句。
+    - 这些产品主要包括 Oracle, SQL Server, PostgreSQL, MySQL和DB2
 
 
 ---
