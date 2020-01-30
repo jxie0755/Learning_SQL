@@ -18,7 +18,7 @@
 - 通过`SELECT`语句查询并选取必要数据的过程叫匹配查询(Qu- ery)
 - `SELECT`语句石SQL中使用最多的最基本的语句
 
-`SELECT`基本用法:
+语法:`SELECT`语句
 ```sql
 SELECT <列名>, ...
 FROM <表名>;
@@ -38,6 +38,7 @@ SELECT product_id, product_name, purchase_price
 
 #### 查询所有列 ####
 
+语法: 查询所有列
 ```sql
 SELECT *
 FROM <表名>
@@ -93,7 +94,7 @@ FROM product;
 
 
 #### WHERE 语句 ####
-通过使用`WHERE`添加选择条件
+语法: 通过使用`WHERE`添加选择条件
 ```sql
 SELECT <列名>, ...
 FROM <表名>

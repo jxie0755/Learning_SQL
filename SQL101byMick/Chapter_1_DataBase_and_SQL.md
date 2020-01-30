@@ -96,6 +96,7 @@
 
 #### 数据库的创建 ####
 
+语法: 创建`DATABASE`数据库
 ```sql
 CREATE DATABASE <数据库名称>;
 ```
@@ -152,6 +153,8 @@ set search_path = "public" -- 默认设为public
 
 ---
 ### 1-4 表的创建 ###
+
+语法: 创建`TABLE`
 ```sql
 CREATE TABLE  <表名> (
 <列名 1> <数据类型> <该列所需约束>，
@@ -279,7 +282,7 @@ BEGIN TRANSACTION;
 - 如果使用`BEGIN TRANSACTION`, 则只要有一个地方出错, 整块都不会被输入
     - 这样就便于管理和避免混乱
 
-随后使用
+随后使用`INSERT`插入数据
 ```sql
 INSERT INTO <表名> VALUES (<列1数据>, <列2数据>, <列3数据>, ...)
 ```

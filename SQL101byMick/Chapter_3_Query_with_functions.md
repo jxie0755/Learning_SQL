@@ -106,7 +106,7 @@ FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
 
 在 `GROUP BY` 子句中指定的列称为聚合键或者分组列
 
-`GROUP BY`语法:
+语法: `GROUP BY`语句
 ```sql
 SELECT <列名1>, <列名2>, <列名3>...
 FROM <表名>
@@ -226,7 +226,7 @@ GROUP BY product_type;
 使用`GROUP BY`分组后, 如何能够单独提取特定的组呢? 使用`HAVING`就可以实现
 
 
-`HAVING`语法:
+语法: `HAVING`语句
 ```sql
 SELECT <列名1>, <列名2>, <列名3>, ……
 FROM <表名>
@@ -326,7 +326,7 @@ GROUP BY product_type;
 一般的`SELECT`语句显示出来的结果排序是随机的(就算偶尔显示的时候似乎像是排过序)
 在`SELECT`语句末尾添加`ORDER BY`就可以使得显示时强制排序
 
-`ORDER BY`基本语法:
+语法: `ORDER BY`语句
 ```sql
 SELECT < 列名 1>, < 列名 2>, < 列名 3>, ……
 FROM < 表名 >
