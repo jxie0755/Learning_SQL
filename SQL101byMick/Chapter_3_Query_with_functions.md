@@ -21,19 +21,28 @@
 
 #### 计算表中数据的行数 ####
 
-实例: 统计Product列表的行数
+实例1: 统计Product列表的行数
 ```sql
 SELECT COUNT(*)
 FROM Product;
 >>> 8
 ```
 >- `COUNT(*)`统计所有行数
+>   - `*`作为参数是`COUNT`函数所特有的，其他函数并不能将星号作为参数
 >- `COUNT(<列名>)`统计该列非空行的行数
 
 
+#### 计算NULL之外的数据的行数 ####
+
+实例2+3: 计算NULL之外的数据的行数
+```sql
+SELECT COUNT(purchase_price) -- 这样排除NULL值
+FROM Product;
+```
+
 #### 计算合计值 ####
 
-实例: 计算SUM
+实例4+5: 计算SUM
 ```sql
 SELECT SUM(sale_price), SUM(purchase_price)
 FROM product;
@@ -43,7 +52,7 @@ FROM product;
 
 #### 计算平均值 ####
 
-实例: 计算AVG
+实例6+7: 计算AVG
 ```sql
 SELECT AVG(sale_price), AVG(purchase_price)
 FROM Product;
@@ -55,16 +64,23 @@ FROM Product;
 
 #### 计算最大值和最小值 ####
 
-实例: 计算MAX和MIN
+实例8: 计算MAX和MIN
 ```sql
 SELECT MAX(sale_price), MIN(purchase_price)
 FROM Product;
 >>> 6800  320
 ```
 
+实例9: 计算登记日期的最大值和最小值
+```sql
+SELECT MAX(regist_date), MIN(regist_date)
+FROM Product;
+```
+
+
 #### 使用聚合函数结合去重(关键字`DISTINCT`) ####
 
-实例: 计算去重后的行数
+实例10: 计算去重后的行数
 ```sql
 SELECT COUNT(DISTINCT product_type)
 FROM Product;
@@ -74,6 +90,7 @@ FROM Product;
 >- 如果这一列全是`NULL`, 那么返回的`MAX`,`MIN`,`AVG`也是`NULL`
 >- 这里得先对`product_type`去重再统计行数, 如果不这么做:
 
+实例11: 先计算数据行数再删除重复数据的结果
 ```sql
 SELECT DISTINCT COUNT(product_type)
 FROM Product;
@@ -82,21 +99,29 @@ FROM Product;
 >- 因为这里面对整列进行统计, 所以得到的是8条完全不同的, 除非有两行完全相同
 >- 但在这张table里不可能 因为`product_id`是Primary Key主键约束导致不能重复
 
+实例12: 使不使用`DISTINCT`时的动作差异(`SUM`函数)
+```sql
+SELECT SUM(sale_price), SUM(DISTINCT sale_price)
+FROM Product;
+--- 16780 和 16280, 因为有两个500的值,被去重后只剩下1个
+```
 
-额外例子:如果没有primary key作为区分, 则可以合并那些完全相同的行
+实例extra: 如果没有primary key作为区分, 则可以合并那些完全相同的行, 只能被出现一次
 ```sql
 SELECT DISTINCT *
 FROM Product_x;
 ```
->- 这样只会显示12行, 因为打孔器有很多完全重复的行
+>- 这样只会显示2行, 因为A和B全是复制了5次
 
-如何统计有多少行呢? 使用复合用法:
+实例extra: 如何统计Product_x有多少无重复的行呢? 使用复合用法:
 ```sql
 SELECT Count(*)
 FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
 >>> 12
 ```
->- 这里必须使用alias对新生成的Table取名
+>- 这里必须先生成一张新表而去重
+>   - 这张临时表必须要有alias名
+>   - 然后再去统计这张表有几行
 
 
 ---
@@ -106,7 +131,7 @@ FROM(SELECT DISTINCT * FROM product_x) as "Filtered_Table";
 
 在 `GROUP BY` 子句中指定的列称为聚合键或者分组列
 
-语法: `GROUP BY`语句
+语法1: `GROUP BY`语句
 ```sql
 SELECT <列名1>, <列名2>, <列名3>...
 FROM <表名>
@@ -118,7 +143,7 @@ GROUP BY <列名1>, <列名2>, <列名3>...;
 - 书写顺序: `SELECT` -> `FROM` -> `WHERE` -> `GROUP BY`
 - 执行顺序: `FROM` -> `WHERE` -> `GROUP BY` -> `SELECT`
 
-实例: 按照商品种类统计数据行数
+实例13: 按照商品种类统计数据行数
 ```sql
 SELECT product_type, COUNT(*)
 FROM Product
@@ -131,7 +156,7 @@ GROUP BY product_type;
 
 #### GROUP BY子句中包含NULL ####
 
-实例: 如果包含`NULL`
+实例14: 如果包含`NULL`
 ```sql
 SELECT purchase_price, COUNT(*)
 FROM Product
@@ -143,8 +168,15 @@ GROUP BY purchase_price;
 
 #### 使用WHERE + GROUP BY ####
 
-实例: 使用`WHERE` + `GROUP` BY
+语法2: 使用WHERE子句和GROUP BY子句进行汇总处理
+```sql
+SELECT <列名1>, <列名2>, <列名3>,...
+FROM <表名>
+WHERE
+GROUP BY <列名1>, <列名2>, <列名3>,...;
+```
 
+实例15: 使用`WHERE` + `GROUP` BY
 ```sql
 SELECT purchase_price, COUNT(*)
 FROM Product
@@ -162,7 +194,7 @@ GROUP BY purchase_price;
 - `GROUP BY`子句指定的列名(聚合键)(可多选)
 
 
-错误1: 把聚合键之外的列名书写在 `SELECT` 子句之中
+实例16, 错误1: 把聚合键之外的列名书写在 `SELECT` 子句之中
 ```sql
 SELECT product_name, purchase_price, COUNT(*)
 FROM Product
@@ -171,7 +203,7 @@ GROUP BY purchase_price;
 >- `product_name`并没有存在于`GROUP BY`语句, 也不是常数或者聚合函数
 >- 原因是, 根据`purchase_price`分组后, 行数减少, 而`product_name`行数没变, 导致不能一一对应
 
-错误2: 在`GROUP BY`子句中写了列的别名
+实例17, 错误2: 在`GROUP BY`子句中写了列的别名
 ```sql
 SELECT product_type AS pt, COUNT(*)
 FROM Product
@@ -184,7 +216,7 @@ GROUP BY pt;
 - 再次执行可以能顺序不同
 - 甚至只要是`SELECT`得语句得到的结果顺序也都是随机的
 
-错误4: 在`WHERE`子句中使用聚合函数
+实例18+19, 错误4: 在`WHERE`子句中使用聚合函数
 ```sql
 SELECT product_type, COUNT(*)
 FROM Product
@@ -226,7 +258,7 @@ GROUP BY product_type;
 使用`GROUP BY`分组后, 如何能够单独提取特定的组呢? 使用`HAVING`就可以实现
 
 
-语法: `HAVING`语句
+语法3: `HAVING`语句
 ```sql
 SELECT <列名1>, <列名2>, <列名3>, ……
 FROM <表名>
@@ -237,17 +269,26 @@ HAVING <分组结果对应的条件>
 >- 执行顺序也排在 `GROUP BY` 子句之后
 
 
-实例: 从按照商品种类进行分组后的结果中, 取出“包含的数据行数为2
+实例20+21: 从按照商品种类进行分组后的结果中, 取出“包含的数据行数为2
 行”的组
 ```sql
 SELECT product_type, COUNT(*)
 FROM Product
 GROUP BY product_type
 HAVING COUNT(*) = 2;
+-- 对比:
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type;
 ```
 
-实例:使用`HAVING`子句设定条件的情况
+
+实例22+23: 销售单价的平均值大于等于2500日元
 ```sql
+SELECT product_type, AVG(sale_price)
+FROM Product
+GROUP BY product_type;
+-- 对比:
 SELECT product_type, AVG(sale_price)
 FROM Product
 GROUP BY product_type
@@ -259,13 +300,6 @@ HAVING AVG(sale_price) >= 2500;
 >- 不能用`WHERE`应为它是用于对`FROM`的过滤, 在分组之前
 >- `HAVING`则是在分组之后的额外过滤手段
 
-实例:销售单价的平均值大于等于2500日元
-```sql
-SELECT product_type, AVG(sale_price)
-FROM Product
-GROUP BY product_type
-HAVING AVG(sale_price) >= 2500;
-```
 
 额外例子: 统计每种类型的产品有几种价位(`Product_x`)
 ```sql
@@ -283,9 +317,7 @@ GROUP BY product_type;
 - 聚合函数
 - `GROUP BY`子句中指定的列名(即聚合键)
 
-常见错误:
-
-错误1:
+实例24, 常见错误:
 ```sql
 SELECT product_type, COUNT(*)
 FROM Product
@@ -297,7 +329,7 @@ HAVING product_name = '圆珠笔';
 
 #### 相对于HAVING子句, 更适合写在WHERE子句中的条件 ####
 
-两组代码得到相同结果:
+实例25+26: 两组代码得到相同结果:
 ```sql
 SELECT product_type, COUNT(*)
 FROM Product
@@ -326,18 +358,11 @@ GROUP BY product_type;
 一般的`SELECT`语句显示出来的结果排序是随机的(就算偶尔显示的时候似乎像是排过序)
 在`SELECT`语句末尾添加`ORDER BY`就可以使得显示时强制排序
 
-语法: `ORDER BY`语句
+语法4: `ORDER BY`语句
 ```sql
 SELECT < 列名 1>, < 列名 2>, < 列名 3>, ……
 FROM < 表名 >
 ORDER BY < 排序基准列 1>, < 排序基准列 2>, ……
-```
-
-实例: 按照销售单价由低到高（升序）进行排列
-```sql
-SELECT product_id, product_name, sale_price, purchase_price
-FROM Product
-ORDER BY sale_price;
 ```
 
 至此:
@@ -350,11 +375,18 @@ ORDER BY sale_price;
 
 默认为升序排列, 如果需要降序则需要使用`DESC`关键字
 
-实例: 按照销售单价由高到低（降序）进行排列 (与上一例排序相反)
+实例27+28: 按照销售单价由高到低（降序）进行排列 (与上一例排序相反)
 ```sql
 SELECT product_id, product_name, sale_price, purchase_price
 FROM Product
 ORDER BY sale_price DESC;
+```
+
+实例29: 按照销售单价由低到高（升序）进行排列
+```sql
+SELECT product_id, product_name, sale_price, purchase_price
+FROM Product
+ORDER BY sale_price;
 ```
 
 
@@ -363,7 +395,7 @@ ORDER BY sale_price DESC;
 - 多个排序键则依主次顺序, 先确保按照主列排序, 然后在主列同数值范围内按次列排序
 - 规则是优先使用左侧的键，如果该列存在相同值的话，再接着参考右侧的键
 
-实例:
+实例30: 按照销售单价和商品编号的升序进行排序
 ```sql
 SELECT product_id, product_name, sale_price, purchase_price
 FROM Product
@@ -372,12 +404,18 @@ ORDER BY sale_price, product_id;
 
 #### NULL的顺序 ####
 
-**首先要明确不能对`NULL`使用比较符**
-- 不能对`NULL`和数字进行排列
-- 也不能对`NULL`和字符串和日期比较大小
-- NULL会在结果的开头或结尾显示
-    - 按照不同的SQL语言可能有所不同
-        - pSQL中`NULL`会被排在最后
+实例31: 按照进货单价的升序进行排列
+```sql
+SELECT product_id, product_name, sale_price, purchase_price
+FROM Product
+ORDER BY purchase_price;
+```
+>- **首先要明确不能对`NULL`使用比较符**
+>- 不能对`NULL`和数字进行排列
+>- 也不能对`NULL`和字符串和日期比较大小
+>- NULL会在结果的开头或结尾显示
+>   - 按照不同的SQL语言可能有所不同
+>       - pSQL中`NULL`会被排在最后
 
 #### 在排序中使用显示用的别名 ####
 
@@ -385,7 +423,7 @@ ORDER BY sale_price, product_id;
 - 一定要记住 `SELECT` 子 句的执行顺序在 `GROUP BY` 子句之后， `ORDER BY` 子句之前
     - 因此, `GROUP BY`在执行时不理解别名, 因为`SELECT`还没有被执行
 
-实例:
+实例32: `ORDER BY`子句中可以使用列的别名
 ```sql
 SELECT product_id AS id, product_name, sale_price AS sp, purchase_price
 FROM Product
@@ -398,14 +436,14 @@ ORDER BY sp, id;
 - `ORDER BY`可以使用`SELECT`中没有包含的列
 - `ORDER BY`也还可以使用聚合函数
 
-实例: `SELECT` 子句中未包含的列也可以在 `ORDER BY` 子句中使用
+实例33: `SELECT` 子句中未包含的列也可以在 `ORDER BY` 子句中使用
 ```sql
 SELECT product_name, sale_price, purchase_price
 FROM Product
 ORDER BY product_id;
 ```
 
-实例: `ORDER BY` 子句中也可以使用聚合函数
+实例34: `ORDER BY` 子句中也可以使用聚合函数
 ```sql
 SELECT product_type, COUNT(*)
 FROM Product
@@ -418,23 +456,20 @@ ORDER BY COUNT(*);
 列编号
 - SELECT 子句中的列按照从左到 右的顺序进行排列时所对应的编号（1, 2, 3, ...)
 
-
-虽然列编号使用起来非常方便，但我们并不推荐使用，原因有以下两点:
-1. 代码阅读起来比较难
-2. 这也是最根本的问题，实际上，在 SQL-92 A中已经明确指出该排序功能将来会被删除, 随着 DBMS 的版本升级，可能原本能够正常执行的 SQL 突然就会出错
-
-
-实例: 不使用列编号
+实例35: 不使用列编号与使用列编号
 ```sql
 SELECT product_id, product_name, sale_price, purchase_price
 FROM Product
 ORDER BY sale_price DESC, product_id;
 ```
 
-实例: 使用列编号
 ```sql
 SELECT product_id, product_name, sale_price, purchase_price
 --          1           2            3            4
 FROM Product
 ORDER BY 3 DESC, 1;
 ```
+
+虽然列编号使用起来非常方便，但我们并不推荐使用，原因有以下两点:
+1. 代码阅读起来比较难
+2. 这也是最根本的问题，实际上，在 SQL-92 A中已经明确指出该排序功能将来会被删除, 随着 DBMS 的版本升级，可能原本能够正常执行的 SQL 突然就会出错

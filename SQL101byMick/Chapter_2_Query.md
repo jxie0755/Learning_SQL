@@ -18,7 +18,7 @@
 - 通过`SELECT`语句查询并选取必要数据的过程叫匹配查询(Qu- ery)
 - `SELECT`语句石SQL中使用最多的最基本的语句
 
-语法:`SELECT`语句
+语法1: `SELECT`语句
 ```sql
 SELECT <列名>, ...
 FROM <表名>;
@@ -27,7 +27,7 @@ FROM <表名>;
     - `SLECT` 列举列的名称
     - `FROM`  指定表的名称
 
-实例:
+实例1: 从Product表中输出3列
 ```sql
 SELECT product_id, product_name, purchase_price
     FROM Product;
@@ -38,7 +38,7 @@ SELECT product_id, product_name, purchase_price
 
 #### 查询所有列 ####
 
-语法: 查询所有列
+语法2: 查询所有列
 ```sql
 SELECT *
 FROM <表名>
@@ -46,12 +46,26 @@ FROM <表名>
 >- `*`号代表所有
 >- 使用`*`就没没法设定顺序? 此时按照`CREATE TABLE`语句排序
 
+实例2: 输出Product表中全部的列
+```sql
+SELECT *
+FROM Product;
+```
 
 注意:
 - SQL可以随意使用换行
 - 但是不要插入空行
 
+实例3: 与代码清单2-2具有相同含义的SELECT语句
+```sql
+SELECT product_id, product_name, product_type, sale_price,
+purchase_price, regist_date
+FROM Product;
+```
+
 #### 为列设定别名 ####
+
+实例4+5: 为列设定别名
 ```sql
 SELECT product_id     AS id,
        product_name   AS name,
@@ -65,6 +79,7 @@ FROM Product;
 
 #### 常数的查询 ####
 
+实例6: 查询常数
 ```sql
 SELECT '商品' AS string, 38 AS number, '2009-02-24' AS date,
         product_id, product_name
@@ -75,6 +90,8 @@ FROM Product;
 
 
 #### 删除重复行 ####
+
+实例7+8: 使用DISTINCT删除product_type列中重复的数据
 ```sql
 SELECT DISTINCT purchase_price
 FROM Product;
@@ -82,7 +99,8 @@ FROM Product;
 >- 这样就会显示无重复的列数据
 >- `NULL`也会被视为一类数据
 
-如果出现多个列
+
+实例9: 在多列之前使用DISTINCT
 ```sql
 SELECT DISTINCT product_type, regist_date
 FROM product;
@@ -94,32 +112,47 @@ FROM product;
 
 
 #### WHERE 语句 ####
-语法: 通过使用`WHERE`添加选择条件
+语法3: 通过使用`WHERE`添加选择条件
 ```sql
 SELECT <列名>, ...
 FROM <表名>
 WHERE <条件表达式>;
 ```
 
-实例: 选取品类为`衣服`的记录
+实例10: 选取品类为`衣服`的记录
 ```sql
 SELECT product_name, product_type
 FROM Product
 WHERE product_type = '衣服';
 ```
 
+实例11: 也可以不选取出作为查询条件的列
 ```sql
 SELECT product_name
 FROM Product
 WHERE product_type = '衣服';
 ```
 
-实例2: 选取价格<=1000的商品
+实例12: 随意改变子句的书写顺序会造成错误
 ```sql
-SELECT product_name, product_type, sale_price
-FROM Product
-WHERE sale_price = 1000;
+SELECT product_name, product_type
+WHERE product_type = '衣服'
+FROM Product;
+>>> Error Message
 ```
+
+实例13+14+15+16: 单行与多行注释
+```sql
+-- 本SELECT语句会从结果中删除重复行。
+SELECT DISTINCT product_id, purchase_price
+FROM Product; -- really?
+
+SELECT DISTINCT product_id, purchase_price
+/* 本SELECT语句，
+会从结果中删除重复行 */
+FROM Product;
+```
+>- 注释可插入在任何地方, 甚至末尾
 >- 未必筛选的信息需要被`SELECT`
 >- `WHERE`必须在`FROM`之后
 
@@ -129,7 +162,7 @@ WHERE sale_price = 1000;
 
 #### 算术运算符 ####
 
-实例: 在显示数据时,对数据进行运算处理
+实例17: 在显示数据时,对数据进行运算处理
 ```sql
 SELECT 
     product_name, 
@@ -152,11 +185,13 @@ SELECT (100+200)*3 AS calculation;
 
 #### 比较运算符 ####
 
-实例: 选出sale_price不等于500的记录
+实例18+19+20: 选出sale_price等于/不等于500 + 大于等于1000的记录
 ```sql
-SELECT product_name, product_type, sale_price
+SELECT product_name, product_type
 FROM Product
-WHERE sale_price <> 1000;
+WHERE sale_price = 500;   -- 等于
+WHERE sale_price <> 500;  -- 不等于
+WHERE sale_price >= 1000;  -- 如题
 ```
 
 SQL中的Boolean比较符
@@ -167,20 +202,28 @@ SQL中的Boolean比较符
 - `<=` 小于等于
 - `>=` 大于等于
 
-实例: 日期的比较
+实例21: 日期的比较
 ```sql
 SELECT product_name, product_type, regist_date 
 FROM Product 
 WHERE regist_date < '2009-09-27';
 ```
->- 连续对比不能连用, 而是要使用`END`
 
+实例22: WHERE子句的条件表达式中也可以使用计算表达式
+```sql
+SELECT product_name, sale_price, purchase_price
+FROM Product
+WHERE sale_price - purchase_price >= 500;
+```
+
+实例extra
 ```sql
 '2009-09-01' < regist_date < '2009-09-20';  -- WRONG
 regist_date < '2009-09-20' AND regist_date > '2009-09-01'; -- RIGHT
 ```
->- 对字符串使用不等号
+>- 连续对比不能连用, 而是要使用`AND`
 
+实例24: 对字符串使用不等号
 ```sql
 SELECT chr
 FROM Chars 
@@ -190,8 +233,14 @@ WHERE chr > '2';
 >- 为什么不显示3,10,11和22?
 >- 因为字符按字典顺序排列: 1, 10, 11, 2, 222, 3
 
-注意: `NULL`不能被比较
+实例25: 选取进货单价为2800日元的记录
+```sql
+SELECT product_name, purchase_price
+FROM Product
+WHERE purchase_price = 2800;
+```
 
+实例26: `NULL`不能被比较
 ```sql
 SELECT product_name, purchase_price
 FROM Product
@@ -199,6 +248,7 @@ WHERE purchase_price <> 2800;
 ```
 >- 由于`叉子`和`圆珠笔`的`purchase_price`是`NULL`, 所以就算不等于2800也不会被显示
 
+实例27: 选出`NULL`值的行, 仍然失败
 ```sql
 SELECT product_name, purchase_price
 FROM Product
@@ -206,7 +256,7 @@ WHERE purchase_price = NULL;
 ```
 >- 使得`purchase_price = NULL`同样无法得到`叉子`和`圆珠笔`
 
-正确的方式:
+实例28: 选出`NULL`值的正确方式:
 ```sql
 SELECT product_name, purchase_price
 FROM Product
@@ -227,11 +277,13 @@ WHERE purchase_price IS NULL;
 - 不能单独使用, 需要和其他条件组合
 - 也就是反向的`Boolean`
 
-实例: 选取价格小于1000的产品
+实例30+31+32: 选取价格小于1000的产品
 ```sql
 SELECT product_name, product_type, sale_price
 FROM Product
-WHERE NOT sale_price >= 1000;
+WHERE sale_price >= 1000;
+WHERE NOT sale_price >= 1000;  -- 与上句相反
+WHERE sale_price < 1000;  -- 与上句等价
 ```
 
 #### AND运算符和OR运算符 ####
@@ -239,17 +291,18 @@ WHERE NOT sale_price >= 1000;
 - 同理于`Boolean`的`and`和`or`
 - 短路?
 
-实例:
+实例33+34: 使用`AND`和`OR`
 ```sql
 SELECT product_name, sale_price
 FROM Product
+WHERE product_type = '厨房用具' AND sale_price >= 3000;
 WHERE product_type = '厨房用具' OR sale_price >= 3000;
 ```
 
 
 #### 通过括号强化处理 ####
 
-实例: 通过括号改变评价顺序
+实例35: 通过括号改变评价顺序
 ```sql
 SELECT product_name, product_type, regist_date
 FROM Product
@@ -257,6 +310,13 @@ WHERE
 product_type = '办公用品'
   AND 
 (regist_date = '2009-09-11' OR regist_date = '2009-09-20');
+```
+
+实例36: 通过使用括号让OR运算符先于AND运算符执行
+```sql
+SELECT product_name, product_type, regist_date
+FROM Product
+WHERE product_type = '办公用品' AND (regist_date = '2009-09-11' OR regist_date = '2009-09-20');
 ```
 
 #### 逻辑运算符和真值 ####

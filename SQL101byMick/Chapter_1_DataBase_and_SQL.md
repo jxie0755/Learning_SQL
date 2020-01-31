@@ -101,7 +101,7 @@
 CREATE DATABASE <数据库名称>;
 ```
 
-例如:
+实例1:
 ```
 CREATE DATABASE shop;
 ```
@@ -154,7 +154,7 @@ set search_path = "public" -- 默认设为public
 ---
 ### 1-4 表的创建 ###
 
-语法: 创建`TABLE`
+语法1: 创建`TABLE`
 ```sql
 CREATE TABLE  <表名> (
 <列名 1> <数据类型> <该列所需约束>，
@@ -169,7 +169,7 @@ CREATE TABLE  <表名> (
 
 - 约束可以在定义列的时 候进行设置，也可以在语句的末尾进行设置
 
-实际样本:
+实例2:
 ```sql
 CREATE TABLE Product
 (product_id      CHAR(4)      NOT NULL,
@@ -227,15 +227,19 @@ CREATE TABLE Product
 ---
 ### 1-5 表的更新和删除 ###
 
-删除Table用`DROP`
+语法2: 删除Table用`DROP`
 ```sql
 DROP TABLE <表名>;
 ```
 - 一旦删除则无法恢复
 - 执行前务必确认!
 
+实例3: 删除Product表
+```sql
+DROP TABLE Product;
+```
 
-语法: 表定义的更新使用`ALTER`
+语法3: 表定义的更新使用`ALTER`
 - 添加Column使用`ADD COLUMN`
 - 删除Column使用`DROP COLUMN`
 ```sql
@@ -243,32 +247,32 @@ ALTER TABLE <表名> ADD COLUMN <列的定义>
 ALTER TABLE <表名> DROP COLUMN <列名>;
 ```
 
-实例:
-```
-ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100) NOT NULL;
-```
-
-实例:
-```
-ALTER TABLE product DROP COLUMN product_name_pinyin;
-```
-
-语法: 改Table名使用`RENAME`
+语法4: 添加列的ALTER TABLE语句
 ```sql
 ALTER TABLE <表名>
   RENAME TO <新表名>;
 ```
 
-改Column名使用`RENAME`:
+实例4:
+```
+ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100) NOT NULL;
+```
+
+语法5: 删除列的ALTER TABLE语句
 ```sql
 ALTER TABLE <表名>
   RENAME COLUMN <列名> TO <新列名>;
 ```
 
+实例5:
+```
+ALTER TABLE product DROP COLUMN product_name_pinyin;
+```
+
 
 #### 向表中插入数据 ####
 
-语法: 题头使用`BEGIN TRANSACTION;`
+语法6: 题头使用`BEGIN TRANSACTION;`
 ```sql
 BEGIN TRANSACTION;
 END TRANSACTION;
@@ -296,9 +300,9 @@ COMMIT;
 >   - `COMMIT`在这里基本等同于`END TRANSACTION` (本地修改) + 其他用户可见
 >   - > 详情请见https://stackoverflow.com/a/14806572/8435726
 
-实例
+实例6
 ```
-BEGIN TRANSACTION ;
+BEGIN TRANSACTION;
 INSERT INTO Product VALUES ('0001', 'T恤' ,'衣服', 1000, 500, '2009-09-20');
 INSERT INTO Product VALUES ('0002', '打孔器', '办公用品', 500, 320, '2009-09-11');
 INSERT INTO Product VALUES ('0003', '运动T恤', '衣服', 4000, 2800, NULL);
