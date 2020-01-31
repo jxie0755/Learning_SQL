@@ -268,16 +268,16 @@ ALTER TABLE <表名>
 
 #### 向表中插入数据 ####
 
-题头使用
+语法: 题头使用`BEGIN TRANSACTION;`
 ```sql
 BEGIN TRANSACTION;
+END TRANSACTION;
 ```
-
-注意:
-- 如果不写,则每条都是单独的`BEGIN TRANSACTION`
-- 如果中间有一条数据出错, 那之前的都被写进去了
-- 如果使用`BEGIN TRANSACTION`, 则只要有一个地方出错, 整块都不会被输入
-    - 这样就便于管理和避免混乱
+>- 如果不写,则每条都是单独的`BEGIN TRANSACTION;`和`END TRANSACTION;`
+>- 如果中间有一条数据出错, 那之前的都被写进去了, 甚至可以选择跳过出错的语句继续执行余下的命令
+>- 如果使用`BEGIN TRANSACTION`:
+>   - 结尾必须要`END TRANSACTION`, 否则数据虽然已经被输入, 但是不会被显示出来.
+>   - 在`BEGIN`和`END`之间必须要保证全程无错,否则整块都不会被输入, 样就便于管理和避免混乱
 
 随后使用`INSERT`插入数据
 ```sql
