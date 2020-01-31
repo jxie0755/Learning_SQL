@@ -263,7 +263,7 @@ DELETE FROM <表名>;
 ```
 
 - 标准SQL中用来从表中删除数据的只有`DELETE`语句
-- 但是，很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句。
+- 但是, 很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句。
     - 这些产品主要包括 Oracle, SQL Server, PostgreSQL, MySQL和DB2
 - 实际上, `DELETE`语句在DML语句中也属于处理时间比较长的
     - 因此需要删除全部数据行时，使用`TRUNCATE`可以缩短执行时间
