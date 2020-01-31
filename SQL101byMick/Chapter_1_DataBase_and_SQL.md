@@ -293,6 +293,8 @@ INSERT INTO <表名> VALUES (<列1数据>, <列2数据>, <列3数据>, ...)
 COMMIT;
 ```
 >- 不`COMMIT`本用户能看到变化, 但是其他用户看不到
+>   - `COMMIT`在这里基本等同于`END TRANSACTION` (本地修改) + 其他用户可见
+>   - > 详情请见https://stackoverflow.com/a/14806572/8435726
 
 实例
 ```
