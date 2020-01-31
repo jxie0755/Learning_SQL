@@ -14,7 +14,7 @@
 ---
 ### 4-1 数据的插入 ###
 
-首先创建一个空表ProductIns用于试验:
+实例1: 首先创建一个空表ProductIns用于试验:
 ```sql
 CREATE TABLE ProductIns
 (product_id      CHAR(4)      NOT NULL,
@@ -28,14 +28,14 @@ CREATE TABLE ProductIns
 
 #### INSERT语句基本语法 ####
 
-语法: `INSERT`的使用
+语法1: `INSERT`的使用
 ```sql
 INSERT INTO <表名> (列1, 列2, 列3 , ...) 
 VALUES 
     (值1, 值2, 值3, ...);
 ```
 
-实例: 插入一条数据
+实例2: 插入一条数据
 ```sql
 INSERT INTO ProductIns
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
@@ -49,7 +49,7 @@ VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 
 #### 列清单的省略 ####
 
-对表进行全列 INSERT 时，可以省略表名后的列清单:
+实例3: 对表进行全列 INSERT 时，可以省略表名后的列清单:
 ```sql
 INSERT INTO ProductIns 
 VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
@@ -67,8 +67,13 @@ VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
 
 #### 插入NULL ####
 
-`INSERT`语句中想给某一列赋予`NULL`值时，可以直接在`VALUES`子句的值清单中写入`NULL`
-- 想要插入`NULL`的列一定不能设置`NOT NULL`约束
+实例4: purchase_price列中插入NULL
+```sql
+INSERT INTO ProductIns (product_id, product_name, product_type, sale_price, purchase_price, regist_date) 
+    VALUES ('0006', '叉子', '厨房用具', 500, NULL, '2009-09-20');
+```
+>- `INSERT`语句中想给某一列赋予`NULL`值时，可以直接在`VALUES`子句的值清单中写入`NULL`
+>- 想要插入`NULL`的列一定不能设置`NOT NULL`约束
 
 
 #### 插入默认值 ####
@@ -76,7 +81,7 @@ VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
 在创建`TABLE`的时候, 可以向表中插入默认值(初始值)
 - 通过设置`DEFAULT`来约束
 
-实例: 在创建`ProductIns`这个列表时,`sale_price`这列就有一个默认为0的初始值
+实例5: 在创建`ProductIns`这个列表时,`sale_price`这列就有一个默认为0的初始值
 ```sql
 CREATE TABLE ProductIns
 (略
@@ -87,7 +92,7 @@ CREATE TABLE ProductIns
 
 如果在创建`TABLE`时赋予了默认值, 那么插入数据时也可以插入默认值
 
-实例: 显式方法插入默认值
+实例6: 显式方法插入默认值
 ```sql
 INSERT INTO productins
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
@@ -95,8 +100,7 @@ VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 ```
 >- 在对应`sale_price`列的值区插入`DEFAULT`
 
-实例: 隐式方法插入默认值
-
+实例7: 隐式方法插入默认值
 ```sql
 INSERT INTO productins
     (product_id, product_name, product_type, purchase_price, regist_date)
@@ -106,13 +110,12 @@ VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 >- 不建议这么做, 容易引起混乱
 
 
-实例: 列清单的省略之后必须用显示方法
+实例extra: 列清单的省略之后必须用显示方法
 ```sql
 INSERT INTO productins
 VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 ```
 >- 此处写入`DEFAULT`: 插入默认值成功
-
 
 ```sql
 INSERT INTO productins
@@ -122,7 +125,7 @@ VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 >- 此处省略`DEFAULT`: 插入默认值失败
 
 
-实例: 未设定默认值
+实例8: 未设定默认值
 ```sql
 INSERT INTO productins (product_id, product_name, product_type, sale_price, regist_date)
 VALUES ('0008', '圆珠笔', '办公用品', 100, '2009-12-12');
@@ -140,8 +143,7 @@ VALUES ('0008', '办公用品', 1000, 500, '2009-12-12');
 
 除了使用`VALUES`子句指定具体的数据之外, 还可以从其他表中复制数据
 
-实例: 创建一张复制的表格
-
+实例9: 创建一张复制的表格
 ```sql
 -- 首先创建一个和原Product表一样的空表格, 只是改了名字叫做ProductCopy
 CREATE TABLE ProductCopy
@@ -154,8 +156,8 @@ regist_date      DATE,
 PRIMARY KEY (product_id));
 ```
 
+实例10: 将Product表中的数据复制到ProductCopy表中
 ```sql
--- 然后将Product表中的数据复制到ProductCopy表中
 INSERT INTO ProductCopy (product_id, product_name, product_type,sale_price, purchase_price, regist_date)
 SELECT product_id, product_name, product_type, sale_price, purchase_price, regist_date
 FROM Product;
@@ -164,6 +166,7 @@ FROM Product;
 >   - 简单的说以前就是`INSERT`指定一张表,`VALUE`则是输入一行数据
 >   - 现在就是`INSERT`一整列到指定一张表, 而这一列是从另一张表中`SELECT`得来
 
+实例10 extra:
 ```sql
 -- 测试隐式复制, 也可以通过 (ProductCopy2的创建同ProductCopy)
 INSERT INTO ProductCopy2  -- 如果是插入全部列, 这里可以省略
@@ -176,7 +179,7 @@ SELECT *
 FROM Product;
 ```
 
-实例:尝试一下使用包含 GROUP BY 子句的 SELECT 语句进行插入
+实例11:尝试一下使用包含 GROUP BY 子句的 SELECT 语句进行插入
 ```sql
 -- 根据商品种类进行汇总的表 ；
 CREATE TABLE ProductType
@@ -187,8 +190,8 @@ PRIMARY KEY (product_type));
 -- 此表一共三列, 类型, 售价总和 与 买入价总和
 ```
 
+实例12: 插入全三列, 然后下面的SELECT语句则是从Product表中通过聚合函数得出
 ```sql
--- 插入全三列, 然后下面的SELECT语句则是从Product表中通过聚合函数得出
 INSERT INTO ProductType (product_type, sum_sale_price, sum_purchase_price)
 SELECT product_type, SUM(sale_price), SUM(purchase_price)
 FROM Product
@@ -212,18 +215,17 @@ GROUP BY product_type;
 
 #### DELETE语句的基本语法 ####
 
-语法: 保留数据表，仅删除全部数据行的`DELETE`
+语法2: 保留数据表，仅删除全部数据行的`DELETE`
 - 如果语句中忘了写 FROM，而是写成了`DELETE <表名>`或者写了多余的列名, 都会出错, 无法正常执行, 请大家特别注意
     - `DELETE <表名>`无法正常执行的原因是删除对象不是表，而是表中的数据行
     - `DELETE * FROM <表名>;`无法正常执行因为`DELETE`语句的对象是行而不是列，所以`DELETE`语句无法只删除部分列的数据
         - 若要删除列, 参见Chapter 1-5中使用`ALTER` + `ADD COLUMN`/`DROP COLUMN`
-
 ```sql
 DELTE FROM <表名>;
 -- 不适用于psql, 见本节专栏
 ```
 
-实例:
+实例13: 清空Product表
 ```sql
 DELETE FROM Product;
 ```
@@ -233,14 +235,14 @@ DELETE FROM Product;
 - 想要删除部分数据行时，可以像`SELECT`语句那样使用`WHERE`子句指定删除条件.
 - 这种指定了删除对象的`DELETE`语句称为搜索型`DELETE`
 
-语法: 删除部分数据行的搜索型`DELETE`
+语法3: 删除部分数据行的搜索型`DELETE`
 - `WHERE`子句的书写方式与此前介绍的`SELECT`语句完全一样
 ```sql
 DELETE FROM <表名>
 WHERE <条件>;
 ```
 
-实例: 删除销售单价(sale_price)大于等于4000日元的数据
+实例14: 删除销售单价(sale_price)大于等于4000日元的数据
 ```sql
 DELETE FROM Product
 WHERE sale_price >= 4000;
@@ -280,15 +282,39 @@ DELETE FROM <表名>;
 - 使用 INSERT 语句向表中插入数据之后，有时却想要再更改数据
 - 和`INSERT`语句, `DELETE`语句一样, `UPDATE`语句也属于DML语句
 
-语法: 改变表中数据的`UPDATE`语句
+语法4: 改变表中数据的`UPDATE`语句
 ```sql
 UPDATE <表名>
     SET <列名> = <表达式>;
 ```
-> -将更新对象的列和更新后的值都记述在`SET`子句中
+>- 将更新对象的列和更新后的值都记述在`SET`子句中
 
-实例: 将登记日期全部更新为“2009-10-10”
+实例15: 将登记日期全部更新为“2009-10-10”
+```sql
+UPDATE Product
+    SET regist_date = '2009-10-10';
+```
+>- 如果不使用`WHERE`语句的话, 则会对整张表起作用
+>   - psql会发出警告, 但是仍然可以强制执行
 
+
+#### 指定条件的UPDATE语句 (搜索型UPDATE) ####
+
+更新数据时也可以像`DELETE`语句那样使用`WHERE`子句，这种指定更新对象的`UPDATE`语句称为搜索型`UPDATE`语句
+
+语法5: 更新部分数据行的搜索型`UPDATE`
+```sql
+UPDATE <表名>
+    SET <列名> = <表达式>
+WHERE <条件>;
+```
+
+实例16: 将商品种类为厨房用具的记录的销售单价更新为原来的10倍
+```sql
+UPDATE Product
+    SET sale_price = sale_price * 10
+WHERE product_type = '厨房用具';
+```
 
 
 
