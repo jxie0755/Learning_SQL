@@ -96,7 +96,7 @@
 
 #### 数据库的创建 ####
 
-语法: 创建`DATABASE`数据库
+语法0: 创建`DATABASE`数据库
 ```sql
 CREATE DATABASE <数据库名称>;
 ```
