@@ -143,12 +143,12 @@ FROM Product;
 
 实例13+14+15+16: 单行与多行注释
 ```sql
--- 本SELECT语句会从结果中删除重复行。
+-- 本SELECT语句会从结果中删除重复行.
 SELECT DISTINCT product_id, purchase_price
 FROM Product; -- really?
 
 SELECT DISTINCT product_id, purchase_price
-/* 本SELECT语句，
+/* 本SELECT语句, 
 会从结果中删除重复行 */
 FROM Product;
 ```

@@ -7,7 +7,7 @@
 - 对表中所有列进行`INSERT`操作时可以省略表名后的列清单.
 - 插入`NULL`时需要在`VALUES`子句的值清单中写入`NULL`.
 - 可以为表中的列设定默认值(初始值), 默认值可以通过在`CREATE TABLE`语句中为列设置`DEFAULT`约束来设定.
-- 插入默认值可以通过两种方式实现，即在`INSERT`语句的`VALUES`子句中指定`DEFAULT`关键字(显式方法), 或省略列清单(隐式方法).
+- 插入默认值可以通过两种方式实现, 即在`INSERT`语句的`VALUES`子句中指定`DEFAULT`关键字(显式方法), 或省略列清单(隐式方法).
 - 使用 `INSERT... SELECT`可以从其他表中复制数据.
 
 
@@ -41,7 +41,7 @@ INSERT INTO ProductIns
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
 VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 ```
->- 将列名和值用逗号隔开，分别括在`()`内，这种形式称为清单
+>- 将列名和值用逗号隔开, 分别括在`()`内, 这种形式称为清单
 >- 其中列与值得顺序必须对应起来
 >    - 如果没有值, 且没有规定为`NOT NULL`则需要用`null`来填补空缺
 >- 原则上, 执行一次`INSERT`语句则会插入一行数据
@@ -49,7 +49,7 @@ VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 
 #### 列清单的省略 ####
 
-实例3: 对表进行全列 INSERT 时，可以省略表名后的列清单:
+实例3: 对表进行全列 INSERT 时, 可以省略表名后的列清单:
 ```sql
 INSERT INTO ProductIns 
 VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
@@ -72,7 +72,7 @@ VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
 INSERT INTO ProductIns (product_id, product_name, product_type, sale_price, purchase_price, regist_date) 
     VALUES ('0006', '叉子', '厨房用具', 500, NULL, '2009-09-20');
 ```
->- `INSERT`语句中想给某一列赋予`NULL`值时，可以直接在`VALUES`子句的值清单中写入`NULL`
+>- `INSERT`语句中想给某一列赋予`NULL`值时, 可以直接在`VALUES`子句的值清单中写入`NULL`
 >- 想要插入`NULL`的列一定不能设置`NOT NULL`约束
 
 
@@ -181,7 +181,7 @@ FROM Product;
 
 实例11:尝试一下使用包含 GROUP BY 子句的 SELECT 语句进行插入
 ```sql
--- 根据商品种类进行汇总的表 ；
+-- 根据商品种类进行汇总的表 : 
 CREATE TABLE ProductType
 (product_type VARCHAR(32) NOT NULL,
 sum_sale_price INTEGER ,
@@ -208,17 +208,17 @@ GROUP BY product_type;
 两种方法删除数据, 区别:
 - `DROP TABLE`语句可以将表完全删除
     - `DROP TABLE`语句会完全删除整张表
-    - 删除之后再想插入数据，就必须使用`CREATE TABLE`语句重新创建一张表
+    - 删除之后再想插入数据, 就必须使用`CREATE TABLE`语句重新创建一张表
 - `DELETE`语句会留下表(容器), 而删除表中的全部数据
     - `DELETE`语句在删除数据(行)的同时会保留数据表, 因此可以通过`INSERT`语句再次向表中插入数据
 
 
 #### DELETE语句的基本语法 ####
 
-语法2: 保留数据表，仅删除全部数据行的`DELETE`
-- 如果语句中忘了写 FROM，而是写成了`DELETE <表名>`或者写了多余的列名, 都会出错, 无法正常执行, 请大家特别注意
-    - `DELETE <表名>`无法正常执行的原因是删除对象不是表，而是表中的数据行
-    - `DELETE * FROM <表名>;`无法正常执行因为`DELETE`语句的对象是行而不是列，所以`DELETE`语句无法只删除部分列的数据
+语法2: 保留数据表, 仅删除全部数据行的`DELETE`
+- 如果语句中忘了写 FROM, 而是写成了`DELETE <表名>`或者写了多余的列名, 都会出错, 无法正常执行, 请大家特别注意
+    - `DELETE <表名>`无法正常执行的原因是删除对象不是表, 而是表中的数据行
+    - `DELETE * FROM <表名>;`无法正常执行因为`DELETE`语句的对象是行而不是列, 所以`DELETE`语句无法只删除部分列的数据
         - 若要删除列, 参见Chapter 1-5中使用`ALTER` + `ADD COLUMN`/`DROP COLUMN`
 ```sql
 DROP TABLE <表名>;
@@ -235,7 +235,7 @@ DELETE FROM Product;
 
 #### 指定删除对象的DELETE语句(搜索型DELTE) ####
 
-- 想要删除部分数据行时，可以像`SELECT`语句那样使用`WHERE`子句指定删除条件.
+- 想要删除部分数据行时, 可以像`SELECT`语句那样使用`WHERE`子句指定删除条件.
 - 这种指定了删除对象的`DELETE`语句称为搜索型`DELETE`
 
 语法3: 删除部分数据行的搜索型`DELETE`
@@ -268,10 +268,10 @@ DELETE FROM <表名>
 WHERE TRUE;   -- psql要求DELETE必须带有WHERE命令, 不然会出提示, 可以强制执行
 ```
 >- 标准SQL中用来从表中删除数据的只有`DELETE`语句
->- 但是, 很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句。
+>- 但是, 很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句.
 >   - 这些产品主要包括 Oracle, SQL Server, PostgreSQL, MySQL和DB2
 >- 实际上, `DELETE`语句在DML语句中也属于处理时间比较长的
->   - 因此需要删除全部数据行时，使用`TRUNCATE`可以缩短执行时间
+>   - 因此需要删除全部数据行时, 使用`TRUNCATE`可以缩短执行时间
 >   - 产品不同需要注意的地方也不尽相同, 在Oracle中, 把`TRUNCATE`定义为DDL, 而不是DML
 >   - 使用`TRUNCATE`时, 请大家仔细阅读使用手册, 多加注意. 便利的工具往往还是会存在一些不足之处的
 
@@ -282,7 +282,7 @@ WHERE TRUE;   -- psql要求DELETE必须带有WHERE命令, 不然会出提示, �
 
 #### UPDATE语句的基本语法 ####
 
-- 使用 INSERT 语句向表中插入数据之后，有时却想要再更改数据
+- 使用 INSERT 语句向表中插入数据之后, 有时却想要再更改数据
 - 和`INSERT`语句, `DELETE`语句一样, `UPDATE`语句也属于DML语句
 
 语法4: 改变表中数据的`UPDATE`语句
@@ -292,7 +292,7 @@ UPDATE <表名>
 ```
 >- 将更新对象的列和更新后的值都记述在`SET`子句中
 
-实例15: 将登记日期全部更新为“2009-10-10”
+实例15: 将登记日期全部更新为"2009-10-10"
 ```sql
 UPDATE Product
     SET regist_date = '2009-10-10';
@@ -303,7 +303,7 @@ UPDATE Product
 
 #### 指定条件的UPDATE语句 (搜索型UPDATE) ####
 
-更新数据时也可以像`DELETE`语句那样使用`WHERE`子句，这种指定更新对象的`UPDATE`语句称为搜索型`UPDATE`语句
+更新数据时也可以像`DELETE`语句那样使用`WHERE`子句, 这种指定更新对象的`UPDATE`语句称为搜索型`UPDATE`语句
 
 语法5: 更新部分数据行的搜索型`UPDATE`
 ```sql
