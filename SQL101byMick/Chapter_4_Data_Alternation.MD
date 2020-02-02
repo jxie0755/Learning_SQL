@@ -226,6 +226,8 @@ DROP TABLE <表名>;
 
 DELETE FROM <表名>;
 -- 只是删除表中的内容, 但是保留表本体, 不适用于psql, 见本节专栏
+
+TRUNCATE <表名>;  -- 对等于: DELETE FROM <表名>, 参见章末专栏;
 ```
 
 实例13: 清空Product表
@@ -260,12 +262,11 @@ WHERE sale_price >= 4000;
 
 #### 专栏: 删除和舍弃 ####
 
-语法2 extra: 只能删除表中全部数据的`TRUNCATE`语句
+只能删除表中全部数据的`TRUNCATE`语句
 ```sql
 TRUNCATE <表名>;
 -- 对等于:
-DELETE FROM <表名>
-WHERE TRUE;   -- psql要求DELETE必须带有WHERE命令, 不然会出提示, 可以强制执行
+DELETE FROM <表名> WHERE TRUE;   -- psql要求DELETE必须带有WHERE命令, 不然会出提示, 可以强制执行
 ```
 >- 标准SQL中用来从表中删除数据的只有`DELETE`语句
 >- 但是, 很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句.
@@ -274,7 +275,6 @@ WHERE TRUE;   -- psql要求DELETE必须带有WHERE命令, 不然会出提示, �
 >   - 因此需要删除全部数据行时, 使用`TRUNCATE`可以缩短执行时间
 >   - 产品不同需要注意的地方也不尽相同, 在Oracle中, 把`TRUNCATE`定义为DDL, 而不是DML
 >   - 使用`TRUNCATE`时, 请大家仔细阅读使用手册, 多加注意. 便利的工具往往还是会存在一些不足之处的
-
 
 
 ---
