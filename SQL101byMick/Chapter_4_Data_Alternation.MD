@@ -319,7 +319,41 @@ UPDATE Product
 WHERE product_type = '厨房用具';
 ```
 
+#### 使用NULL进行更新 ####
+
+使用`UPDATE`也可以将列更新为NULL, 俗称`NULL`清空
+
+实例17: 将商品编号为 0008 的数据（圆珠笔）的登记日期更新为 `NULL`
+```sql
+UPDATE Product
+SET regist_date = NULL 
+WHERE product_id = '0008';
+```
+>- 最快速锁定一行数据的方法显然是锁定primary key的值, 因为它不可重复
+>- 此时只需要将赋值表达式右边的值直接写为`NULL`即可
+>- 和`INSERT`语句一样, `UPDATE`语句也可以将`NULL`作为一个值来使用
+>   - 但是, 只有未设置`NOT NULL`约束和主键约束的列才可以清空为`NULL`
+
+#### 多列更新 ####
+
+`UPDATE`语句的`SET`子句支持同时将多个列作为更新对象
+
+实例18+19: 能够正确执行的繁琐的`UPDATE`语句
+```sql
+不必写两条UPDATE语句改两个列的数据, 只需要一条UPDATE可以实现多列操作
+
+--第一种方法(比较通用):
+UPDATE Product
+SET sale_price = sale_price * 10, purchase_price = purchase_price / 2
+WHERE product_type = '厨房用具';
+
+--第二种方法(只能在psql和DB2中使用):
+UPDATE Product
+SET (sale_price, purchase_price) = (sale_price * 10, purchase_price / 2)
+WHERE product_type = '厨房用具';
+```
 
 
 ---
 ### 4-4 事务 ###
+
