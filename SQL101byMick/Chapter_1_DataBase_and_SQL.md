@@ -4,6 +4,7 @@
 ---
 ### 1-1 数据库是什么 ###
 
+学习重点:
 - 将大量数据保存起来, 通过计算机加工而成的可以进行高效访数据的数据集合称为数据库(Database,  DB)
 - 用来管理数据库的计算机系统称为数据库管理系统 (Database Management System,  DBMS)
 - 系统的使用者通常无法直接接触到数据库.因此, 在使用系统的时候往往意识不到数据库的存在
@@ -40,6 +41,13 @@
 ---
 ### 1-2 数据库的结构 ###
 
+学习重点:
+- RDBMS通常使用客户端/服务器这样的系统结构。
+- 通过从客户端向服务器端发送SQL语句来实现数据库的读写操作。
+- 关系数据库采用被称为数据库表的二维表来管理数据。
+- 数据库表由表示数据项目的列（字段）和表示一条数据的行（记录）所组成，以记录为单位进行数据读写。
+- 本书将行和列交汇的方格称为单元格，每个单元格只能输入一个数据。
+
 #### RDBMS 常见结构 ####
 - 客户端 - 服务器 - 数据库 结构
     - 客户端发送SQL语句给服务器
@@ -55,6 +63,17 @@
 
 ---
 ### 1-3 SQL概要 ###
+
+学习重点:
+- SQL是为操作数据库而开发的语言。
+- 虽然SQL也有标准，但实际上根据RDBMS的不同SQL也不尽相同。
+- SQL通过一条语句来描述想要进行的操作，发送给RDBMS。
+- 原则上SQL语句都会使用分号结尾。
+- SQL根据操作目的可以分为DDL、DML和DCL。
+
+#### 标准SQL ####
+- 国际标准化组织（ISO）为 SQL 制定了相应的标准，以此为基准的SQL称为标准SQL（相关信息请参考专栏——标准SQL和特定的SQL）。
+- 以前，完全基于标准SQL的RDBMS很少，通常需要根据不同的RDBMS来编写特定的SQL语句。
 
 #### SQL 语句和类型 ####
 - DDL (Data Defnition Language, 数据定义语言)
@@ -79,7 +98,6 @@
 **实际使用SQL时, 有90%的语句属于DML**
 
 
-
 #### SQL 基本书写规则 ####
 
 - 语句以分号`;`结尾
@@ -94,9 +112,32 @@
 - 单词需要使用空格分隔
 
 
-#### 数据库的创建 ####
+#### 设定DATABASE中的schemas ####
+```
+set search_path = "public" -- 默认设为public
+```
 
-语法0: 创建`DATABASE`数据库
+[How to select a schema in postgres when using psql?](https://stackoverflow.com/a/34098414/8435726)
+> And to put the new schema in the path, you could use:
+> - SET search_path TO myschema;
+> - Or if you want multiple schemas:
+> - SET search_path TO myschema, public;
+
+
+---
+### 1-4 表的创建 ###
+
+学习重点:
+- 表通过`CREATE TABLE`语句创建而成。
+- 表和列的命名要使用有意义的文字。
+- 指定列的数据类型（整数型、字符型和日期型等）。
+- 可以在表中设置约束（主键约束和 NOT NULL 约束等）。
+
+#### 表的内容的创建 ####
+
+#### 数据库的创建(CREATE DATABASE)语句 ####
+
+语法1: 创建`DATABASE`数据库
 ```sql
 CREATE DATABASE <数据库名称>;
 ```
@@ -139,22 +180,8 @@ CREATE DATABASE shop;
 > Technically PostgreSQL can't switch databases. You must disconnect and reconnect to the new DB.
 
 
-#### 设定DATABASE中的schemas ####
-```
-set search_path = "public" -- 默认设为public
-```
-
-[How to select a schema in postgres when using psql?](https://stackoverflow.com/a/34098414/8435726)
-> And to put the new schema in the path, you could use:
-> - SET search_path TO myschema;
-> - Or if you want multiple schemas:
-> - SET search_path TO myschema, public;
-
-
----
-### 1-4 表的创建 ###
-
-语法1: 创建`TABLE`
+#### 表的创建(CREATE TABLE)语句 ####
+语法2: 创建`TABLE`
 ```sql
 CREATE TABLE  <表名> (
 <列名 1> <数据类型> <该列所需约束>, 
@@ -192,7 +219,7 @@ CREATE TABLE Product
     - 名称必须以半角英文字母开头
     - 一个database/schemas之内名称不能重复
 
-#### 数据类型 ####
+#### 数据类型的指定 ####
 
 - `INTEGER`
     - 整数
@@ -227,6 +254,12 @@ CREATE TABLE Product
 ---
 ### 1-5 表的更新和删除 ###
 
+学习重点:
+- 使用`DROP TABLE`语句来删除表。
+- 使用`ALTER TABLE`语句向表中添加列或者从表中删除列。
+
+#### 标的删除 (DROP TABLE)语句 ####
+
 语法2: 删除Table用`DROP`
 ```sql
 DROP TABLE <表名>;
@@ -247,6 +280,7 @@ ALTER TABLE <表名> ADD COLUMN <列的定义>
 ALTER TABLE <表名> DROP COLUMN <列名>;
 ```
 
+#### 表定义的更新(ALTER TABLE)语句 ####
 语法4: 添加列的ALTER TABLE语句
 ```sql
 ALTER TABLE <表名>
@@ -270,7 +304,7 @@ ALTER TABLE product DROP COLUMN product_name_pinyin;
 ```
 
 
-#### 向表中插入数据 ####
+#### 向Product表中插入数据 ####
 
 语法6: 题头使用`BEGIN TRANSACTION;`
 ```sql
