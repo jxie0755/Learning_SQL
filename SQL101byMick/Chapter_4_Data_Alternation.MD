@@ -203,8 +203,8 @@ GROUP BY product_type;
 ### 4-2 数据的删除 ###
 
 学习重点:
-- 如果想将整个表全部删除，可以使用`DROP TABLE`语句，如果只想删除 表中全部数据，需使用`DELETE`语句。
-- 如果想删除部分数据行，只需在`WHERE`子句中书写对象数据的条件即可。 通过`WHERE`子句指定删除对象的`DELETE`语句称为搜索型`DELETE`语句。
+- 如果想将整个表全部删除, 可以使用`DROP TABLE`语句, 如果只想删除 表中全部数据, 需使用`DELETE`语句.
+- 如果想删除部分数据行, 只需在`WHERE`子句中书写对象数据的条件即可.  通过`WHERE`子句指定删除对象的`DELETE`语句称为搜索型`DELETE`语句.
 
 
 #### DROP TABLE语句和DELETE语句 ####
@@ -285,10 +285,10 @@ DELETE FROM <表名> WHERE TRUE;   -- psql要求DELETE必须带有WHERE命令, �
 ### 4-3 数据的更新 (UPDATE语句的使用方法) ###
 
 学习重点:
-- 使用`UPDATE`语句可以更改（更新）表中的数据。
-- 更新部分数据行时可以使用`WHERE`来指定更新对象的条件。通过`WHERE`子句指定更新对象的`UPDATE`语句称为搜索型`UPDATE`语句。
-- `UPDATE`语句可以将列的值更新为`NULL`。
-- 同时更新多列时，可以在`UPDATE`语句的`SET`子句中，使用逗号分隔更 新对象的多个列。
+- 使用`UPDATE`语句可以更改(更新)表中的数据.
+- 更新部分数据行时可以使用`WHERE`来指定更新对象的条件. 通过`WHERE`子句指定更新对象的`UPDATE`语句称为搜索型`UPDATE`语句.
+- `UPDATE`语句可以将列的值更新为`NULL`.
+- 同时更新多列时, 可以在`UPDATE`语句的`SET`子句中, 使用逗号分隔更 新对象的多个列.
 
 #### UPDATE语句的基本语法 ####
 
@@ -333,7 +333,7 @@ WHERE product_type = '厨房用具';
 
 使用`UPDATE`也可以将列更新为NULL, 俗称`NULL`清空
 
-实例17: 将商品编号为 0008 的数据（圆珠笔）的登记日期更新为 `NULL`
+实例17: 将商品编号为 0008 的数据(圆珠笔)的登记日期更新为 `NULL`
 ```sql
 UPDATE Product
 SET regist_date = NULL 
@@ -358,7 +358,7 @@ SET sale_price = sale_price * 10, purchase_price = purchase_price / 2
 WHERE product_type = '厨房用具';
 
 --第二种方法(只能在psql和DB2中使用):
-UPDATE Product
+UPDATE Product 
 SET (sale_price, purchase_price) = (sale_price * 10, purchase_price / 2)
 WHERE product_type = '厨房用具';
 ```
@@ -368,7 +368,7 @@ WHERE product_type = '厨房用具';
 ### 4-4 事务 ###
 
 学习重点:
-- 事务是需要在同一个处理单元中执行的一系列更新处理的集合。通过使用 事务，可以对数据库中的数据更新处理的提交和取消进行管理。
-- 事务处理的终止指令包括`COMMIT`（提交处理）和`ROLLBACK`（取消处 理）两种。
-- DBMS的事务具有原子性（Atomicity）、一致性（Consistency）、隔离性 （Isolation）和持久性（Durability）四种特性。通常将这四种特性的首字母 结合起来，统称为ACID特性。
+- 事务是需要在同一个处理单元中执行的一系列更新处理的集合. 通过使用 事务, 可以对数据库中的数据更新处理的提交和取消进行管理.
+- 事务处理的终止指令包括`COMMIT`(提交处理)和`ROLLBACK`(取消处 理)两种.
+- DBMS的事务具有原子性(Atomicity), 一致性(Consistency), 隔离性 (Isolation)和持久性(Durability)四种特性. 通常将这四种特性的首字母 结合起来, 统称为ACID特性.
 
