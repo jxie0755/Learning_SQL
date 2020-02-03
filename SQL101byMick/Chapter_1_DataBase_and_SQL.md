@@ -293,7 +293,7 @@ ALTER TABLE product DROP COLUMN product_name_pinyin;
 题头使用`BEGIN TRANSACTION;`
 ```sql
 BEGIN TRANSACTION;
-END TRANSACTION;
+END TRANSACTION;   -- 一般不用, 而使用COMMIT或者ROLLBACK来提交, 见事务(4-4).
 ```
 >- 如果不写,则每条都是单独的`BEGIN TRANSACTION;`和`END TRANSACTION;`
 >   - 若中间有一条数据出错, 那之前的都被写进去了, 甚至可以选择跳过出错的语句继续执行余下的命令
