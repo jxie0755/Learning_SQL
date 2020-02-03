@@ -29,7 +29,7 @@ CREATE TABLE ProductIns
 
 语法1: `INSERT`的使用
 ```sql
-INSERT INTO <表名> (列1, 列2, 列3 , ...) 
+INSERT INTO <表名> (列1, 列2, 列3, ...) 
 VALUES 
     (值1, 值2, 值3, ...);
 ```
