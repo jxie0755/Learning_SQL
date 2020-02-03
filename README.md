@@ -11,8 +11,11 @@ by Mick
 
 ## Study Notes ##
 
-- Chapter 1 数据库和SQL
-- Chapter 2 查询基础
-- Chapter 3 聚合与查询
-- Chapter 4 数据更新
+- [Chapter 0 数据库和SQL](/SQL101byMick/Chapter_0_Setup.md "")
+- [Chapter 1 数据库和SQL](/SQL101byMick/Chapter_1_DataBase_and_SQL.md "")
+- [Chapter 2 查询基础](/SQL101byMick/Chapter_2_Query.md "")
+- [Chapter 3 聚合与查询](/SQL101byMick/Chapter_3_Query_with_functions.md "")
+- [Chapter 4 数据更新](/SQL101byMick/Chapter_4_Data_Alternation.md "")
 
+Appendix:
+- [Syntax Summary](/SQL101byMick/Syntax_Summary.md "")
