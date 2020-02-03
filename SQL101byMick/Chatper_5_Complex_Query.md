@@ -99,3 +99,79 @@ WHERE product_type = '办公用品';
 ```
 
 #### 视图的限制1 - 定义视图时不能使用ORDER BY子句 ####
+
+```sql
+CREATE VIEW ProductSum (product_type, cnt_product)
+AS
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type
+ORDER BY product_type; -- 这里注意, 不是每个DBMS都支持
+```
+
+虽然之前我们说过在定义视图时可以使用任何`SELECT`语句
+- 但其实有一种情况例外, 那就是不能使用`ORDER BY`子句
+- 因为视图和表一样, 数据行都是没有顺序的
+    - 但是psql支持视图的排序
+
+
+#### 视图的限制2 - 对视图进行更新 ####
+
+对于`INSERT`, `DELETE`, `UPDATE`这类更新语句(更新数据的SQL)来说, 会怎么样呢?
+- 实际上, 虽然这其中有很严格的限制, 但是某些时候也可以对视图进行更新.
+- 标准SQL中有这样的规定: 如果定义视图的`SELECT`语句能够满足某些条件, 那么这个视图就可以被更新
+    - `SELECT`子句中未使用`DISTINCT`
+    - `FROM`子句中只有一张表
+    - 未使用`GROUP BY`子句
+    - 未使用`HAVING`子句
+        - 视图归根结底还是从表派生出来的, 因此, 如果原表可以更新, 那么视图中的数据也可以更新.
+        - 反之亦然, 如果视图发生了改变, 而原表没有进行相应更新的话, 就无法保证数据的一致性了
+
+实例5: 可以更新的视图
+```sql
+CREATE VIEW ProductJim (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
+AS
+SELECT *
+FROM Product
+WHERE product_type = '办公用品';
+```
+
+实例6: 向视图中添加数据行
+```sql
+INSERT INTO ProductJim VALUES ('0009', '印章', '办公用品', 95, 10, '2009-11-30');
+```
+>- 不但在视图中添加了, 在原表中也加了一行数据
+
+#### 注意: psql视图如果为只读时的处理情况 ####
+
+由于PostgreSQL中的视图会被初始设定为只读, 所以执行实例6中的`INSERT`语句时, 会发生错误
+- 似乎PostgreSQL 11中已经没有这个问题
+
+实例6A: 允许PostgreSQL对视图进行更新
+```sql
+CREATE OR REPLACE RULE insert_rule
+AS ON INSERT
+TO ProductJim DO INSTEAD
+INSERT INTO Product VALUES (
+    new.product_id,
+    new.product_name,
+    new.product_type,
+    new.sale_price,
+    new.purchase_price,
+    new.regist_date);
+```
+
+#### 删除视图 ####
+
+语法2: 删除视图需要使用`DROP VIEW`语句
+```sql
+删除视图需要使用`DROP VIEW`语句
+```
+
+实例7: 删除整个视图ProducSum
+```sql
+DROP VIEW ProductSum;         -- 若有关联视图可能出错
+DROP VIEW ProductSum CASCADE; -- 顺便删除关联视图
+```
+>- 在PostgreSQL中, 如果删除以视图为基础创建出来的多重视图, 由于存在关联的视图, 因此会发生错误
+
