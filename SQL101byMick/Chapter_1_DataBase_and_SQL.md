@@ -42,11 +42,11 @@
 ### 1-2 数据库的结构 ###
 
 学习重点:
-- RDBMS通常使用客户端/服务器这样的系统结构. 
-- 通过从客户端向服务器端发送SQL语句来实现数据库的读写操作. 
-- 关系数据库采用被称为数据库表的二维表来管理数据. 
-- 数据库表由表示数据项目的列(字段)和表示一条数据的行(记录)所组成, 以记录为单位进行数据读写. 
-- 本书将行和列交汇的方格称为单元格, 每个单元格只能输入一个数据. 
+- RDBMS通常使用客户端/服务器这样的系统结构.
+- 通过从客户端向服务器端发送SQL语句来实现数据库的读写操作.
+- 关系数据库采用被称为数据库表的二维表来管理数据.
+- 数据库表由表示数据项目的列(字段)和表示一条数据的行(记录)所组成, 以记录为单位进行数据读写.
+- 本书将行和列交汇的方格称为单元格, 每个单元格只能输入一个数据.
 
 #### RDBMS 常见结构 ####
 - 客户端 - 服务器 - 数据库 结构
@@ -65,15 +65,15 @@
 ### 1-3 SQL概要 ###
 
 学习重点:
-- SQL是为操作数据库而开发的语言. 
-- 虽然SQL也有标准, 但实际上根据RDBMS的不同SQL也不尽相同. 
-- SQL通过一条语句来描述想要进行的操作, 发送给RDBMS. 
-- 原则上SQL语句都会使用分号结尾. 
-- SQL根据操作目的可以分为DDL, DML和DCL. 
+- SQL是为操作数据库而开发的语言.
+- 虽然SQL也有标准, 但实际上根据RDBMS的不同SQL也不尽相同.
+- SQL通过一条语句来描述想要进行的操作, 发送给RDBMS.
+- 原则上SQL语句都会使用分号结尾.
+- SQL根据操作目的可以分为DDL, DML和DCL.
 
 #### 标准SQL ####
-- 国际标准化组织(ISO)为 SQL 制定了相应的标准, 以此为基准的SQL称为标准SQL(相关信息请参考专栏--标准SQL和特定的SQL). 
-- 以前, 完全基于标准SQL的RDBMS很少, 通常需要根据不同的RDBMS来编写特定的SQL语句. 
+- 国际标准化组织(ISO)为 SQL 制定了相应的标准, 以此为基准的SQL称为标准SQL(相关信息请参考专栏--标准SQL和特定的SQL).
+- 以前, 完全基于标准SQL的RDBMS很少, 通常需要根据不同的RDBMS来编写特定的SQL语句.
 
 #### SQL 语句和类型 ####
 - DDL (Data Defnition Language, 数据定义语言)
@@ -128,10 +128,10 @@ set search_path = "public" -- 默认设为public
 ### 1-4 表的创建 ###
 
 学习重点:
-- 表通过`CREATE TABLE`语句创建而成. 
-- 表和列的命名要使用有意义的文字. 
-- 指定列的数据类型(整数型, 字符型和日期型等). 
-- 可以在表中设置约束(主键约束和 NOT NULL 约束等). 
+- 表通过`CREATE TABLE`语句创建而成.
+- 表和列的命名要使用有意义的文字.
+- 指定列的数据类型(整数型, 字符型和日期型等).
+- 可以在表中设置约束(主键约束和 NOT NULL 约束等).
 
 #### 表的内容的创建 ####
 
@@ -255,12 +255,12 @@ CREATE TABLE Product
 ### 1-5 表的更新和删除 ###
 
 学习重点:
-- 使用`DROP TABLE`语句来删除表. 
-- 使用`ALTER TABLE`语句向表中添加列或者从表中删除列. 
+- 使用`DROP TABLE`语句来删除表.
+- 使用`ALTER TABLE`语句向表中添加列或者从表中删除列.
 
 #### 标的删除 (DROP TABLE)语句 ####
 
-语法2: 删除Table用`DROP`
+语法3: 删除表用`DROP TABLE`
 ```sql
 DROP TABLE <表名>;
 ```
@@ -272,7 +272,8 @@ DROP TABLE <表名>;
 DROP TABLE Product;
 ```
 
-语法3: 表定义的更新使用`ALTER`
+#### 表定义的更新(ALTER TABLE)语句 ####
+语法4+5: 表定义的更新使用`ALTER`
 - 添加Column使用`ADD COLUMN`
 - 删除Column使用`DROP COLUMN`
 ```sql
@@ -280,33 +281,16 @@ ALTER TABLE <表名> ADD COLUMN <列的定义>
 ALTER TABLE <表名> DROP COLUMN <列名>;
 ```
 
-#### 表定义的更新(ALTER TABLE)语句 ####
-语法4: 添加列的ALTER TABLE语句
+实例4+5: 添加一列可以存储100位的可变长字符串的product_name_pinyin列和将其删除
 ```sql
-ALTER TABLE <表名>
-  RENAME TO <新表名>;
-```
-
-实例4:
-```
 ALTER TABLE product ADD COLUMN product_name_pinyin VARCHAR(100) NOT NULL;
-```
-
-语法5: 删除列的ALTER TABLE语句
-```sql
-ALTER TABLE <表名>
-  RENAME COLUMN <列名> TO <新列名>;
-```
-
-实例5:
-```
 ALTER TABLE product DROP COLUMN product_name_pinyin;
 ```
 
 
 #### 向Product表中插入数据 ####
 
-语法6: 题头使用`BEGIN TRANSACTION;`
+题头使用`BEGIN TRANSACTION;`
 ```sql
 BEGIN TRANSACTION;
 END TRANSACTION;
@@ -346,4 +330,22 @@ INSERT INTO Product VALUES ('0006', '叉子', '厨房用具', 500, NULL, '2009-0
 INSERT INTO Product VALUES ('0007', '擦菜板', '厨房用具', 880, 790, '2008-04-28');
 INSERT INTO Product VALUES ('0008', '圆珠笔', '办公用品', 100, NULL, '2009-11-11');
 COMMIT ;
+```
+
+#### 专栏: 表的修改 ####
+
+其实很多数据库都提供了可以修改表名的指令`RENAME`来解决这样的问题
+语法6: 修改表名
+```sql
+-- only for psql and Oracle
+ALTER TABLE Poduct RENAME TO Product;
+
+-- MySQL
+ALTER TABLE Poduct RENAME TO Product;
+```
+
+语法7: Extra材料, 给列改名
+```sql
+ALTER TABLE <表名>
+  RENAME COLUMN <列名> TO <新列名>;
 ```
