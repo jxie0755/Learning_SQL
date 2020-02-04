@@ -37,14 +37,15 @@ GROUP BY product_type;
 #### 创建视图的方法 ####
 
 语法1: 创建视图的CREATE VIEW语句
+- `SELECT`语句需要书写在`AS`关键字之后.
+- `SELECT`语句中列的排列顺序和视图中列的排列顺序相同, `SELECT`语句中的第1列就是视图中的第1列, `SELECT`语句中的第2列就是视图中的第2列
+- 定义视图时可以使用任何`SELECT`语句, 既可以使用`WHERE`, `GROUP BY`, `HAVING`, 也可以通过`SELECT *`来指定全部列
 ```sql
 CREATE VIEW 视图名称(<视图列名1>, <视图列名2>, ......)
 AS
 <SELECT语句>
 ```
->- `SELECT`语句需要书写在`AS`关键字之后.
->- `SELECT`语句中列的排列顺序和视图中列的排列顺序相同, `SELECT`语句中的第1列就是视图中的第1列, `SELECT`语句中的第2列就是视图中的第2列
->- 定义视图时可以使用任何`SELECT`语句, 既可以使用`WHERE`, `GROUP BY`, `HAVING`, 也可以通过`SELECT *`来指定全部列
+
 
 
 实例1+2: 通过视图等SELECT语句保存数据
@@ -164,9 +165,12 @@ INSERT INTO Product VALUES (
 #### 删除视图 ####
 
 语法2: 删除视图需要使用`DROP VIEW`语句
+- 可以一次删除多个`VIEW`
+- psql不支持删除`VIEW`中的`COLUMN`
 ```sql
-删除视图需要使用`DROP VIEW`语句
+DROP VIEW 视图名称(<视图1>, <视图2>, ...)
 ```
+
 
 实例7: 删除整个视图ProducSum
 ```sql
@@ -174,4 +178,5 @@ DROP VIEW ProductSum;         -- 若有关联视图可能出错
 DROP VIEW ProductSum CASCADE; -- 顺便删除关联视图
 ```
 >- 在PostgreSQL中, 如果删除以视图为基础创建出来的多重视图, 由于存在关联的视图, 因此会发生错误
+>   - 使用`CASCADE`后缀可以将关联视图删除
 

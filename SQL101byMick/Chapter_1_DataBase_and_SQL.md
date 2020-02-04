@@ -261,11 +261,12 @@ CREATE TABLE Product
 #### 标的删除 (DROP TABLE)语句 ####
 
 语法3: 删除表用`DROP TABLE`
+- 一旦删除则无法恢复
+- 执行前务必确认!
 ```sql
 DROP TABLE <表名>;
 ```
-- 一旦删除则无法恢复
-- 执行前务必确认!
+
 
 实例3: 删除Product表
 ```sql
