@@ -192,4 +192,3 @@ DROP VIEW ProductSum CASCADE; -- 顺便删除关联视图
 
 #### 子查询和视图 ####
 
-
