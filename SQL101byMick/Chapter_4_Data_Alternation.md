@@ -40,10 +40,10 @@ INSERT INTO ProductIns
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
 VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 ```
->- 将列名和值用逗号隔开, 分别括在`()`内, 这种形式称为清单
->- 其中列与值得顺序必须对应起来
+> - 将列名和值用逗号隔开, 分别括在`()`内, 这种形式称为清单
+> - 其中列与值得顺序必须对应起来
 >    - 如果没有值, 且没有规定为`NOT NULL`则需要用`null`来填补空缺
->- 原则上, 执行一次`INSERT`语句则会插入一行数据
+> - 原则上, 执行一次`INSERT`语句则会插入一行数据
 
 
 #### 列清单的省略 ####
@@ -71,8 +71,8 @@ VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
 INSERT INTO ProductIns (product_id, product_name, product_type, sale_price, purchase_price, regist_date) 
     VALUES ('0006', '叉子', '厨房用具', 500, NULL, '2009-09-20');
 ```
->- `INSERT`语句中想给某一列赋予`NULL`值时, 可以直接在`VALUES`子句的值清单中写入`NULL`
->- 想要插入`NULL`的列一定不能设置`NOT NULL`约束
+> - `INSERT`语句中想给某一列赋予`NULL`值时, 可以直接在`VALUES`子句的值清单中写入`NULL`
+> - 想要插入`NULL`的列一定不能设置`NOT NULL`约束
 
 
 #### 插入默认值 ####
@@ -97,7 +97,7 @@ INSERT INTO productins
     (product_id, product_name, product_type, sale_price, purchase_price, regist_date)
 VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 ```
->- 在对应`sale_price`列的值区插入`DEFAULT`
+> - 在对应`sale_price`列的值区插入`DEFAULT`
 
 实例7: 隐式方法插入默认值
 ```sql
@@ -105,8 +105,8 @@ INSERT INTO productins
     (product_id, product_name, product_type, purchase_price, regist_date)
 VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 ```
->- 把`sale_price`列过滤掉,把对应的`DEFAULT`也直接略过
->- 不建议这么做, 容易引起混乱
+> - 把`sale_price`列过滤掉,把对应的`DEFAULT`也直接略过
+> - 不建议这么做, 容易引起混乱
 
 
 实例extra: 列清单的省略之后必须用显示方法
@@ -114,14 +114,14 @@ VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 INSERT INTO productins
 VALUES ('0007', '擦菜板', '厨房用具', DEFAULT, 790, '2009-04-28');
 ```
->- 此处写入`DEFAULT`: 插入默认值成功
+> - 此处写入`DEFAULT`: 插入默认值成功
 
 ```sql
 INSERT INTO productins
 VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 >>> ERROR
 ```
->- 此处省略`DEFAULT`: 插入默认值失败
+> - 此处省略`DEFAULT`: 插入默认值失败
 
 
 实例8: 未设定默认值
@@ -129,7 +129,7 @@ VALUES ('0007', '擦菜板', '厨房用具', 790, '2009-04-28');
 INSERT INTO productins (product_id, product_name, product_type, sale_price, regist_date)
 VALUES ('0008', '圆珠笔', '办公用品', 100, '2009-12-12');
 ```
->- 如果省略一个列, 也不赋值, 会自动设成默认值,如果不存在默认值,则会赋予`NULL`值
+> - 如果省略一个列, 也不赋值, 会自动设成默认值,如果不存在默认值,则会赋予`NULL`值
 
 ```sql
 INSERT INTO productins (product_id, product_type, sale_price, purchase_price, regist_date)
@@ -161,7 +161,7 @@ INSERT INTO ProductCopy (product_id, product_name, product_type,sale_price, purc
 SELECT product_id, product_name, product_type, sale_price, purchase_price, regist_date
 FROM Product;
 ```
->- 先`INSERT`然后再`SELECT...FROM...`
+> - 先`INSERT`然后再`SELECT...FROM...`
 >   - 简单的说以前就是`INSERT`指定一张表,`VALUE`则是输入一行数据
 >   - 现在就是`INSERT`一整列到指定一张表, 而这一列是从另一张表中`SELECT`得来
 
@@ -272,10 +272,10 @@ TRUNCATE <表名>;
 -- 对等于:
 DELETE FROM <表名> WHERE TRUE;   -- psql要求DELETE必须带有WHERE命令, 不然会出提示, 可以强制执行
 ```
->- 标准SQL中用来从表中删除数据的只有`DELETE`语句
->- 但是, 很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句.
+> - 标准SQL中用来从表中删除数据的只有`DELETE`语句
+> - 但是, 很多数据库产品中还存在另外一种被称为`TRUNCATE`的语句.
 >   - 这些产品主要包括 Oracle, SQL Server, PostgreSQL, MySQL和DB2
->- 实际上, `DELETE`语句在DML语句中也属于处理时间比较长的
+> - 实际上, `DELETE`语句在DML语句中也属于处理时间比较长的
 >   - 因此需要删除全部数据行时, 使用`TRUNCATE`可以缩短执行时间
 >   - 产品不同需要注意的地方也不尽相同, 在Oracle中, 把`TRUNCATE`定义为DDL, 而不是DML
 >   - 使用`TRUNCATE`时, 请大家仔细阅读使用手册, 多加注意. 便利的工具往往还是会存在一些不足之处的
@@ -308,7 +308,7 @@ UPDATE <表名>
 UPDATE Product
     SET regist_date = '2009-10-10';
 ```
->- 如果不使用`WHERE`语句的话, 则会对整张表起作用
+> - 如果不使用`WHERE`语句的话, 则会对整张表起作用
 >   - psql会发出警告, 但是仍然可以强制执行
 
 
@@ -340,9 +340,9 @@ UPDATE Product
 SET regist_date = NULL 
 WHERE product_id = '0008';
 ```
->- 最快速锁定一行数据的方法显然是锁定primary key的值, 因为它不可重复
->- 此时只需要将赋值表达式右边的值直接写为`NULL`即可
->- 和`INSERT`语句一样, `UPDATE`语句也可以将`NULL`作为一个值来使用
+> - 最快速锁定一行数据的方法显然是锁定primary key的值, 因为它不可重复
+> - 此时只需要将赋值表达式右边的值直接写为`NULL`即可
+> - 和`INSERT`语句一样, `UPDATE`语句也可以将`NULL`作为一个值来使用
 >   - 但是, 只有未设置`NOT NULL`约束和主键约束的列才可以清空为`NULL`
 
 #### 多列更新 ####

@@ -296,9 +296,9 @@ ALTER TABLE product DROP COLUMN product_name_pinyin;
 BEGIN TRANSACTION;
 END TRANSACTION;   -- 一般不用, 而使用COMMIT或者ROLLBACK来提交, 见事务(4-4).
 ```
->- 如果不写,则每条都是单独的`BEGIN TRANSACTION;`和`END TRANSACTION;`
+> - 如果不写,则每条都是单独的`BEGIN TRANSACTION;`和`END TRANSACTION;`
 >   - 若中间有一条数据出错, 那之前的都被写进去了, 甚至可以选择跳过出错的语句继续执行余下的命令
->- 如果使用`BEGIN TRANSACTION`:
+> - 如果使用`BEGIN TRANSACTION`:
 >   - 结尾必须要`END TRANSACTION`, 否则数据虽然会存在缓存区, 但不会被真正写入.
 >   - 在`BEGIN...`和`END...`之间
 >       - 可以分段输入命令
@@ -308,14 +308,14 @@ END TRANSACTION;   -- 一般不用, 而使用COMMIT或者ROLLBACK来提交, 见�
 ```sql
 INSERT INTO <表名> VALUES (<列1数据>, <列2数据>, <列3数据>, ...)
 ```
->- 对于没有定义Not Null的列,  可以使用`NULL`来占位
+> - 对于没有定义Not Null的列,  可以使用`NULL`来占位
 
 
 最后使用`COMMIT`, 目的是提交, 使得其他用户能看到变化
 ```sql
 COMMIT;
 ```
->- 不`COMMIT`本用户能看到变化, 但是其他用户看不到
+> - 不`COMMIT`本用户能看到变化, 但是其他用户看不到
 >   - `COMMIT`在这里基本等同于`END TRANSACTION` (本地修改) + 其他用户可见
 >   - > 详情请见https://stackoverflow.com/a/14806572/8435726
 
