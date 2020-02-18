@@ -227,8 +227,8 @@ SELECT product_type, cnt_product
 
 #### 子查询的名称 ####
 
-- 之前的例子中我们给子查询设定了 `ProductSum`等名称。
-- 原则上子查询必须设定名称，因此请大家尽量从处理内容的角度出发为子查询设定恰当的名称
+- 之前的例子中我们给子查询设定了 `ProductSum`等名称. 
+- 原则上子查询必须设定名称, 因此请大家尽量从处理内容的角度出发为子查询设定恰当的名称
 
 
 #### 标量子查询 ####
@@ -242,7 +242,7 @@ SELECT product_type, cnt_product
 实例11: 计算平均销售单价的标量子查询
 ```sql
 -- 错误示范: 在WHERE子句中不能使用聚合函数
-SELECT product_id, product＿name, sale_price
+SELECT product_id, product_name, sale_price
 FROM Product
 WHERE sale_price > AVG(sale_price);
 
@@ -289,6 +289,6 @@ HAVING AVG(sale_price) > (SELECT AVG(sale_price)
 #### 使用标量子查询时的注意事项 ####
 
 该子查询绝对不能返回多行结果
-- 也就是说，如果子查询返回了多行结果，那么它就不再是标量子查询，而仅仅是一个普通的子查询了
-  - 因此不能被用在 `=` 或 者 `<>` 等需要单一输入值的运算符当中，也不能用在 SELECT 等子句当中
+- 也就是说, 如果子查询返回了多行结果, 那么它就不再是标量子查询, 而仅仅是一个普通的子查询了
+  - 因此不能被用在 `=` 或 者 `<>` 等需要单一输入值的运算符当中, 也不能用在 SELECT 等子句当中
 
