@@ -101,6 +101,7 @@ WHERE product_type = '办公用品';
 
 #### 视图的限制1 - 定义视图时不能使用ORDER BY子句 ####
 
+实例: 错误示范
 ```sql
 CREATE VIEW ProductSum (product_type, cnt_product)
 AS
@@ -192,4 +193,34 @@ DROP VIEW ProductSum CASCADE; -- 顺便删除关联视图
 
 #### 子查询和视图 ####
 
+实例8+9: 对比 创建一个ProductSum的视图 vs. 创建一个子查询
+```sql
+-- From实例2, ProductSum视图
+CREATE VIEW ProductSum (product_type, cnt_product)
+AS
+SELECT product_type, COUNT(*)
+FROM Product
+GROUP BY product_type;
+
+-- 等量子查询
+SELECT product_type, cnt_product  -- 外层查询
+    FROM ( 
+        SELECT product_type, COUNT(*) AS cnt_product    --|
+        FROM Product                                    --|- 内层查询
+        GROUP BY product_type                           --|
+    ) AS ProductSum   -- 这个是内层查询的alias, 名字只是一次性使用, 只供外层查询时调用, 不会被保存;
+```
+>- 子查询就是将用来定义视图的`SELECT`语句直接用于`FROM`子句当中
+
+
+实例10: 尝试增加子查询的嵌套层数
+```sql
+SELECT product_type, cnt_product
+    FROM (SELECT *
+        FROM (SELECT product_type, COUNT(*) AS cnt_product
+                FROM Product
+                GROUP BY product_type) AS ProductSum  -- 最内层alias
+        WHERE cnt_product = 4) AS ProductSum2;  -- 中层alias
+```
+>- 随着子查询嵌套层数的增加, SQL语句会变得越来越难读懂, 性能也会越来越差. 因此, 请大家尽量避免使用多层嵌套的子查询
 
