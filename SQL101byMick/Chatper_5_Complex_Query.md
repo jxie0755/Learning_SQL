@@ -193,7 +193,7 @@ DROP VIEW ProductSum CASCADE; -- 顺便删除关联视图
 
 #### 子查询和视图 ####
 
-实例8+9: 对比 创建一个ProductSum的视图 vs. 创建一个子查询
+实例8+9: 对比 创建一个`ProductSum`的视图 vs. 创建一个子查询
 ```sql
 -- From实例2, ProductSum视图
 CREATE VIEW ProductSum (product_type, cnt_product)
@@ -256,6 +256,39 @@ FROM Product
 WHERE sale_price > (SELECT AVG(sale_price)   -- 这里就是标量子查询
                     FROM Product);            
 ```
-> - 使用子查询的 SQL 会从子查询开始执行, 先查平均价
+> - 使用子查询的SQL会从子查询开始执行, 先查平均价
 
+
+#### 标量子查询的书写位置 ####
+
+- 标量子查询的书写位置并不仅仅局限于`WHERE`子句中
+- 通常任何可以使用单一值的位置都可以使用
+  - 几乎所有的地方都可以使用
+
+实例13: 在`SELECT`子句中使用标量子查询
+```sql
+SELECT product_id,
+product_name,
+sale_price,
+(SELECT AVG(sale_price)
+    FROM Product) AS avg_price
+FROM Product;
+```
+
+实例14: 在`HAVING``子句中使用标量子查询
+```sql
+SELECT product_type, AVG(sale_price)
+FROM Product
+GROUP BY product_type
+HAVING AVG(sale_price) > (SELECT AVG(sale_price)
+                            FROM Product);
+```
+> - 这里甄选出了平均售价高于全部商品平均售价的品类
+
+
+#### 使用标量子查询时的注意事项 ####
+
+该子查询绝对不能返回多行结果
+- 也就是说，如果子查询返回了多行结果，那么它就不再是标量子查询，而仅仅是一个普通的子查询了
+  - 因此不能被用在 `=` 或 者 `<>` 等需要单一输入值的运算符当中，也不能用在 SELECT 等子句当中
 
