@@ -386,16 +386,23 @@ ORDER BY 子句中不能使用列的编号.
 
 语法4: `ORDER BY`语句
 ```sql
-SELECT < 列名 1>, < 列名 2>, < 列名 3>, ...
-FROM < 表名 >
-ORDER BY < 排序基准列 1>, < 排序基准列 2>, ...
+SELECT <列名1>, <列名2>, <列名3>, ...
+FROM <表名>
+ORDER BY <排序基准列1>, <排序基准列2>, ... (DESC | ASC)
 ```
 
-至此:
-- 子句书写顺序
-`SELECT` -> `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `ORDER BY`
-- 真实执行顺序
-`FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `SELECT` -> `ORDER BY`
+语法extra: 至此SQL语句顺序
+- 真实执行顺序:
+  - `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `SELECT` -> `ORDER BY`
+```sql
+SELECT * 
+FROM <表名>
+WHERE <条件>
+GROUP BY <分组条件>
+HAVING <条件> 
+ORDER BY <条件>
+```
+
 
 #### 指定升序或降序 ####
 

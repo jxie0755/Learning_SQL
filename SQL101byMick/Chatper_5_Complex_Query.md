@@ -301,4 +301,59 @@ HAVING AVG(sale_price) > (SELECT AVG(sale_price)
 - 关联子查询和`GROUP BY`子句一样, 也可以对表中的数据进行切分.
 - 关联子查询的结合条件如果未出现在子查询之中就会发生错误.
 
+#### 普通的子查询和关联子查询的区别 ####
+
+一个需求: 找出各类别中哪个商品的价格高于该类商品的平均价格
+
+根据`Product`, 厨房用具, 衣服, 办公用品简表:
+
+| 商品名称   | 销售单价   | 商品名称    | 销售单价   | 商品名称   | 销售单价   |
+|:----------|:---------|:-----------|:---------|:----------|:---------|
+| **菜刀**   | **3000** | T恤        | 1000     | 圆珠笔     | 100      |
+| **高压锅** | **6800** | **运动T恤** | **4000** | **打孔器** | **500**  |
+| 叉子       | 500      |           |          |           |          |
+| 擦菜板     | 880      |            |          |           |          |
+| 平均价格   | 2795     | 平均价格     | 2500     | 均价格     | 300      |
+
+> - 根据以上, 每类产品中超过该类平均价格的产品为
+>   - 厨房用具: 菜刀, 高压锅
+>   - 衣服: 运动T恤
+>   - 办公用品: 打孔器
+
+实例15 + 16:
+```sql
+-- 找出每类产品的平均价格
+SELECT AVG(sale_price)
+FROM Product
+GROUP BY product_type;
+
+-- 以上不能用于下列操作
+SELECT product_id, product_name, sale_price
+FROM Product
+WHERE sale_price > (SELECT AVG(sale_price)
+                    FROM Product
+                    GROUP BY product_type);  -- 因为这里不是标量子查询, 出现了三个数据
+
+-- 使用关联子查询就可以解决问题
+SELECT product_type, product_name, sale_price
+    FROM Product AS P1
+WHERE sale_price > (SELECT AVG(sale_price)
+                        FROM Product AS P2
+                    WHERE P1.product_type = P2.product_type   --- 调用P1和P2的关联性来形成每个类别的单独子查询对比
+                        GROUP BY product_type);
+```
+
+语法extra: 关联子查询
+- 这里起到关键作用的就是在子查询中添加的`WHERE`子句的条件
+    - 这次由于作为比较对象的都是同一张`Product`表, 因此为了进行区别, 分别使用了`P1`和`P2`两个别名.
+    - 在使用关联子查询时, 需要在表所对应的列名之前加上表的别名, 以`<表名>.<列名>`的形式记述
+```sql
+SELECT product_type, product_name, sale_price
+    FROM Product AS P1
+WHERE sale_price > (SELECT AVG(sale_price)
+                        FROM Product AS P2
+                    WHERE P1.product_type = P2.product_type   --- 调用P1和P2的关联性来形成每个类别的单独子查询对比
+                        GROUP BY product_type);
+```
+
 
