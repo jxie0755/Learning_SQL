@@ -88,13 +88,125 @@ ROUND(对象数值, 保留小数的位数)
 
 实例4: 对m列的数值进行n列位数的四舍五入处理
 ```sql
-SELECT m, n,
-ROUND(m, n) AS round_col
+SELECT m, n, ROUND(m, n) AS round_col
 FROM SampleMath;
 ```
 
 #### 字符串函数 ####
 
+算术函数只是SQL(其他编程语言通常也是如此)自带的函数中的一部分. 虽然算术函数是我们经常使用的函数, 但是字符串函数也同样经常被使用.
+
+实例5: 创建SampleStr表
+```sql
+CREATE TABLE SampleStr
+(str1 VARCHAR(40),
+str2 VARCHAR(40),
+str3 VARCHAR(40));
+
+BEGIN TRANSACTION;
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('opx', 'rt', NULL);
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('abc', 'def', NULL);
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('山田', '太郎', '是我');
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('aaa', NULL, NULL);
+INSERT INTO SampleStr (str1, str2, str3) VALUES (NULL, 'xyz', NULL);
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('@!#$%', NULL, NULL);
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('ABC', NULL, NULL);
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('aBC', NULL, NULL);
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('abc太郎', 'abc', 'ABC');
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('abcdefabc', 'abc', 'ABC');
+INSERT INTO SampleStr (str1, str2, str3) VALUES ('micmic', 'i', 'I');
+COMMIT;
+```
 
 
+语法4: `||`拼接
+- 在实际业务中, 我们经常会碰到abc + de = abcde这样希望将字符串进行拼接的情况.
+- 在SQL中, 可以通过由两条并列的竖线变换而成的`||`函数来实现
+- 只要存在`NULL`, 则输出`NULL`, SQL不会拼接任何`str+NULL`
+- `||`函数在SQL Server(`+`)和MySQL(`CONCAT`)中无法使用
+```sql
+字符串1||字符串2
+```
 
+实例6+7: 拼接两个/三个字符串(str1+str2)
+```sql
+SELECT str1, str2, str1||str2 AS str_concat
+FROM SampleStr;
+
+SELECT str1, str2, str3, str1||str2||str3 AS str_concat
+FROM SampleStr
+WHERE str1 = '山田';
+```
+
+语法5: `LENGTH`函数计算字符串长度
+```sql
+LENGTH(字符串)
+```
+
+实例8: 计算字符串长度
+```sql
+SELECT str1, LENGTH(str1) AS len_str
+FROM SampleStr;
+```
+
+语法6: `LOWER`函数小写转换
+- 只能针对英文字母使用，它会将参数中的字符串全都转换为小写
+- 混合型字符串只变化大写字符部分
+- 并不影响原本就是小写的字符
+```sql
+LOWER(字符串)
+```
+
+实例9: 大写转换为小写
+```sql
+SELECT str1, LOWER(str1) AS low_str
+FROM SampleStr
+WHERE str1 IN ('ABC', 'aBC', 'abc', '山田');
+```
+
+语法7: `REPLACE`函数字符串的替换
+- 这里有一个要求就b必须存在于a里面, 才会把a中的b部分替换成c
+    - 不然的话, 不存在替换动作, 返回的还是a本身
+    - 如果a中存在多个b部分, 则所有b都会被替换成c
+```sql
+REPLACE(对象字符串，替换前的字符串，替换后的字符串)
+--          a         b           c
+```
+
+实例10: 替换字符串的一部分
+```sql
+SELECT str1, str2, str3, REPLACE(str1, str2, str3) AS rep_str
+FROM SampleStr;
+```
+
+语法8: `SUBSTRING`函数（PostgreSQL/MySQL专用语法）
+- 截取的起始位置从字符串最左侧开始计算
+- 注意index从1开始, 不为0
+```sql
+SUBSTRING（对象字符串 FROM 截取的起始位置 FOR 截取的字符数）
+--           str          index           长度
+```
+
+实例11: 截取出字符串中第3位和第4位的字符
+```sql
+SELECT str1, SUBSTRING(str1 FROM 3 FOR 2) AS sub_str
+FROM SampleStr;
+```
+
+
+语法9: `UPPER`函数大写转换
+- 只能针对英文字母使用，它会将参数中的字符串全都转换为大写
+- 混合型字符串只变化小写字符部分
+- 并不影响原本就是大写的字符
+```sql
+UPPER(字符串)
+```
+
+实例12: 将小写转换为大写
+```sql
+SELECT str1, UPPER(str1) AS up_str
+FROM SampleStr
+WHERE str1 IN ('ABC', 'aBC', 'abc', '山田');
+```
+
+#### 日期函数 ####
