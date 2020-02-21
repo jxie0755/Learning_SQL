@@ -150,7 +150,7 @@ FROM SampleStr;
 ```
 
 语法6: `LOWER`函数小写转换
-- 只能针对英文字母使用，它会将参数中的字符串全都转换为小写
+- 只能针对英文字母使用, 它会将参数中的字符串全都转换为小写
 - 混合型字符串只变化大写字符部分
 - 并不影响原本就是小写的字符
 ```sql
@@ -169,7 +169,7 @@ WHERE str1 IN ('ABC', 'aBC', 'abc', '山田');
     - 不然的话, 不存在替换动作, 返回的还是a本身
     - 如果a中存在多个b部分, 则所有b都会被替换成c
 ```sql
-REPLACE(对象字符串，替换前的字符串，替换后的字符串)
+REPLACE(对象字符串, 替换前的字符串, 替换后的字符串)
 --          a         b           c
 ```
 
@@ -179,11 +179,11 @@ SELECT str1, str2, str3, REPLACE(str1, str2, str3) AS rep_str
 FROM SampleStr;
 ```
 
-语法8: `SUBSTRING`函数（PostgreSQL/MySQL专用语法）
+语法8: `SUBSTRING`函数(PostgreSQL/MySQL专用语法)
 - 截取的起始位置从字符串最左侧开始计算
 - 注意index从1开始, 不为0
 ```sql
-SUBSTRING（对象字符串 FROM 截取的起始位置 FOR 截取的字符数）
+SUBSTRING(对象字符串 FROM 截取的起始位置 FOR 截取的字符数)
 --           str          index           长度
 ```
 
@@ -195,7 +195,7 @@ FROM SampleStr;
 
 
 语法9: `UPPER`函数大写转换
-- 只能针对英文字母使用，它会将参数中的字符串全都转换为大写
+- 只能针对英文字母使用, 它会将参数中的字符串全都转换为大写
 - 混合型字符串只变化小写字符部分
 - 并不影响原本就是大写的字符
 ```sql
