@@ -273,6 +273,7 @@ WHERE utc_offset = '-05:00:00';  -- 美国东岸GMT-5时区
 
 -- 调整时区
 -- 设置时可以使用pg_timezone_names表中的name或者abbrev作为字符串
+-- 注意: 每次在新的Console中都需要设置,设置不是永久在database中保存
 SET TIMEZONE = 'UTC';  -- GMT标准时间
 SET TIMEZONE = 'EST';  -- 美国东岸时间
 SET TIMEZONE = 'CST';  -- 美国中部时间
