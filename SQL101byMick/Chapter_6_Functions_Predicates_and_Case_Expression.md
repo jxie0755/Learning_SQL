@@ -260,7 +260,7 @@ psql默认给的都是UTC时区, 可以通过修改时区
 ```sql
 -- 查询所有时区
 SELECT *
-FROM pg_timezone_names;
+FROM pg_timezone_names; -- 位于pg_catalog/views中
 
 -- 查询所在时区有哪些地方
 SELECT *
