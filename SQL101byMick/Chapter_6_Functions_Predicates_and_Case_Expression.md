@@ -211,3 +211,75 @@ WHERE str1 IN ('ABC', 'aBC', 'abc', '山田');
 
 #### 日期函数 ####
 
+语法10: `CURRENT_DATE`函数
+- `CURRENT_DATE`函数能够返回SQL执行的日期, 也就是该函数执行时的日期.
+- 由于没有参数, 因此无需使用括号行时的时间
+```sql
+CURRENT_DATE
+```
+
+实例13: 获得当前日期
+```sql
+SELECT CURRENT_DATE;
+```
+
+
+语法11: `CURRENT_TIME`函数
+- `CURRENT_TIME`函数能够取得SQL执行的时间, 也就是该函数执行时的时间
+```sql
+CURRENT_TIME;
+```
+
+实例14: 取得当前时间
+```sql
+SELECT CURRENT_TIME;
+```
+> - 这里返回的是GMT时间
+
+
+语法12: `CURRENT_TIMESTAMP`函数
+- `CURRENT_TIMESTAMP`函数具有`CURRENT_DATE` + `CURRENT_TIME`的功能.
+- 使用该函数可以同时得到当前的日期和时间
+- 当然也可以从结果中截取日期或者时间
+```sql
+CURRENT_TIMESTAMP
+```
+
+实例15: 取得当前日期和时间
+```sql
+SELECT CURRENT_TIMESTAMP;
+```
+> - 这里返回的是GMT日期和时间
+
+
+#### EXTRA: 时区问题 ####
+
+psql默认给的都是UTC时区, 可以通过修改时区
+
+语法extra: 查询和修改时区
+```sql
+-- 查询所有时区
+SELECT *
+FROM pg_timezone_names;
+
+-- 查询所在时区有哪些地方
+SELECT *
+FROM pg_timezone_names
+WHERE utc_offset = '+08:00:00';  -- 中国的GMT+8时区
+
+SELECT *
+FROM pg_timezone_names
+WHERE utc_offset = '-05:00:00';  -- 美国东岸GMT-5时区
+
+-- 调整时区
+-- 设置时可以使用pg_timezone_names表中的name或者abbrev作为字符串
+SET TIMEZONE = 'UTC';  -- GMT标准时间
+SET TIMEZONE = 'EST';  -- 美国东岸时间
+SET TIMEZONE = 'CST';  -- 美国中部时间
+SET TIMEZONE = 'PST';  -- 美国西岸时间
+
+-- 由于该表中直接有对每个ETC时区的name 例如:
+-- name: ETc/GMT-8, abbrev: +08
+-- 所以可以直接SET TIMEZONE = '+08'; 或者 SET TIMEZONE = '-05';等等
+```
+
