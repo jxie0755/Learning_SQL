@@ -252,6 +252,35 @@ SELECT CURRENT_TIMESTAMP;
 > - 这里返回的是GMT日期和时间
 
 
+语法13: `EXTRACT`函数
+- 使用`EXTRACT`函数可以截取出日期数据中的一部分,  例如"年" "月", 或者"小时""秒"等
+- 该函数的返回值并不是日 期类型而是数值类型
+- `EXTRACT`函数不能独立使用, 必须用在一条SELECT命令之后
+- `EXTRACT`函数不能提取出时区信息, 因为在psql中所有时区信息都会被转换成UTC时间记录下来, 所以没有独立的时区信息被保留
+```sql
+-- 批量
+SELECT 列名 as D
+    EXTRACT(日期元素 FROM D)
+
+-- 单独
+SELECT EXTRACT(日期元素 FROM TIMESTAMP 'YYYY-MM-DD HH-MM-SS.123456')
+```
+
+实例16: 截取日期元素
+```sql
+SELECT CURRENT_TIMESTAMP,
+    EXTRACT(YEAR FROM CURRENT_TIMESTAMP) AS year,      -- 2010
+    EXTRACT(MONTH FROM CURRENT_TIMESTAMP) AS month,    -- 4
+    EXTRACT(DAY FROM CURRENT_TIMESTAMP) AS day,        -- 25
+    EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AS hour,      -- 19
+    EXTRACT(MINUTE FROM CURRENT_TIMESTAMP) AS minute,  -- 7
+    EXTRACT(SECOND FROM CURRENT_TIMESTAMP) AS second;  -- 33.987
+    
+-- 也可以这样独立使用:
+SELECT EXTRACT(SECOND FROM timestamptz '2020-02-22 10:52:11.123456-05') AS second;  -- 11.123456
+```
+
+
 #### EXTRA: 时区问题 ####
 
 psql默认给的都是UTC时区, 可以通过修改时区
@@ -322,4 +351,34 @@ SET TIMEZONE = '+08';
 SELECT timestamp_col
 FROM Timezonetest
 WHERE id = '1';                          -- 显示的还是 2020-02-22 10:52:00.000000
+
+
+-- 直接获取一个日期/时间数据(不用从TABLE)
+SELECT time '10:49:50';
+SELECT timetz '10:49:50.123456-05';
+SELECT timestamp '2020-02-22 10:52:11.123456';
+SELECT timestamptz '2020-02-22 10:52:11.123456-05';
 ```
+
+#### 转换函数 ####
+
+一类比较特殊的函数 -- 转换函数. 虽说有些特殊, 但是由于这些函数的语法和之前介绍的函数类似, 数量也比较少,  因此很容易记忆
+
+
+语法14: `CAST`函数实现类型转换
+- 之所以需要进行类型转换, 是因为可能会插入与表中数据类型不匹配的数据
+- 或者在进行运算时由于数据类型不一致发生了错误
+- 又或者是进行自动类型转换会造成处理速度低下. 这些时候都需要事前进行数据类型转换
+- 将字符串转换为日期 类型时，从结果上并不能看出数据发生了什么变化，理解起来也比较困难。
+  - 从这一点我们也可以看出，类型转换其实并不是为了方便用户使用而开发的功能，而是为了方便DBMS内部处理而开发的功能
+```sql
+CAST (转换前的值 AS 想要转换的数据类型)
+```
+
+实例17: 将字符串类型转换为数值类型
+```sql
+SELECT CAST('0001' AS INTEGER) AS int_col;
+SELECT CAST(100 AS VARCHAR) AS char_col;
+SELECT CAST('2020-02-20 15:10:33' AS timestamp) AS timestamp_col;
+```
+
