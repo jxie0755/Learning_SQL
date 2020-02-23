@@ -284,3 +284,38 @@ SET TIMEZONE = 'PST';  -- 美国西岸时间
 -- 所以可以直接SET TIMEZONE = '+08'; 或者 SET TIMEZONE = '-05';等等
 ```
 
+实例: 创建一个测试DATE/TIME的表
+```sql
+CREATE TABLE Timezonetest
+(
+    id              char(4)     NOT NULL,
+    time_col        time        NOT NULL,
+    timetz_col      timetz      NOT NULL,
+    timestamp_col   timestamp   NOT NULL,
+    timestamptz_col timestamptz NOT NULL,
+        PRIMARY KEY (id)
+);
+
+-- 插入数据
+INSERT INTO Timezonetest VALUES
+('10:49:50', '10:49:50-05', '2020-02-22 10:52:00', '2020-02-22 10:52:00-05');
+
+-- 注意, 在表中, 显示出来的四列数据为:
+-- 10:49:50,  10:49:50.000000 -05:00, 2020-02-22 10:52:00.000000, 2020-02-22 15:52:00.000000
+-- 没有显示毫秒    带毫秒,保留时区-5信息     带毫秒,没有时区信息(默认GMT)   带毫秒,直接时间比原数据+5小时, 没有单独显示时区
+-- 即使输入带时区的时间戳，postgres 底层存的也是转换后的 UTC 时间。通过 set timezone 可以改变了数据库展示时间的方式（带时区）
+-- 意思就是说, 输入timestamptz数据时, 应该输入[当地时间+当地时区], 而不是直接输入[GMT时间+修改时区]
+
+-- 提取数据
+SET TIMEZONE = '-05';  -- 如果没有这一个设置, 则显示的还是 2020-02-22 15:52:00.000000
+SELECT timestamptz_col
+FROM Timezonetest
+WHERE id = '1';        --                 显示回当地时间 2020-02-22 10:52:00.000000 -05:00
+
+SET TIMEZONE = '+08';
+SELECT timestamptz_col
+FROM Timezonetest
+WHERE id = '1';       --                 显示成北京时间 2020-02-22 23:52:00.000000 +08:00
+
+-- 而没带TZ的类型, 则不管怎么改时区设置, 都是输出一样的
+```
