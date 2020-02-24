@@ -369,16 +369,119 @@ SELECT timestamptz '2020-02-22 10:52:11.123456-05';
 - 之所以需要进行类型转换, 是因为可能会插入与表中数据类型不匹配的数据
 - 或者在进行运算时由于数据类型不一致发生了错误
 - 又或者是进行自动类型转换会造成处理速度低下. 这些时候都需要事前进行数据类型转换
-- 将字符串转换为日期 类型时，从结果上并不能看出数据发生了什么变化，理解起来也比较困难。
-  - 从这一点我们也可以看出，类型转换其实并不是为了方便用户使用而开发的功能，而是为了方便DBMS内部处理而开发的功能
+- 将字符串转换为日期 类型时, 从结果上并不能看出数据发生了什么变化, 理解起来也比较困难.
+  - 从这一点我们也可以看出, 类型转换其实并不是为了方便用户使用而开发的功能, 而是为了方便DBMS内部处理而开发的功能
 ```sql
 CAST (转换前的值 AS 想要转换的数据类型)
 ```
 
-实例17: 将字符串类型转换为数值类型
+实例17+18: 将字符串类型转换为数值类型
 ```sql
 SELECT CAST('0001' AS INTEGER) AS int_col;
 SELECT CAST(100 AS VARCHAR) AS char_col;
 SELECT CAST('2020-02-20 15:10:33' AS timestamp) AS timestamp_col;
 ```
 
+语法15: `COALSECE`函数
+- `COALESCE`是SQL特有的函数.
+- 该函数会返回可变参数A中左侧开始第1个不是`NULL`的值.
+- 参数个数是可变的, 因此可以根据需要无限增加.
+- 在 SQL 语句中将`NULL`转换 为其他值时就会用到转换函数.
+    - 运算或者函数中含有`NULL`时, 结果全都会变为`NULL`.
+    - 能够避免这种结果的函数就是 COALESCE
+```sql
+COALESCE( 数据1, 数据2, 数据3 ...... )
+```
+
+实例19+20: 将`NULL`转换为其他值
+```sql
+SELECT 
+    COALESCE(NULL, 1) AS col_1, 
+    COALESCE(NULL, 'test', NULL) AS col_2, 
+    COALESCE(NULL, NULL, '2009-11-01') AS col_3;
+-- 筛选出`1`, `'test'`, `'2009-11-01'`
+
+SELECT COALESCE(str2, 'IT WAS NULL') FROM SampleStr;
+-- 把str2这一列中所有的NULL替换成了`'IT WAS NULL'`
+```
+
+
+
+---
+### 6-2 谓词 ###
+
+学习重点:
+- 谓词就是返回值为真值的函数.
+- 掌握`LIKE`的三种使用方法(前方一致, 中间一致, 后方一致).
+- 需要注意`BETWEEN`包含三个参数.
+- 想要取得`NULL`数据时必须使用`IS NULL`.
+- 可以将子查询作为`IN`和`EXISTS`的参数.
+
+
+#### 什么是谓词 ####
+
+- 谓词(predicate)是SQL的抽出条件中不可或缺的工具.
+- 谓词就是6-1节中介绍的函数中的一种, 是需要满足特定条件的函数, 该条件就是返回值是真值
+- 本节将会介绍以下谓词:
+  - LIKE
+  - BETWEEN
+  - IS NULL
+  - IS NOT NULL
+  - IN
+  - EXISTS
+
+
+#### LIKE谓词 - 字符串的部分一致查询 ####
+
+- 我们使用字符串作为查询条件的例子中使用的都是`=`.
+  - `=`只有在字符串完全一致时才为真
+- 与之相反, `LIKE`谓词更加模糊,
+  - 当需要进行字符串的部分一致查询时需要使用该谓词
+
+实例21: 创建 SampleLike 表
+```sql
+CREATE TABLE SampleLike
+(strcol VARCHAR(6) NOT NULL,
+PRIMARY KEY (strcol));
+
+BEGIN TRANSACTION;
+INSERT INTO SampleLike (strcol) VALUES ('abcddd');
+INSERT INTO SampleLike (strcol) VALUES ('dddabc');
+INSERT INTO SampleLike (strcol) VALUES ('abdddc');
+INSERT INTO SampleLike (strcol) VALUES ('abcdd');
+INSERT INTO SampleLike (strcol) VALUES ('ddabc');
+INSERT INTO SampleLike (strcol) VALUES ('abddc');
+COMMIT;
+```
+
+现在我们想在这张表取出包含`'ddd'`的字符串:
+- 前方一致: 与查询对象字符串起始部分相同的记录的查询方法, 必须以`'ddd'`开头
+  - 选出`'dddabc'`
+- 中间一致: 就是选取出查询对象字符串中含有作为查询条件的字符串的记录的查询方法, 无论前后
+- 也就是说中间一致全部包括了前方一致,后方一致和中间一致三种情况, 是最宽容的方法
+  - 选出`'abcddd'`, `'dddabc'`, `'abdddc'`
+- 后方一致: 与前方一致相反, 结尾必须为`'ddd'`
+  - 选出`'abcddd'`
+- 使用`%`来表示省略的部分
+  - `'ddd%'`表示`'ddd'`开头, 后面不管 (前方一致)
+  - `'%ddd%'`表示前后都可以有任何东西, 甚至没有也行, 只要包含`'ddd'`就行 (中间一致)
+  - `'%ddd'`表示前面有什么都不重要, 但是结尾必须是`'ddd'` (后方一致)
+
+
+实例22+23+24: 使用LIKE进行前方/中间/后方一致查询
+```sql
+-- 前方一致
+SELECT *
+FROM SampleLike 
+WHERE strcol LIKE 'ddd%';
+
+-- 中间一致
+SELECT *
+FROM SampleLike 
+WHERE strcol LIKE '%ddd%';
+
+-- 后方一致
+SELECT *
+FROM SampleLike 
+WHERE strcol LIKE '%ddd';
+```
