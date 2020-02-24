@@ -466,9 +466,12 @@ COMMIT;
   - `'ddd%'`表示`'ddd'`开头, 后面不管 (前方一致)
   - `'%ddd%'`表示前后都可以有任何东西, 甚至没有也行, 只要包含`'ddd'`就行 (中间一致)
   - `'%ddd'`表示前面有什么都不重要, 但是结尾必须是`'ddd'` (后方一致)
+- 此外, 我们还可以使用`_`(下划线)来代替`%`, 与`%`不同的是, 它代表了"任意1个字符"
+  - 这就固定了长度
+  - 
 
 
-实例22+23+24: 使用LIKE进行前方/中间/后方一致查询
+实例22+23+24: 使用`LIKE`进行前方/中间/后方一致查询
 ```sql
 -- 前方一致
 SELECT *
@@ -484,4 +487,30 @@ WHERE strcol LIKE '%ddd%';
 SELECT *
 FROM SampleLike 
 WHERE strcol LIKE '%ddd';
+```
+
+实例25+26: 使用`LIKE`和`_`（下划线）进行后方一致查询
+```sql
+SELECT *
+FROM SampleLike 
+WHERE strcol LIKE 'abc__';  -- abc+任意两个字符
+
+SELECT *
+FROM SampleLike 
+WHERE strcol LIKE 'abc___';  -- abc+任意三个字符
+```
+
+
+#### BETWEEN谓词 - 范围查询 ####
+
+- 使用`BETWEEN`可以进行范围查询。
+- 该谓词与其他谓词或者函数的不同之处在于它使用了3个参数。
+- 最大特点就是包括两端
+  - 如果不想包括两端则需要使用`<`和`>`
+
+实例27: 选取销售单价为 100～1000 日元的商品
+```sql
+SELECT product_name, sale_price
+FROM Product 
+WHERE sale_price BETWEEN 100 AND 1000;
 ```
