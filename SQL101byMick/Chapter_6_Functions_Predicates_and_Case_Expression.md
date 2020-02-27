@@ -623,7 +623,7 @@ WHERE product_id NOT IN (SELECT product_id
 2. 语法理解起来比较困难.
 3. 实际上即使不使用`EXIST`, 基本上也都可以使用`IN`(或者`NOT IN`)来代替.
 
-实例38+39+40: 使用`EXIST`选取出“大阪店在售商品的销售单价”
+实例38+39+40: 使用`EXIST`选取出"大阪店在售商品的销售单价"
 ```sql
 SELECT product_name, sale_price
     FROM Product AS P                 ---- 
