@@ -489,7 +489,7 @@ FROM SampleLike
 WHERE strcol LIKE '%ddd';
 ```
 
-实例25+26: 使用`LIKE`和`_`（下划线）进行后方一致查询
+实例25+26: 使用`LIKE`和`_`(下划线)进行后方一致查询
 ```sql
 SELECT *
 FROM SampleLike 
@@ -503,16 +503,157 @@ WHERE strcol LIKE 'abc___';  -- abc+任意三个字符
 
 #### BETWEEN谓词 - 范围查询 ####
 
-- 使用`BETWEEN`可以进行范围查询。
-- 该谓词与其他谓词或者函数的不同之处在于它使用了3个参数。
+- 使用`BETWEEN`可以进行范围查询.
+- 该谓词与其他谓词或者函数的不同之处在于它使用了3个参数.
 - 最大特点就是包括两端
   - 如果不想包括两端则需要使用`<`和`>`
 
-实例27: 选取销售单价为 100～1000 日元的商品
+实例27 + 28: 选取销售单价为 100~1000 日元的商品
 ```sql
+-- Use BETWEEN
 SELECT product_name, sale_price
 FROM Product 
 WHERE sale_price BETWEEN 100 AND 1000;
+
+--- Use < and >
+SELECT product_name, sale_price
+FROM Product
+WHERE sale_price > 100 AND sale_price < 1000;
 ```
 
+
+#### IS NULL, IS NOT NULL - 判断是否为NULL ####
+
+为了选取出某些值为`NULL`的列的数据, 不能使用`=`, 而只能使用特定的谓词`IS NULL`
+
+实例29+30: 选取出进货单价(purchase_price)为/不为`NULL`的商品
+```sql
+SELECT product_name, purchase_price
+FROM Product
+WHERE purchase_price IS NULL;
+
+SELECT product_name, purchase_price
+FROM Product
+WHERE purchase_price IS NOT NULL;
+```
+
+
+#### IN谓词 - OR的简便用法 ####
+
+连续使用太多OR可能会显得代码太长
+
+实例31+32+33: 通过`OR`/`IN`/`NOT IN`指定或者排除多个进货单价进行查询
+```sql
+-- Use OR
+SELECT product_name, purchase_price
+FROM Product
+WHERE purchase_price = 320 OR purchase_price = 500 OR purchase_price = 5000;
+
+-- Use IN
+SELECT product_name, purchase_price
+FROM Product
+WHERE purchase_price IN (320, 500, 5000); -- 类似python的tuple
+
+-- Use NOT IN
+SELECT product_name, purchase_price
+FROM Product
+WHERE purchase_price NOT IN (320, 500, 5000);
+```
+
+
+#### 使用子查询作为IN谓词的参数 ####
+
+`IN`谓词(`NOT IN`谓词)具有其他谓词所没有的用法, 那就是可以使用子查询作为其参数
+- 子查询就是SQL内部生成的表, 因此也可以说"能够将表作为`IN`的参数".
+- 同理, 我们还可以说"能够将视图作为`IN`的参数"
+
+实例34: 建ShopProduct(商店商品)表的CREATE TABLE语句
+```sql
+CREATE TABLE ShopProduct
+(shop_id CHAR(4) NOT NULL,
+shop_name VARCHAR(200) NOT NULL,
+product_id CHAR(4) NOT NULL,
+quantity INTEGER NOT NULL,
+PRIMARY KEY (shop_id, product_id));  -- 两个主键, 不能同时重复
+
+BEGIN TRANSACTION; ①
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000A', '东京', '0001', 30);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000A', '东京', '0002', 50);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000A', '东京', '0003', 15);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000B', '名古屋', '0002', 30);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000B', '名古屋', '0003', 120);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000B', '名古屋', '0004', 20);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000B', '名古屋', '0006', 10);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000B', '名古屋', '0007', 40);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000C', '大阪', '0003', 20);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000C', '大阪', '0004', 50);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000C', '大阪', '0006', 90);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000C', '大阪', '0007', 70);
+INSERT INTO ShopProduct (shop_id, shop_name, product_id, quantity) VALUES ('000D', '福冈', '0001', 100);
+COMMIT
+```
+> - 该`CREATE TABLE`语句的特点是指定了 2 列作为主键(primarykey).
+
+实例36: 使用子查询作为IN的参数
+```sql
+-- 得到大阪店所出售商品的单价
+SELECT product_name, sale_price
+FROM product
+WHERE product_id IN (SELECT product_id
+                        FROM shopproduct
+                    WHERE shop_id = '000C')
+```
+> -   既然子查询展开后得到的结果同样是('0003','0004','0006','0007'), 为什么一定要使用子查询呢?
+>     - 因为这个语句能应付商店内出售商品的变化, 而不需要更改代码
+
+
+实例37: 使用子查询作为`NOT IN`的参数
+```sql
+SELECT product_name, sale_price
+FROM Product
+WHERE product_id NOT IN (SELECT product_id
+                            FROM ShopProduct
+                        WHERE shop_id = '000A');
+```
+
+#### EXIST谓词 ####
+
+`EXIST`是使用方法特殊而难以理解的谓词, 但是一旦能够熟练使用就能体会到它极大的便利性
+1. EXIST 的使用方法与之前的都不相同.
+2. 语法理解起来比较困难.
+3. 实际上即使不使用`EXIST`, 基本上也都可以使用`IN`(或者`NOT IN`)来代替.
+
+实例38+39+40: 使用`EXIST`选取出“大阪店在售商品的销售单价”
+```sql
+SELECT product_name, sale_price
+    FROM Product AS P                 ---- 
+WHERE EXISTS (SELECT *
+                FROM ShopProduct AS SP ---
+            WHERE SP.shop_id = '000C' AND SP.product_id = P.product_id);
+            
+-- 注意, 这样不行
+SELECT product_name, sale_price
+    FROM Product AS P                 
+WHERE EXISTS (SELECT product_id as SP  --- 直接选product_id并给alias
+                FROM ShopProduct
+            WHERE SP = '000C' AND SP = P.product_id); -- 无法成立, 一定要引用table.col = table.col
+            
+            
+-- 可以把子查询替换为常数
+SELECT 1 -- 这里可以书写适当的常数
+    FROM ShopProduct AS SP
+WHERE SP.shop_id = '000C' AND SP.product_id = P.product_id)
+
+-- 使用NOT EXIST
+SELECT product_name, sale_price
+    FROM Product AS P
+WHERE NOT EXISTS (SELECT *
+                    FROM ShopProduct AS SP
+                  WHERE SP.shop_id = '000A' AND SP.product_id = P.product_id);
+```
+> - `EXIST`的左侧并没有任何参数
+> - 这是因为`EXIST`是只有1个参数的谓词
+
+
+### 6-3 CASE表达式 ###
 
