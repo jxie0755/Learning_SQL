@@ -681,7 +681,7 @@ CASE表达式的语法分为两种:
 
 语法16: 搜索CASE表达式
 > - WHEN 子句中的"<求值表达式>"就是类似"`列 = 值`"这样, 返回值为真值(`TRUE`/`FALSE`/`UNKNOWN`)的表达式
-> - CASE 表达式会从对最初的`WHEN`子句中的"< 求值表达式 >"进行求值开始执行. 
+> - CASE 表达式会从对最初的`WHEN`子句中的"< 求值表达式 >"进行求值开始执行.
 >   - 所谓求值, 就是要调查该表达式的真值是什么
 > - 如果结果为真(`TRUE`), 那么就返回`THEN`子句中的表达式
 >   - CASE 表达式的执行到此为止 (相当于if...elif, 而不是if...if...)
@@ -695,3 +695,20 @@ CASE WHEN <求值表达式> THEN <表达式>
     ELSE <表达式>
 END
 ```
+
+
+#### CASE表达式的使用方法 ####
+
+实例41: 通过CASE表达式将A~C的字符串加入到商品种类当中
+```sql
+SELECT product_name,
+    CASE WHEN product_type = '衣服' THEN 'A: ' || product_type
+        WHEN product_type = '办公用品' THEN 'B: ' || product_type
+        WHEN product_type = '厨房用具' THEN 'C: ' || product_type
+        ELSE NULL
+    END AS abc_product_type
+FROM Product;
+```
+> - 输出产品的类型
+
+
