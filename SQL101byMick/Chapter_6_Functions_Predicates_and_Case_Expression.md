@@ -710,5 +710,5 @@ SELECT product_name,
 FROM Product;
 ```
 > - 输出产品的类型
-
+> - `ELSE`子句也可以省略不写，这时会被默认为`ELSE NULL`
 
