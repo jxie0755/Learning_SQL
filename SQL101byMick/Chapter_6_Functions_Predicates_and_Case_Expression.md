@@ -742,10 +742,10 @@ FROM Product;
 简单CASE表达式比搜索CASE表达式简单, 但是会受到条件的约束, 因此通常情况下都会使用搜索CASE表达式
 
 语法extra: 简单CASE表达式
-- 与搜索CASE表达式一样，简单CASE表达式也是从最初的`WHEN`子句开始进行
+- 与搜索CASE表达式一样, 简单CASE表达式也是从最初的`WHEN`子句开始进行
 - 逐一判断每个 WHEN 子句直到返回真值为止
-- 没有能够返回真值的`WHEN`子句时，也会返回`ELSE`子句指定的表达式
-- 两者的不同之处在于，简单CASE表达式最初的`CASE< 表达式 >`也会作为求值的对象
+- 没有能够返回真值的`WHEN`子句时, 也会返回`ELSE`子句指定的表达式
+- 两者的不同之处在于, 简单CASE表达式最初的`CASE< 表达式 >`也会作为求值的对象
 ```sql
 CASE <表达式>
     WHEN <表达式> THEN <表达式>
@@ -762,9 +762,9 @@ END
 ```sql
 SELECT product_name,
     CASE product_type -- 这里是最关键的, 把product_type作为case的区分要素, 以后不需要每行都写
-        WHEN '衣服' THEN 'A ： ' | | product_type
-        WHEN '办公用品' THEN 'B ： ' | | product_type
-        WHEN '厨房用具' THEN 'C ： ' | | product_type
+        WHEN '衣服' THEN 'A :  ' | | product_type
+        WHEN '办公用品' THEN 'B :  ' | | product_type
+        WHEN '厨房用具' THEN 'C :  ' | | product_type
         ELSE NULL
     END AS abc_product_type
 FROM Product;
