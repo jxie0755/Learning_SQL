@@ -680,11 +680,11 @@ CASE表达式的语法分为两种:
 但是由于搜索CASE表达式包含了简单CASE表达式的全部功能, 因此本节只会介绍搜索CASE表达
 
 语法16: 搜索CASE表达式
-> - WHEN 子句中的"<求值表达式>"就是类似"`列 = 值`"这样, 返回值为真值(`TRUE`/`FALSE`/`UNKNOWN`)的表达式
-> - CASE 表达式会从对最初的`WHEN`子句中的"< 求值表达式 >"进行求值开始执行.
->   - 所谓求值, 就是要调查该表达式的真值是什么
-> - 如果结果为真(`TRUE`), 那么就返回`THEN`子句中的表达式
->   - CASE 表达式的执行到此为止 (相当于if...elif, 而不是if...if...)
+- WHEN 子句中的"<求值表达式>"就是类似"`列 = 值`"这样, 返回值为真值(`TRUE`/`FALSE`/`UNKNOWN`)的表达式
+- CASE 表达式会从对最初的`WHEN`子句中的"< 求值表达式 >"进行求值开始执行.
+  - 所谓求值, 就是要调查该表达式的真值是什么
+  - 如果结果为真(`TRUE`), 那么就返回`THEN`子句中的表达式
+  - CASE 表达式的执行到此为止 (相当于if...elif, 而不是if...if...)
 ```sql
 CASE WHEN <求值表达式> THEN <表达式>
      WHEN <求值表达式> THEN <表达式>
@@ -711,3 +711,61 @@ FROM Product;
 ```
 > - 输出产品的类型
 > - `ELSE`子句也可以省略不写, 这时会被默认为`ELSE NULL`
+
+
+
+CASE 表达式的便利之处就在于它是一个表达式. 之所以这么说, 是因为表达式可以书写在任意位置
+
+实例42-43: 通常使用GROUP BY也无法实现行列转换
+```sql
+-- 使用GROUP BY只能把三类产品的类总价放在同一列中
+SELECT product_type,
+SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY product_type;
+
+-- 使用CASE表达式把总价放到三个列中
+SELECT SUM(CASE WHEN product_type = '衣服'
+                THEN sale_price ELSE 0 END) AS sum_price_clothes,
+        SUM(CASE WHEN product_type = '厨房用具'
+                THEN sale_price ELSE 0 END) AS sum_price_kitchen,
+        SUM(CASE WHEN product_type = '办公用品'
+            THEN sale_price ELSE 0 END) AS sum_price_office
+FROM Product;
+```
+> - 这里面, 把CASE表达式用于了`SUM`函数的参数, 这样`SUM`就只统计同类产品
+> - 使用`ELSE 0`可以把其他类别忽略
+
+
+#### 专栏: 简单CASE表达式 ####
+
+简单CASE表达式比搜索CASE表达式简单, 但是会受到条件的约束, 因此通常情况下都会使用搜索CASE表达式
+
+语法extra: 简单CASE表达式
+- 与搜索CASE表达式一样，简单CASE表达式也是从最初的`WHEN`子句开始进行
+- 逐一判断每个 WHEN 子句直到返回真值为止
+- 没有能够返回真值的`WHEN`子句时，也会返回`ELSE`子句指定的表达式
+- 两者的不同之处在于，简单CASE表达式最初的`CASE< 表达式 >`也会作为求值的对象
+```sql
+CASE <表达式>
+    WHEN <表达式> THEN <表达式>
+    WHEN <表达式> THEN <表达式>
+    WHEN <表达式> THEN <表达式>
+     .
+     .
+     .
+    ELSE <表达式>
+END
+```
+
+实例extra: 实例41使用简单CASE表达式的实现
+```sql
+SELECT product_name,
+    CASE product_type -- 这里是最关键的, 把product_type作为case的区分要素, 以后不需要每行都写
+        WHEN '衣服' THEN 'A ： ' | | product_type
+        WHEN '办公用品' THEN 'B ： ' | | product_type
+        WHEN '厨房用具' THEN 'C ： ' | | product_type
+        ELSE NULL
+    END AS abc_product_type
+FROM Product;
+```
