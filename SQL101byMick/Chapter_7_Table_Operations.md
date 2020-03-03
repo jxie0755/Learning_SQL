@@ -47,7 +47,7 @@ COMMIT;
 ```
 
 
-实例3: 使用`UNION`对表进行加减法
+实例3+4: 使用`UNION`对表进行加减法
 - `UNION`等集合运算符通常都会除去重复的记录
 ```sql
 SELECT product_id, product_name
@@ -55,6 +55,16 @@ FROM Product
 UNION
 SELECT product_id, product_name
 FROM Product2;
+
+-- 使用ORDER BY
+SELECT product_id, product_name
+FROM Product
+WHERE product_type = '厨房用具'
+UNION
+SELECT product_id, product_name
+FROM Product2
+WHERE product_type = '厨房用具'
+ORDER BY product_id;
 ```
 
 
@@ -68,3 +78,64 @@ FROM Product2;
 
 
 #### 包含重复行的集合运算 — ALL选项 ####
+
+`UNION`的结果中保留重复行的语法。其实非常简单，只需要在`UNION`后面添加`ALL`关键字就可以了
+
+实例5: 保留重复行
+```sql
+SELECT product_id, product_name
+FROM Product
+UNION ALL
+SELECT product_id, product_name
+FROM Product2;
+```
+
+
+#### 选取表中的公共部分 - INTERSECT ####
+
+选取两个记录集合中公共部分的关键字是`INTERSECT`（交集）
+- 与使用`AND`可以选取出一张表中满足多个条件的公共部分不同，`INTERSECT`应用于两张表，选取出它们当中的公共记录
+
+实例6: 使用`INTERSECT`选取出表中公共部分
+```sql
+SELECT product_id, product_name
+FROM Product
+INTERSECT
+SELECT product_id, product_name
+FROM Product2
+ORDER BY product_id;
+```
+
+
+#### 记录的减法 - EXCEPT ####
+
+进行减法运算的`EXCEPT`（差集），其语法也与`UNION`相同
+
+实例7+8: 使用`EXCEPT`对记录进行减法运算
+```sql
+SELECT product_id, product_name
+FROM Product
+EXCEPT
+SELECT product_id, product_name
+FROM Product2
+ORDER BY product_id;
+
+-- 互换两张表的顺序结果也不同
+SELECT product_id, product_name
+FROM Product2
+EXCEPT
+SELECT product_id, product_name
+FROM Product
+ORDER BY product_id;
+```
+
+### 联结 (以列为单位对表进行联结) ###
+
+学习重点:
+- 联结（JOIN）就是将其他表中的列添加过来，进行“添加列”的集合运算。UNION是以行（纵向）为单位进行操作，而联结则是以列（横向）为单位进行的。
+- 联结大体上分为内联结和外联结两种。首先请大家牢牢掌握这两种联结的使用方法。
+- 请大家一定要使用标准SQL的语法格式来写联结运算，对于那些过时的或者特定SQL中的写法，了解一下即可，不建议使用。
+
+#### 什么是联结 ####
+
+
