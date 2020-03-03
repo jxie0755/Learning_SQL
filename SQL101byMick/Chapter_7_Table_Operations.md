@@ -24,7 +24,7 @@
 
 UNION就是集合中的并集
 
-实例1: 创建表Product2
+实例1+2: 创建表Product2
 ```sql
 -- 注意, Product2表的结构和Product完全相同, 包括product_id作为KEY
 CREATE TABLE Product2
@@ -35,4 +35,14 @@ sale_price INTEGER ,
 purchase_price INTEGER ,
 regist_date DATE ,
 PRIMARY KEY (product_id));
+
+-- 插入数据
+BEGIN TRANSACTION;
+INSERT INTO Product2 VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2008-09-20');
+INSERT INTO Product2 VALUES ('0002', '打孔器', '办公用品', 500, 320, '2009-09-11');
+INSERT INTO Product2 VALUES ('0003', '运动T恤', '衣服', 4000, 2800, NULL);
+INSERT INTO Product2 VALUES ('0009', '手套', '衣服', 800, 500, NULL);
+INSERT INTO Product2 VALUES ('0010', '水壶', '厨房用具', 2000, 1700, '2009-09-20');
+COMMIT;
 ```
+
