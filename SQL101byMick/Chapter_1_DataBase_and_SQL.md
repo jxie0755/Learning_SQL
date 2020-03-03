@@ -322,7 +322,7 @@ COMMIT;
 实例6
 ```
 BEGIN TRANSACTION;
-INSERT INTO Product VALUES ('0001', 'T恤' ,'衣服', 1000, 500, '2009-09-20');
+INSERT INTO Product VALUES ('0001', 'T恤衫' ,'衣服', 1000, 500, '2009-09-20');
 INSERT INTO Product VALUES ('0002', '打孔器', '办公用品', 500, 320, '2009-09-11');
 INSERT INTO Product VALUES ('0003', '运动T恤', '衣服', 4000, 2800, NULL);
 INSERT INTO Product VALUES ('0004', '菜刀', '厨房用具', 3000, 2800, '2009-09-20');

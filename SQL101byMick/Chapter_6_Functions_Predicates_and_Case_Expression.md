@@ -281,7 +281,7 @@ SELECT EXTRACT(SECOND FROM timestamptz '2020-02-22 10:52:11.123456-05') AS secon
 ```
 
 
-#### EXTRA: 时区问题 ####
+#### EXTRA - 时区问题 ####
 
 psql默认给的都是UTC时区, 可以通过修改时区
 

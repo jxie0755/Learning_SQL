@@ -22,7 +22,7 @@
 
 #### 表的加法 - UNION ####
 
-UNION就是集合中的并集
+`UNION`就是集合中的并集
 
 实例1+2: 创建表Product2
 ```sql
@@ -46,3 +46,25 @@ INSERT INTO Product2 VALUES ('0010', '水壶', '厨房用具', 2000, 1700, '2009
 COMMIT;
 ```
 
+
+实例3: 使用`UNION`对表进行加减法
+- `UNION`等集合运算符通常都会除去重复的记录
+```sql
+SELECT product_id, product_name
+FROM Product
+UNION
+SELECT product_id, product_name
+FROM Product2;
+```
+
+
+#### 集合运算的注意事项 ####
+
+集合运算的注意事项
+1. 作为运算对象的记录的列数必须相同
+2. 作为运算对象的记录中列的类型必须一致
+3. 可以使用任何`SELECT`语句，但`ORDER BY`子句只能在最后使用一次
+   - 对集合结果进行全体排序
+
+
+#### 包含重复行的集合运算 — ALL选项 ####
