@@ -20,3 +20,19 @@
 - 通过集合运算, 可以得到两张表中记录的集合或者公共记录的集合, 又或者其中某张表中的记录的集合. 像这样用来进行集合运算的运算符称为集合运算符
 
 
+#### 表的加法 - UNION ####
+
+UNION就是集合中的并集
+
+实例1: 创建表Product2
+```sql
+-- 注意, Product2表的结构和Product完全相同, 包括product_id作为KEY
+CREATE TABLE Product2
+(product_id CHAR(4) NOT NULL,
+product_name VARCHAR(100) NOT NULL,
+product_type VARCHAR(32) NOT NULL,
+sale_price INTEGER ,
+purchase_price INTEGER ,
+regist_date DATE ,
+PRIMARY KEY (product_id));
+```
