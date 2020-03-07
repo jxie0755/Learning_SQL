@@ -26,4 +26,3 @@
 <窗口函数> OVER ([PARTITION BY <列清单>]
                         ORDER BY <排序用列清单>)   
 ```
-
