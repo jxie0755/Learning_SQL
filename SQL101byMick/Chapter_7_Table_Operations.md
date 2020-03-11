@@ -166,7 +166,7 @@ ORDER BY product_id;
 
 实例9: 将Product表和ShopProduct表内联
 ```sql
-SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
 FROM ShopProduct AS SP INNER JOIN Product AS P
 ON SP.product_id = P.product_id;
 ```
@@ -179,10 +179,30 @@ ON SP.product_id = P.product_id;
 >   - 需要指定多个键时, 同样可以使用`AND`, `OR`
 >   - 在进行内联结时`ON`子句是必不可少的(如果没有~会发生错误), 并且`ON`必须书写在`FROM`和`WHERE`之间
 >     - 也就是说不能平白无故连接两个毫无关联的表, 中间必须要存在一个联结点
->     - 在联结条件也可以使用`=`来记述. 
+>     - 在联结条件也可以使用`=`来记述.
 >     - 在语法上, 还可以使用`<=`和`BETWEEN`等谓词
 > - 内联要点3 - `SELECT`子句
 >   - 在`SELECT`子句中指定的列要使用使用`<表的别名>.<列名>`的形式来指定列
 >     - 只有那些同时存在于两张表中的列必须使用这样的书写方式
 >     - 其他的列直接书写列名也不会发生错误
 >     - 为了避免混乱, 建议全部按照`<表的别名>.<列名>`
+
+实例10: 内联和`WHERE`子句结合使用`
+```sql
+-- 如果并不想了解所有商店的情况，例如只想知道东京店（000A）的信息时:
+
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
+FROM ShopProduct AS SP INNER JOIN Product AS P
+ON SP.product_id = P.product_id
+WHERE SP.shop_id = '000A';  -- 加入WHERE指定
+```
+> - 像这样使用联结运算将满足相同规则的表联结起来时，`WHERE`、`GROUP BY`、`HAVING`、`ORDER BY`等工具都可以正常使用
+
+实例extra: 将联结之后的结果想象为新创建出来的一张表, 并存为视图:
+```sql
+CREATE VIEW ProductJoinShopProduct(shop_id, shop_name, product_id, product_name, sale_price)
+AS
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
+FROM ShopProduct AS SP INNER JOIN Product AS P
+ON SP.product_id = P.product_id;
+```
