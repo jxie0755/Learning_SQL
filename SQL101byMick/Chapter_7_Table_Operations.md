@@ -189,14 +189,14 @@ ON SP.product_id = P.product_id;
 
 实例10: 内联和`WHERE`子句结合使用`
 ```sql
--- 如果并不想了解所有商店的情况，例如只想知道东京店（000A）的信息时:
+-- 如果并不想了解所有商店的情况, 例如只想知道东京店(000A)的信息时:
 
 SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
 FROM ShopProduct AS SP INNER JOIN Product AS P
 ON SP.product_id = P.product_id
 WHERE SP.shop_id = '000A';  -- 加入WHERE指定
 ```
-> - 像这样使用联结运算将满足相同规则的表联结起来时，`WHERE`、`GROUP BY`、`HAVING`、`ORDER BY`等工具都可以正常使用
+> - 像这样使用联结运算将满足相同规则的表联结起来时, `WHERE`, `GROUP BY`, `HAVING`, `ORDER BY`等工具都可以正常使用
 
 实例extra: 将联结之后的结果想象为新创建出来的一张表, 并存为视图:
 ```sql
