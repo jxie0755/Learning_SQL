@@ -170,10 +170,10 @@ SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
 FROM ShopProduct AS SP INNER JOIN Product AS P
 ON SP.product_id = P.product_id;
 ```
-> - 内联要点1 - `FROM`子句
+> - 内联结要点1 - `FROM`子句
 >   - 之前的`FROM`子句中只有一张表, 而这次我们同时使用了ShopProduct和Product两张表
 >   - 在 SELECT 子句中直接使用表的原名也没有关系, 但为了SQL语句的可读性, 建议使用别名
-> - 内联要点2 - `ON`子句
+> - 内联结要点2 - `ON`子句
 >   - 可以在`ON`之后指定两张表联结所使用的列(联结键)
 >   - `ON`是专门用来指定联结条件的, 它能起到与 WHERE 相同的作用
 >   - 需要指定多个键时, 同样可以使用`AND`, `OR`
@@ -181,7 +181,7 @@ ON SP.product_id = P.product_id;
 >     - 也就是说不能平白无故连接两个毫无关联的表, 中间必须要存在一个联结点
 >     - 在联结条件也可以使用`=`来记述.
 >     - 在语法上, 还可以使用`<=`和`BETWEEN`等谓词
-> - 内联要点3 - `SELECT`子句
+> - 内联结要点3 - `SELECT`子句
 >   - 在`SELECT`子句中指定的列要使用使用`<表的别名>.<列名>`的形式来指定列
 >     - 只有那些同时存在于两张表中的列必须使用这样的书写方式
 >     - 其他的列直接书写列名也不会发生错误
@@ -206,4 +206,36 @@ SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
 FROM ShopProduct AS SP INNER JOIN Product AS P
 ON SP.product_id = P.product_id;
 ```
+
+#### 外联结 - OUTER JOIN ####
+
+外联结也是通过`ON`子句的联结键将两张表进行联结，并从两张表中同时选取相应的列的。基本的使用方法并没有什么不同，只是结果却有所不同
+
+实例11+12 将两张表进行外联结
+```sql
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
+FROM ShopProduct AS SP RIGHT OUTER JOIN Product AS P
+ON SP.product_id = P.product_id;
+
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
+FROM Product AS P LEFT OUTER JOIN ShopProduct AS SP
+ON SP.product_id = P.product_id;
+
+-- 上两例结果一样, 因为LEFT的左侧和RIGHT的右侧指到了同一张表
+```
+> - 外联结要点1 - 选取出单张表中全部的信息
+>   - 与内联结的结果相比，不同点显而易见，那就是结果的行数不一样
+>   - 这是一个并集和交集的关系, 内联结属于交集, 外联结类似并集
+>   - 多出来的数据
+>     - 由于内联结只能选取出同时存在于两张表中的数据
+>     - 对于外联结来说，只要数据存在于某一张表当中，就能够读取出来
+>     - 那些表中不存在的信息我们还是无法得到，结果中高压锅和圆珠笔的商店编号和商店名称都是 NULL
+> - 外联结要点2 - 每张表都是主表吗
+>   - 设定主表可以使得主表内所有数据存在于外联结后的结果之中
+>     - 此例中由于Product是主表, 所以虽然ShopProduct中没有任何关于高压锅和圆珠笔的记录, 也会在外联时被显示出来.
+>     - 若是相反? 在此例中没有意义, 因为商店不可能有商品名单中没有的商品, 只存在"有商品,但是没有店铺在卖"的情况
+>   - 指定主表的关键字是`LEFT`和`RIGHT`
+>   - 使用`LEFT`时FROM子句中写在左侧的表是主表，使用`RIGHT`时右侧的表是主表
+>   -  `LEFT`和`RIGHT`的功能没有任何区别，使用哪一个都可以
+>      -  通常使用`LEFT`的情况会多一些
 
