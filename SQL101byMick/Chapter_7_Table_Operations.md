@@ -287,6 +287,5 @@ INNER JOIN InventoryProduct AS IP  -- 第二次内联结开始
 ON SP.product_id = IP.product_id
 WHERE IP.inventory_id = 'P001';
 ```
-> - 外联结也是同理, 但是也要注意LEFT和RIGHT的处理, 和依次选择主表
-
+> - 外联结也是同理, 但是也要注意`LEFT`和`RIGHT`的处理, 和依次选择主表
 
