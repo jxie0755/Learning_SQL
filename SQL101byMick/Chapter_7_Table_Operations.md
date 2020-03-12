@@ -240,3 +240,53 @@ ON SP.product_id = P.product_id;
 >      -  通常使用`LEFT`的情况会多一些
 
 
+#### 3张以上的表的联结 ####
+
+通常联结只涉及2张表
+- 但有时也会出现必须同时联结3张以上的表的情况
+- 原则上联结表的数量并没有限制
+
+实例13: 创建一个InventoryProduct表并插入数据
+```sql
+-- 假设商品都保存在P001和P002这2个仓库之中
+
+CREATE TABLE InventoryProduct
+( inventory_id CHAR(4) NOT NULL,
+product_id CHAR(4) NOT NULL,
+inventory_quantity INTEGER NOT NULL,
+PRIMARY KEY (inventory_id, product_id));
+
+BEGIN TRANSACTION;
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0001', 0);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0002', 120);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0003', 200);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0004', 3);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0005', 0);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0006', 99);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0007', 999);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P001', '0008', 200);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0001', 10);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0002', 25);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0003', 34);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0004', 19);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0005', 99);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0006', 0);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0007', 0);
+INSERT INTO InventoryProduct (inventory_id, product_id, inventory_quantity) VALUES ('P002', '0008', 18);
+COMMIT;
+```
+
+
+实例14: 对3张表进行内联结
+```sql
+-- 针对原代码做了小改动, 增加了IP.inventory_id列, 确定了只筛选出P001仓库的货品
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price, IP.inventory_id, IP.inventory_quantity
+FROM ShopProduct AS SP INNER JOIN Product AS P
+ON SP.product_id = P.product_id    -- 以上和第一次内联结两张表完全相同
+INNER JOIN InventoryProduct AS IP  -- 第二次内联结开始
+ON SP.product_id = IP.product_id
+WHERE IP.inventory_id = 'P001';
+```
+> - 外联结也是同理, 但是也要注意LEFT和RIGHT的处理, 和依次选择主表
+
+
