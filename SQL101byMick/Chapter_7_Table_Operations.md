@@ -289,3 +289,46 @@ WHERE IP.inventory_id = 'P001';
 ```
 > - 外联结也是同理, 但是也要注意`LEFT`和`RIGHT`的处理, 和依次选择主表
 
+
+#### 交叉联结 - CROSS JOIN ####
+
+第3种联结方式 — 交叉联结(`CROSS JOIN`)
+- 其实这种联结在实际业务中并不会使用（笔者使用这种联结的次数也屈指可数)
+- 交叉联结是所有联结运算的基础
+- 交叉联结本身非常简单，但是其结果有点麻烦
+
+实例15: 将两张表进行交叉联结
+```sql
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name
+FROM ShopProduct AS SP CROSS JOIN Product AS P;
+```
+> - 对满足相同规则的表进行交叉联结的集合运算符是`CROSS JOIN`（笛卡儿积）
+> - 进行交叉联结时无法使用内联结和外联结中所使用的`ON`子句
+> - 内联结是交叉联结的一部分
+>   - “内”也可以理解为“包含在交叉联结结果中的部分”。
+>   - “外”可以理解为“交叉联结结果之外的部分”
+
+
+#### 联结的特定语法和过时语法 ####
+
+SQL 是一门特定语法及过时语法非常多的语言. 使用中一定会碰到需要阅读他人写的代码并进行维护的情况，而那些使用特定和过时语法的程序就会成为我们的麻烦
+
+实例16: 使用过时语法的内联结(与实例10结果相同)
+```sql
+-- 过时语法:
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
+FROM ShopProduct SP, Product P
+WHERE SP.product_id = P.product_id AND SP.shop_id = '000A';
+
+-- 实例9的标准语法
+SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
+FROM ShopProduct AS SP INNER JOIN Product AS P
+ON SP.product_id = P.product_id
+WHERE SP.shop_id = '000A';
+```
+> - 这样的书写方式所得到的结果与标准语法完全相同
+> - 并且这样的语法可以在所有的DBMS中执行，并不能算是特定的语法，只是过时了而已
+> - 不推荐大家使用，理由主要有以下三点:
+>   - 使用这样的语法无法马上判断出到底是内联结还是外联结（又或者是其他种类的联结）
+>   - 由于联结条件都写在 WHERE 子句之中，因此无法在短时间内分辨出哪部分是联结条件，哪部分是用来选取记录的限制条件
+>   - 我们不知道这样的语法到底还能使用多久。每个 DBMS 的开发者都会考虑放弃过时的语法，转而支持新的语法。虽然并不是马上就不能使用了，但那一天总会到来
