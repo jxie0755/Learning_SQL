@@ -240,6 +240,7 @@ ON SP.product_id = P.product_id;
 >      -  通常使用`LEFT`的情况会多一些
 
 
+
 #### 3张以上的表的联结 ####
 
 通常联结只涉及2张表
@@ -288,6 +289,7 @@ ON SP.product_id = IP.product_id
 WHERE IP.inventory_id = 'P001';
 ```
 > - 外联结也是同理, 但是也要注意`LEFT`和`RIGHT`的处理, 和依次选择主表
+
 
 
 #### 交叉联结 - CROSS JOIN ####
