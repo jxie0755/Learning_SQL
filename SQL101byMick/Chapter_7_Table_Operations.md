@@ -47,7 +47,7 @@ COMMIT;
 ```
 
 
-实例3+4: 使用`UNION`对表进行加减法
+实例3+4/语法1: 使用`UNION`对表进行加减法
 - `UNION`等集合运算符通常都会除去重复的记录
 ```sql
 SELECT product_id, product_name
@@ -81,7 +81,7 @@ ORDER BY product_id;
 
 `UNION`的结果中保留重复行的语法. 其实非常简单, 只需要在`UNION`后面添加`ALL`关键字就可以了
 
-实例5: 保留重复行
+实例5/语法2: `UNION ALL`保留重复行
 ```sql
 SELECT product_id, product_name
 FROM Product
@@ -96,7 +96,7 @@ FROM Product2;
 选取两个记录集合中公共部分的关键字是`INTERSECT`(交集)
 - 与使用`AND`可以选取出一张表中满足多个条件的公共部分不同, `INTERSECT`应用于两张表, 选取出它们当中的公共记录
 
-实例6: 使用`INTERSECT`选取出表中公共部分
+实例6/语法3: 使用`INTERSECT`选取出表中公共部分
 ```sql
 SELECT product_id, product_name
 FROM Product
@@ -111,7 +111,7 @@ ORDER BY product_id;
 
 进行减法运算的`EXCEPT`(差集), 其语法也与`UNION`相同
 
-实例7+8: 使用`EXCEPT`对记录进行减法运算
+实例7+8/语法4: 使用`EXCEPT`对记录进行减法运算
 ```sql
 SELECT product_id, product_name
 FROM Product
@@ -164,7 +164,7 @@ ORDER BY product_id;
        - 数量
 - 内联之后, 会合并公共列, 然后其它列就直接连接
 
-实例9: 将Product表和ShopProduct表内联
+实例9/语法5: 将Product表和ShopProduct表内联
 ```sql
 SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
 FROM ShopProduct AS SP INNER JOIN Product AS P
@@ -211,7 +211,7 @@ ON SP.product_id = P.product_id;
 
 外联结也是通过`ON`子句的联结键将两张表进行联结, 并从两张表中同时选取相应的列的. 基本的使用方法并没有什么不同, 只是结果却有所不同
 
-实例11+12 将两张表进行外联结
+实例11+12/语法6 将两张表进行外联结
 ```sql
 SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
 FROM ShopProduct AS SP RIGHT OUTER JOIN Product AS P
@@ -278,7 +278,7 @@ COMMIT;
 ```
 
 
-实例14: 对3张表进行内联结
+实例14/语法7: 对3张表进行内联结
 ```sql
 -- 针对原代码做了小改动, 增加了IP.inventory_id列, 确定了只筛选出P001仓库的货品
 SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price, IP.inventory_id, IP.inventory_quantity
@@ -299,7 +299,7 @@ WHERE IP.inventory_id = 'P001';
 - 交叉联结是所有联结运算的基础
 - 交叉联结本身非常简单, 但是其结果有点麻烦
 
-实例15: 将两张表进行交叉联结
+实例15/语法8: 将两张表进行交叉联结
 ```sql
 SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name
 FROM ShopProduct AS SP CROSS JOIN Product AS P;
