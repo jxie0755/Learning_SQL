@@ -27,3 +27,17 @@
                         ORDER BY <排序用列清单>)   
 ```
 
+#### 语法的基本使用方法 - 使用RANK函数 ####
+
+RANK 是用来计算记录排序的函数
+
+实例1/语法2: 根据不同的商品种类, 按照销售单价从低到高顺序创建排序表
+> - `PARTITION BY`能够设定排序的对象范围 (就是先把商品根据类型分区)
+> - `ORDER BY`能够指定按照哪一列、何种顺序进行排序 (也就是在各分区内按照规定排序)
+```sql
+SELECT product_name, product_type, sale_price,
+       RANK() OVER (PARTITION BY product_type
+           ORDER BY sale_price) AS ranking     --- 根据排序结果依次分配序号
+FROM product;
+```
+
