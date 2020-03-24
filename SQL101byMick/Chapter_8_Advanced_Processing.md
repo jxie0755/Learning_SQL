@@ -41,3 +41,4 @@ SELECT product_name, product_type, sale_price,
 FROM product;
 ```
 
+
