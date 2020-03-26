@@ -40,4 +40,3 @@ SELECT product_name, product_type, sale_price,
            ORDER BY sale_price) AS ranking     --- 根据排序结果依次分配序号
 FROM product;
 ```
-
