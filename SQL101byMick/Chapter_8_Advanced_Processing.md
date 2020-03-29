@@ -40,3 +40,5 @@ SELECT product_name, product_type, sale_price,
            ORDER BY sale_price) AS ranking     --- 根据排序结果依次分配序号
 FROM product;
 ```
+
+`RANK`函数的意义在于排好序后, 可以将每行数据分配序号, 方便任意提取第N大的数据
