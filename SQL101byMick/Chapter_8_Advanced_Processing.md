@@ -89,15 +89,15 @@ from student_exam
 GROUP BY subject;
 -- 可以发现一共考三科
 
-SELECT name, sum(score)
+SELECT name, sum(score), avg(score)
 from student_exam
 GROUP BY name;
--- 可以看各人三科总分, 发现Denis总分最高
+-- 可以看各人三科总分和平均分, 发现Denis总分最高
 
-SELECT subject, sum(score)
+SELECT subject, sum(score), avg(score)
 from student_exam
 GROUP BY subject;
--- 可以看各科三人总分, 发现宏观上来看英语学得比其他两科好
+-- 可以看各科三人总分和平均分, 发现宏观上来看英语学得比其他两科好
 ```
 >- 无论如何, 这里都是做了一些简单的统计工作, 简化了数据
 
@@ -121,9 +121,10 @@ ORDER BY name, score;
 
 那么如何展示窗口函数特别之处?
 SELECT name, subject, score,
-    avg(score) over(partition by name) -- 增加一个平均分列
+       sum(score) over(partition by name),  -- 增加一个总分列
+        avg(score) over(partition by name)  -- 增加一个平均分列
 FROM student_exam
--- 每个人只有一个平均分, 但是有三科成绩, 这样同一个平均分要出现三次,分别和三科成绩对比
+-- 每个人只有一个总分/平均分, 但是有三科成绩, 这样同一个总分/平均分要出现三次,分别和三科成绩对比
 -- 如此使用窗口函数则方便很多
 ```
 >- 无论如何, 这里都是对原表做了一个分层展示, 数据全部不动
