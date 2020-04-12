@@ -113,6 +113,18 @@ Select name, subject, score,
        Rank () over (PARTITION BY name ORDER BY score)
 from student_exam;
 -- 展示整张表, 按照三人分组, 每组包含一个人的三科成绩, 从低到高
+
+-- 从本质上来说,上组查询和使用ORDER BY对多列先后排序比较类似
+Select name, subject, score
+from student_exam
+ORDER BY name, score;
+
+那么如何展示窗口函数特别之处?
+SELECT name, subject, score,
+    avg(score) over(partition by name) -- 增加一个平均分列
+FROM student_exam
+-- 每个人只有一个平均分, 但是有三科成绩, 这样同一个平均分要出现三次,分别和三科成绩对比
+-- 如此使用窗口函数则方便很多
 ```
 >- 无论如何, 这里都是对原表做了一个分层展示, 数据全部不动
 
