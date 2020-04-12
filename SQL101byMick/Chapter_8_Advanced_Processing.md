@@ -6,8 +6,8 @@
 ### 8-1 窗口函数 ###
 
 学习重点:
-- 口函数可以进行排序、生成序列号等一般的 操作。
-- 理解 PARTITION BY 和 ORDER BY 这两个关键字的含义十分重要。
+- 口函数可以进行排序, 生成序列号等一般的 操作.
+- 理解 PARTITION BY 和 ORDER BY 这两个关键字的含义十分重要.
 
 
 #### 什么是窗口函数 ####
@@ -19,9 +19,9 @@
 
 语法1: 窗口函数
 > - 窗口函数大体可以分为以下两种:
->   1. 能够作为窗口函数的聚合函数（`SUM`、`AVG`、`COUNT`、`MAX`、`MIN`）
->      - 将聚合函数书写 在`<窗口函数>`中，就能够当作窗口函数来使用了
->   2. `RANK`、`DENSE_RANK`、`ROW_NUMBER`等专用窗口函数
+>   1. 能够作为窗口函数的聚合函数(`SUM`, `AVG`, `COUNT`, `MAX`, `MIN`)
+>      - 将聚合函数书写 在`<窗口函数>`中, 就能够当作窗口函数来使用了
+>   2. `RANK`, `DENSE_RANK`, `ROW_NUMBER`等专用窗口函数
 ```sql
 <窗口函数> OVER ([PARTITION BY <列清单>]
                         ORDER BY <排序用列清单>)   
@@ -32,13 +32,16 @@
 RANK 是用来计算记录排序的函数
 ≥
 实例1/语法2: 根据不同的商品种类, 按照销售单价从低到高顺序创建排序表
+> - `RANK`函数的意义在于排好序后, 可以将每行数据分配序号, 方便任意提取第N大的数据
 > - `PARTITION BY`能够设定排序的对象范围 (就是先把商品根据类型分区)
 >   - `PARTITION BY`在横向上对表进行分组
-> - `ORDER BY`能够指定按照哪一列、何种顺序进行排序 (也就是在各分区内按照规定排序)
+> - `ORDER BY`能够指定按照哪一列, 何种顺序进行排序 (也就是在各分区内按照规定排序)
 >   - `ORDER BY`决定了纵向排序的规则
-> - 通过`PARTITION BY`分组后的记录集合称为窗口。
->   - 此处的窗口并 非“窗户”的意思，而是代表范围。
->   - 这也是“窗口函数”名称的由来。
+> - 通过`PARTITION BY`分组后的记录集合称为窗口.
+>   - 此处的窗口并 非"窗户"的意思, 而是代表范围.
+>   - 这也是"窗口函数"名称的由来.
+>   - 各个窗口在定义上绝对不会包含共通的部分。就像刀切蛋糕一 样，干净利落。
+>   - 这与通过 GROUP BY 子句分割后的集合具有相同的特征
 ```sql
 SELECT product_name, product_type, sale_price,
        RANK() OVER (PARTITION BY product_type
@@ -46,6 +49,21 @@ SELECT product_name, product_type, sale_price,
 FROM product;
 ```
 
-`RANK`函数的意义在于排好序后, 可以将每行数据分配序号, 方便任意提取第N大的数据
+- 窗口函数兼具之前我们学过的`GROUP BY`子句的分组功能以及`ORDER BY`子句的排序功能
+- `PARTITION BY`子句并不具备`GROUP BY`子句的汇总功能。因此，使用`RANK`函数并不会减少原表中记录的行数，结果中仍然包含 8 行数据.
+  - 解释: GROUP BY会把同类GROUP缩减成一行显示不同的GROUP, 而PARTITION BY则是把GROUP中每行数据展示出来
 
+
+#### 无需指定PARTITION BY ####
+
+- 使用窗口函数时起到关键作用的是`PARTITION BY`和`GROUP BY`。
+- 其中，`PARTITION BY`并不是必需的
+
+
+实例2/语法3: 不指定`PARTITION BY`
+```sql
+SELECT product_name, product_type, sale_price,
+    RANK () OVER (ORDER BY sale_price) AS ranking
+FROM Product;
+```
 
