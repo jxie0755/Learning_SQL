@@ -54,6 +54,69 @@ FROM product;
   - 解释: GROUP BY会把同类GROUP缩减成一行显示不同的GROUP, 而PARTITION BY则是把GROUP中每行数据展示出来
 
 
+#### Extra: GROUP BY vs PARTITION BY ####
+
+首先创立一个简单的TABLE展示三位学生的语数英考试成绩
+```sql
+CREATE TABLE student_exam
+(name    varchar(32) NOT NULL,
+subject varchar(32) NOT NULL,
+score   INTEGER
+);
+
+BEGIN TRANSACTION;
+INSERT INTO student_exam VALUES ('Denis', 'Chinese', 77);
+INSERT INTO student_exam VALUES ('Denis', 'Math', 99);
+INSERT INTO student_exam VALUES ('Denis', 'English', 95);
+INSERT INTO student_exam VALUES ('Cindy', 'Chinese', 90);
+INSERT INTO student_exam VALUES ('Cindy', 'Math', 81);
+INSERT INTO student_exam VALUES ('Cindy', 'English', 98);
+INSERT INTO student_exam VALUES ('Adrienne', 'Chinese', 73);
+INSERT INTO student_exam VALUES ('Adrienne', 'Math', 75);
+INSERT INTO student_exam VALUES ('Adrienne', 'English', 99);
+END TRANSACTION;
+```
+
+实例extra 1: 如果使用GROUP BY, 应该配合一些统计函数
+```sql
+SELECT name
+from student_exam
+GROUP BY name;
+-- 可以发现一共有三个人
+
+SELECT subject
+from student_exam
+GROUP BY subject;
+-- 可以发现一共考三科
+
+SELECT name, sum(score)
+from student_exam
+GROUP BY name;
+-- 可以看各人三科总分, 发现Denis总分最高
+
+SELECT subject, sum(score)
+from student_exam
+GROUP BY subject;
+-- 可以看各科三人总分, 发现宏观上来看英语学得比其他两科好
+```
+>- 无论如何, 这里都是做了一些简单的统计工作, 简化了数据
+
+
+实例extra 2: 如果使用OVER (PARTITION BY) 则是从不同的角度展示整张表, 不简化数据
+```sql
+Select name, subject, score,
+       Rank () over (PARTITION BY subject ORDER BY score)
+from student_exam;
+-- 展示整张表, 按照三科分组, 每组包含三个人成绩, 从低到高
+
+Select name, subject, score,
+       Rank () over (PARTITION BY name ORDER BY score)
+from student_exam;
+-- 展示整张表, 按照三人分组, 每组包含一个人的三科成绩, 从低到高
+```
+>- 无论如何, 这里都是对原表做了一个分层展示, 数据全部不动
+
+
 #### 无需指定PARTITION BY ####
 
 - 使用窗口函数时起到关键作用的是`PARTITION BY`和`GROUP BY`。
