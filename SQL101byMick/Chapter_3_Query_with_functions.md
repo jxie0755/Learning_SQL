@@ -392,6 +392,8 @@ ORDER BY <排序基准列1>, <排序基准列2>, ... (DESC | ASC)
 ```
 
 语法extra: 至此SQL语句顺序
+- 最终书写顺序:
+  - `SELECT` -> `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `ORDER BY`
 - 真实执行顺序:
   - `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `SELECT` -> `ORDER BY`
 ```sql
