@@ -40,8 +40,8 @@ RANK 是用来计算记录排序的函数
 > - 通过`PARTITION BY`分组后的记录集合称为窗口.
 >   - 此处的窗口并 非"窗户"的意思, 而是代表范围.
 >   - 这也是"窗口函数"名称的由来.
->   - 各个窗口在定义上绝对不会包含共通的部分。就像刀切蛋糕一 样，干净利落。
->   - 这与通过 GROUP BY 子句分割后的集合具有相同的特征
+>   - 各个窗口在定义上绝对不会包含共通的部分. 就像刀切蛋糕一 样, 干净利落.
+>   - 这与通过`GROUP BY`子句分割后的集合具有相同的特征
 ```sql
 SELECT product_name, product_type, sale_price,
        RANK() OVER (PARTITION BY product_type
@@ -50,8 +50,8 @@ FROM product;
 ```
 
 - 窗口函数兼具之前我们学过的`GROUP BY`子句的分组功能以及`ORDER BY`子句的排序功能
-- `PARTITION BY`子句并不具备`GROUP BY`子句的汇总功能。因此，使用`RANK`函数并不会减少原表中记录的行数，结果中仍然包含 8 行数据.
-  - 解释: GROUP BY会把同类GROUP缩减成一行显示不同的GROUP, 而PARTITION BY则是把GROUP中每行数据展示出来
+- `PARTITION BY`子句并不具备`GROUP BY`子句的汇总功能. 因此, 使用`RANK`函数并不会减少原表中记录的行数, 结果中仍然包含 8 行数据.
+  - 解释: `GROUP BY`会把同类GROUP缩减成一行显示不同的GROUP, 而`PARTITION BY`则是把GROUP中每行数据展示出来
 
 
 #### Extra: GROUP BY vs PARTITION BY ####
@@ -77,7 +77,7 @@ INSERT INTO student_exam VALUES ('Adrienne', 'English', 99);
 END TRANSACTION;
 ```
 
-实例extra 1: 如果使用GROUP BY, 应该配合一些统计函数
+实例extra 1: 如果使用`GROUP BY`, 应该配合一些统计函数
 ```sql
 SELECT name
 from student_exam
@@ -102,7 +102,7 @@ GROUP BY subject;
 >- 无论如何, 这里都是做了一些简单的统计工作, 简化了数据
 
 
-实例extra 2: 如果使用OVER (PARTITION BY) 则是从不同的角度展示整张表, 不简化数据
+实例extra 2: 如果使用`OVER (PARTITION BY)` 则是从不同的角度展示整张表, 不简化数据
 ```sql
 Select name, subject, score,
        Rank () over (PARTITION BY subject ORDER BY score)
@@ -132,8 +132,8 @@ FROM student_exam
 
 #### 无需指定PARTITION BY ####
 
-- 使用窗口函数时起到关键作用的是`PARTITION BY`和`GROUP BY`。
-- 其中，`PARTITION BY`并不是必需的
+- 使用窗口函数时起到关键作用的是`PARTITION BY`和`GROUP BY`.
+- 其中, `PARTITION BY`并不是必需的
 
 
 实例2/语法3: 不指定`PARTITION BY`
@@ -143,3 +143,24 @@ SELECT product_name, product_type, sale_price,
 FROM Product;
 ```
 
+
+#### 专用窗口函数的种类 ####
+
+一些有代表性的窗口函数, 在所有DBMS中可以使用
+- `RANK`函数
+  - 出现并列的情况, 参考通用体育排名, 并列第一名之后就是排第三名了.
+- `DENISE_RANK`函数
+  - 与`RANK`的情况相反, 并列第一名之后的仍然是排第二名
+- `ROW_NUMBER`函数
+  - 无视并列的情况, 强行安排1,2,3,4....
+
+
+实例3: 比较`RANK`, `DENSE_RANK`, `ROW_NUMBER`的结果
+```sql
+SELECT product_name, product_type, sale_price,
+    -- 同时对sale_price做三列不同的窗口函数:
+    RANK () OVER (ORDER BY sale_price) AS ranking,
+    DENSE_RANK () OVER (ORDER BY sale_price) AS dense_ranking,
+    ROW_NUMBER () OVER (ORDER BY sale_price) AS row_num    
+FROM Product;
+```
