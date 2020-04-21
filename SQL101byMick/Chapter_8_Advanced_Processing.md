@@ -164,3 +164,5 @@ SELECT product_name, product_type, sale_price,
     ROW_NUMBER () OVER (ORDER BY sale_price) AS row_num    
 FROM Product;
 ```
+> - 使用`RANK`或`ROW_NUMBER`时无需任何参数, 只需要像`RANK ()`或者`ROW_NUMBER()`这样保持括号中为空就可以了. 
+> - 这也是专用窗口函数通常的使用方式. 
