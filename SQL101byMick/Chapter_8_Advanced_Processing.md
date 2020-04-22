@@ -32,6 +32,8 @@
 RANK 是用来计算记录排序的函数
 ≥
 实例1/语法2: 根据不同的商品种类, 按照销售单价从低到高顺序创建排序表
+> - 核心语法: `窗口函数 OVER (分组方式/排序方式) AS <列名>`
+> - `PARTITION BY`和`ORDER BY`分别可以单独使用, 但是如果一起使用必须先`PARTITION BY`
 > - `RANK`函数的意义在于排好序后, 可以将每行数据分配序号, 方便任意提取第N大的数据
 > - `PARTITION BY`能够设定排序的对象范围 (就是先把商品根据类型分区)
 >   - `PARTITION BY`在横向上对表进行分组
@@ -40,7 +42,7 @@ RANK 是用来计算记录排序的函数
 > - 通过`PARTITION BY`分组后的记录集合称为窗口.
 >   - 此处的窗口并 非"窗户"的意思, 而是代表范围.
 >   - 这也是"窗口函数"名称的由来.
->   - 各个窗口在定义上绝对不会包含共通的部分. 就像刀切蛋糕一 样, 干净利落.
+>   - 各个窗口在定义上绝对不会包含共通的部分. 就像刀切蛋糕一样, 干净利落.
 >   - 这与通过`GROUP BY`子句分割后的集合具有相同的特征
 ```sql
 SELECT product_name, product_type, sale_price,
@@ -164,5 +166,38 @@ SELECT product_name, product_type, sale_price,
     ROW_NUMBER () OVER (ORDER BY sale_price) AS row_num    
 FROM Product;
 ```
-> - 使用`RANK`或`ROW_NUMBER`时无需任何参数, 只需要像`RANK ()`或者`ROW_NUMBER()`这样保持括号中为空就可以了. 
-> - 这也是专用窗口函数通常的使用方式. 
+> - 使用`RANK`或`ROW_NUMBER`时无需任何参数, 只需要像`RANK ()`或者`ROW_NUMBER()`这样保持括号中为空就可以了.
+> - 这也是专用窗口函数通常的使用方式.
+
+
+#### 窗口函数的适用范围 ####
+
+使用窗口函数的位置有非常大的限制, 只能书写在一个特定的位置
+- 这个位置就是`SELECT`子句之中。
+- 反过来说，就是这类函数不能在`WHERE`子句或者`GROUP BY`子句中使用
+- 理由:
+  - 在DBMS内部，窗口函数是对`WHERE`子句或者`GROUP BY`子句处理后的“结果”进行的操作
+
+
+#### 作为窗口函数使用的聚合函数 ####
+
+把SUM或者AVG等聚合函数作为窗口函数使用的方法 (其实以前之前**Extra: GROUP BY vs PARTITION BY**中讨论过)
+- 所有的聚合函数都能用作窗口函数，其语法和专用窗口函数完全相同
+
+实例4+5: 将`SUM`函数作为窗口函数使用
+```sql
+SELECT product_id, product_name, sale_price,
+    SUM (sale_price) OVER (ORDER BY product_id) AS current_sum
+FROM Product;
+
+-- 这里的current sum是随着行数往下累积从头相加到该行
+    -- 任意一行的sum就是到目前为止的sum
+    -- 最后一行的sum显然就是total sum
+    
+SELECT product_id, product_name, sale_price,
+    AVG (sale_price) OVER (ORDER BY product_id) AS current_avg
+FROM Product;
+
+-- 理由同上, 每一行的avg都是至此行的avg
+```
+
