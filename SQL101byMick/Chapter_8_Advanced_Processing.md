@@ -200,3 +200,4 @@ FROM Product;
 
 -- 理由同上, 每一行的avg都是至此行的avg
 ```
+
