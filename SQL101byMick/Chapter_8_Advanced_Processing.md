@@ -173,18 +173,18 @@ FROM Product;
 #### 窗口函数的适用范围 ####
 
 使用窗口函数的位置有非常大的限制, 只能书写在一个特定的位置
-- 这个位置就是`SELECT`子句之中。
-- 反过来说，就是这类函数不能在`WHERE`子句或者`GROUP BY`子句中使用
+- 这个位置就是`SELECT`子句之中.
+- 反过来说, 就是这类函数不能在`WHERE`子句或者`GROUP BY`子句中使用
 - 理由:
-  - 在DBMS内部，窗口函数是对`WHERE`子句或者`GROUP BY`子句处理后的“结果”进行的操作
+  - 在DBMS内部, 窗口函数是对`WHERE`子句或者`GROUP BY`子句处理后的"结果"进行的操作
 
 
 #### 作为窗口函数使用的聚合函数 ####
 
 把SUM或者AVG等聚合函数作为窗口函数使用的方法 (其实以前之前**Extra: GROUP BY vs PARTITION BY**中讨论过)
-- 所有的聚合函数都能用作窗口函数，其语法和专用窗口函数完全相同
+- 所有的聚合函数都能用作窗口函数, 其语法和专用窗口函数完全相同
 
-实例4+5: 将`SUM`函数作为窗口函数使用
+实例4+5: 将`SUM`函数和`AVG`函数作为窗口函数使用
 ```sql
 SELECT product_id, product_name, sale_price,
     SUM (sale_price) OVER (ORDER BY product_id) AS current_sum
@@ -200,3 +200,32 @@ FROM Product;
 
 -- 理由同上, 每一行的avg都是至此行的avg
 ```
+
+
+#### 计算平均移动 ####
+
+- 窗口函数就是将表以窗口为单位进行分割, 并在其中进行排序的函数.
+- 其实其中还包含在窗口中指定更加详细的汇总范围的备选功能, 该备选功能中的汇总范围称为**框架**
+
+
+实例6+7: 指定"最靠近的3行"和"当前前后"作为汇总对象
+```sql
+-- 使用PRECEDING
+SELECT product_id, product_name, sale_price,
+    AVG (sale_price) OVER (ORDER BY product_id 
+                            ROWS 2 PRECEDING) AS moving_avg 
+FROM Product;
+    
+-- 使用PRECEDING和FOLLOWING
+SELECT product_id, product_name, sale_price,
+    AVG (sale_price) OVER (ORDER BY product_id 
+                            ROWS BETWEEN 1 PRECEDING AND 
+                            1 FOLLOWING) AS moving_avg 
+FROM Product;    
+```
+> - 从第三行开始才是"最近3行"平移
+>   - 之前的第一行就是它本身, 第二行就是本身加上一行,从第三行开始都是本身加前两行
+> - 这种方法叫做Moving Average
+>   - 这里我们使用了`ROWS`("行")和`PRECEDING`("之前")两个关键字, 将框架指定为"截止到之前 ~ 行".
+>   - 同理, 之后N行叫做`FOLLOWING`
+> - 结合在一起就是有之前就看,没有就不看,有之后就看,没有也不看,至少要看自己
