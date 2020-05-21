@@ -221,6 +221,9 @@ SELECT SP.shop_id, SP.shop_name, SP.product_id, P.product_name, P.sale_price
 FROM Product AS P LEFT OUTER JOIN ShopProduct AS SP
 ON SP.product_id = P.product_id;
 
+-- 此处我给ShopProduct表强行加了一行数据, 给了product id = 0009 一个product表中不存在的产品
+-- 这样反转左右就能看出来以ShopProduct作为主表的时候就能显示出这一行了
+
 -- 上两例结果一样, 因为LEFT的左侧和RIGHT的右侧指到了同一张表
 ```
 > - 外联结要点1 - 选取出单张表中全部的信息
