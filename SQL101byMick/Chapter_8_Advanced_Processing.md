@@ -292,5 +292,6 @@ FROM Product GROUP BY product_type;
 2. `CUBE`
 3. `GROUPING SETS`
 - *目前不是每个DBMS都支持GROUPING运算符比如MySQL5.7还不行
-- pSQL从9.5版之后开始支持
+- pSQL从9.5版之后开始支持(使用语法0查看版本)
+
 
