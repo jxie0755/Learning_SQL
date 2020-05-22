@@ -208,7 +208,7 @@ FROM Product;
 - 其实其中还包含在窗口中指定更加详细的汇总范围的备选功能, 该备选功能中的汇总范围称为**框架**
 
 
-实例6+7: 指定"最靠近的3行"和"当前前后"作为汇总对象
+实例6+7: 指定"最靠近的3行"和"当前的前后"作为汇总对象
 ```sql
 -- 使用PRECEDING
 SELECT product_id, product_name, sale_price,
@@ -230,3 +230,29 @@ FROM Product;
 >   - 这里我们使用了`ROWS`("行")和`PRECEDING`("之前")两个关键字, 将框架指定为"截止到之前 ~ 行".
 >   - 同理, 之后N行叫做`FOLLOWING`
 > - 结合在一起就是有之前就看,没有就不看,有之后就看,没有也不看,至少要看自己
+>   - 如果要排除自己就在窗口函数中减去自己即可
+
+
+#### 两个ORDER BY ####
+
+- `OVER`子句中的`ORDER BY`只是用来决定窗口函数按照什么样的顺序进行计算的，对结果的排列顺序并没有影响
+
+实例8: 无法保证SELECT语句的结果的排序顺序
+```sql
+-- 不能保证排序ranking
+SELECT product_name, product_type, sale_price,
+    RANK () OVER (ORDER BY sale_price) AS ranking 
+FROM Product;
+
+-- 保证按照ranking来排序
+SELECT product_name, product_type, sale_price,
+    RANK () OVER (ORDER BY sale_price) AS ranking 
+FROM Product
+ORDER BY ranking;
+```
+> - 有时候的确会按照ranking来排序, 但是未必一定
+> - 所以这是必须要加一个`ORDER BY`给这个显示出来的view排序
+
+
+### GROUPING运算符 ###
+
