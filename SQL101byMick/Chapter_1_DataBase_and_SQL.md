@@ -147,7 +147,7 @@ SELECT version();
 CREATE DATABASE <数据库名称>;
 ```
 
-实例1:
+实例1: 创建`DATABASE`数据库
 ```
 CREATE DATABASE shop;
 ```
@@ -201,7 +201,7 @@ CREATE TABLE  <表名> (
 
 - 约束可以在定义列的时 候进行设置, 也可以在语句的末尾进行设置
 
-实例2:
+实例2: 创建给一个Product表
 ```sql
 CREATE TABLE Product
 (product_id      CHAR(4)      NOT NULL,
@@ -324,7 +324,7 @@ COMMIT;
 >   - `COMMIT`在这里基本等同于`END TRANSACTION` (本地修改) + 其他用户可见
 >   - > 详情请见https://stackoverflow.com/a/14806572/8435726
 
-实例6
+实例6: 像Product表中插入数据
 ```
 BEGIN TRANSACTION;
 INSERT INTO Product VALUES ('0001', 'T恤衫' ,'衣服', 1000, 500, '2009-09-20');

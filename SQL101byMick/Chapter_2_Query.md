@@ -57,7 +57,7 @@ FROM Product;
 - SQL可以随意使用换行
 - 但是不要插入空行
 
-实例3: 与代码清单2-2具有相同含义的SELECT语句
+实例3: 与代码清单2-2具有相同含义的`SELECT`语句
 ```sql
 SELECT product_id, product_name, product_type, sale_price,
 purchase_price, regist_date
@@ -92,7 +92,7 @@ FROM Product;
 
 #### 删除重复行 ####
 
-实例7+8: 使用DISTINCT删除product_type列中重复的数据
+实例7+8: 使用`DISTINCT`删除product_type列中重复的数据
 ```sql
 SELECT DISTINCT purchase_price
 FROM Product;
@@ -101,7 +101,7 @@ FROM Product;
 > - `NULL`也会被视为一类数据
 
 
-实例9: 在多列之前使用DISTINCT
+实例9: 在多列之前使用`DISTINCT`
 ```sql
 SELECT DISTINCT product_type, regist_date
 FROM product;
@@ -218,7 +218,7 @@ FROM Product
 WHERE regist_date < '2009-09-27';
 ```
 
-实例22: WHERE子句的条件表达式中也可以使用计算表达式
+实例22: `WHERE`子句的条件表达式中也可以使用计算表达式
 ```sql
 SELECT product_name, sale_price, purchase_price
 FROM Product
@@ -328,7 +328,7 @@ product_type = '办公用品'
 (regist_date = '2009-09-11' OR regist_date = '2009-09-20');
 ```
 
-实例36: 通过使用括号让OR运算符先于AND运算符执行
+实例36: 通过使用括号让`OR`运算符先于`AND`运算符执行
 ```sql
 SELECT product_name, product_type, regist_date
 FROM Product

@@ -567,7 +567,7 @@ WHERE purchase_price NOT IN (320, 500, 5000);
 - 子查询就是SQL内部生成的表, 因此也可以说"能够将表作为`IN`的参数".
 - 同理, 我们还可以说"能够将视图作为`IN`的参数"
 
-实例34: 建ShopProduct(商店商品)表的CREATE TABLE语句
+实例34: 建ShopProduct(商店商品)表的`CREATE TABLE`语句
 ```sql
 CREATE TABLE ShopProduct
 (shop_id CHAR(4) NOT NULL,
@@ -716,7 +716,7 @@ FROM Product;
 
 CASE 表达式的便利之处就在于它是一个表达式. 之所以这么说, 是因为表达式可以书写在任意位置
 
-实例42-43: 通常使用GROUP BY也无法实现行列转换
+实例42-43: 通常使用`GROUP BY`也无法实现行列转换
 ```sql
 -- 使用GROUP BY只能把三类产品的类总价放在同一列中
 SELECT product_type,

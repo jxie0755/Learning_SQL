@@ -26,7 +26,7 @@
     1. 由于视图无需保存数据, 因此可以节省存储设备的容量
     2. 可以将频繁使用的`SELECT`语句保存成视图, 这样就不用每次都重新书写了
 
-实例1:
+实例1: 通过视图等`SELECT`语句保存数据
 ```sql
 SELECT product_type, SUM(sale_price), SUM(purchase_price)
 FROM Product
@@ -275,7 +275,7 @@ sale_price,
 FROM Product;
 ```
 
-实例14: 在`HAVING``子句中使用标量子查询
+实例14: 在`HAVING`子句中使用标量子查询
 ```sql
 SELECT product_type, AVG(sale_price)
 FROM Product
@@ -320,7 +320,7 @@ HAVING AVG(sale_price) > (SELECT AVG(sale_price)
 >   - 衣服: 运动T恤
 >   - 办公用品: 打孔器
 
-实例15 + 16:
+实例15 + 16: 按照商品种类计算平均价格, 通过关联子查询按照商品种类对平均销售单价进行比较
 ```sql
 -- 找出每类产品的平均价格
 SELECT AVG(sale_price)

@@ -237,7 +237,7 @@ FROM Product;
 
 - `OVER`子句中的`ORDER BY`只是用来决定窗口函数按照什么样的顺序进行计算的, 对结果的排列顺序并没有影响
 
-实例8: 无法保证SELECT语句的结果的排序顺序
+实例8: 无法保证`SELECT`语句的结果的排序顺序
 ```sql
 -- 不能保证排序ranking
 SELECT product_name, product_type, sale_price,
@@ -295,3 +295,8 @@ FROM Product GROUP BY product_type;
 - pSQL从9.5版之后开始支持(使用语法0查看版本)
 
 
+ROLLUP
+- 从语法上来说，就是将 GROUP BY 子句中的聚合键清单像 ROLLUP （ 列 1>,< 列 2>,... ）这样使用
+- 该运算符的作用，一言以蔽之，就是“一次计算出不同聚合键组合的结果”
+
+实例12: 使用ROLLUP同时得出合计和小计

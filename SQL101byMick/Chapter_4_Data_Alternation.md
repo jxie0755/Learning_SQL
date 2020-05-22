@@ -48,7 +48,7 @@ VALUES ('0001', 'T恤衫', '衣服', 1000, 500, '2009-09-20');
 
 #### 列清单的省略 ####
 
-实例3: 对表进行全列 INSERT 时, 可以省略表名后的列清单:
+实例3: 对表进行全列`INSERT`时, 可以省略表名后的列清单:
 ```sql
 INSERT INTO ProductIns 
 VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
@@ -178,7 +178,7 @@ SELECT *
 FROM Product;
 ```
 
-实例11:尝试一下使用包含 GROUP BY 子句的 SELECT 语句进行插入
+实例11:尝试一下使用包含`GROUP BY`子句的`SELECT`语句进行插入
 ```sql
 -- 根据商品种类进行汇总的表 : 
 CREATE TABLE ProductType
@@ -189,7 +189,7 @@ PRIMARY KEY (product_type));
 -- 此表一共三列, 类型, 售价总和 与 买入价总和
 ```
 
-实例12: 插入全三列, 然后下面的SELECT语句则是从Product表中通过聚合函数得出
+实例12: 插入全三列, 然后下面的`SELECT`语句则是从Product表中通过聚合函数得出
 ```sql
 INSERT INTO ProductType (product_type, sum_sale_price, sum_purchase_price)
 SELECT product_type, SUM(sale_price), SUM(purchase_price)

@@ -34,7 +34,7 @@ FROM Product;
 
 #### 计算NULL之外的数据的行数 ####
 
-实例2+3: 计算NULL之外的数据的行数
+实例2+3: 计算`NULL`之外的数据的行数
 ```sql
 SELECT COUNT(purchase_price) -- 这样排除NULL值
 FROM Product;
