@@ -279,9 +279,9 @@ SELECT '合计' AS product_type, SUM(sale_price)
 FROM Product 
 UNION ALL SELECT product_type, SUM(sale_price)
 FROM Product GROUP BY product_type;
+
+-- `UNION ALL`和`UNION`的区别:加上`ALL`不会去重(第七章有提到)
 ```
 > - 这相当于对Product表做了两次类似的SUM语句再合并起来, 比较繁琐
-> - `UNION ALL`和`UNION`的区别:加上`ALL`不会去重(第七章有提到)
-
 
 
