@@ -235,7 +235,7 @@ FROM Product;
 
 #### 两个ORDER BY ####
 
-- `OVER`子句中的`ORDER BY`只是用来决定窗口函数按照什么样的顺序进行计算的，对结果的排列顺序并没有影响
+- `OVER`子句中的`ORDER BY`只是用来决定窗口函数按照什么样的顺序进行计算的, 对结果的排列顺序并没有影响
 
 实例8: 无法保证SELECT语句的结果的排序顺序
 ```sql
@@ -255,4 +255,33 @@ ORDER BY ranking;
 
 
 ### GROUPING运算符 ###
+
+学习重点
+- 只使用`GROUP BY`子句和聚合函数是无法同时得出小计和合计的. 如果想要同时得到, 可以使用GROUPING运算符.
+- 理解`GROUPING`运算符中`CUBE`的关键在于形成"积木搭建出的立方体"的印象.
+- 虽然`GROUPING`运算符是标准SQL的功能, 但还是有些DBMS尚未支持这一功能.
+
+
+#### 同时得到合计行 ####
+
+- 使用`GROUP BY`把合计作为一行数据添加到表里
+
+实例10+11: 使用`GROUP BY`只能得到小计,无法得到合计行, 但是可以通过UNION ALL来把小计连接
+```sql
+SELECT product_type, SUM(sale_price) 
+FROM Product 
+GROUP BY product_type;
+
+-- 如此可以得到各品类产品的小计(也即是品类总和)
+-- 但是无法得到三类物品的全部合计
+
+SELECT '合计' AS product_type, SUM(sale_price) 
+FROM Product 
+UNION ALL SELECT product_type, SUM(sale_price)
+FROM Product GROUP BY product_type;
+```
+> - 这相当于对Product表做了两次类似的SUM语句再合并起来, 比较繁琐
+> - `UNION ALL`和`UNION`的区别:加上`ALL`不会去重(第七章有提到)
+
+
 
