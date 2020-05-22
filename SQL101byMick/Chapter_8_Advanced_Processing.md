@@ -285,3 +285,12 @@ FROM Product GROUP BY product_type;
 > - 这相当于对Product表做了两次类似的SUM语句再合并起来, 比较繁琐
 
 
+#### ROLLUP - 同时得出合计和小计 ####
+
+为了满足用户的需求，标准SQL引入了`GROUPING`运算符,包含3种:
+1. `ROLLUP`
+2. `CUBE`
+3. `GROUPING SETS`
+- *目前不是每个DBMS都支持GROUPING运算符比如MySQL5.7还不行
+- pSQL从9.5版之后开始支持
+

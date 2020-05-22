@@ -137,6 +137,11 @@ set search_path = "public" -- 默认设为public
 
 #### 数据库的创建(CREATE DATABASE)语句 ####
 
+语法0:查看pSQL版本
+```sql
+SELECT version();
+```
+
 语法1: 创建`DATABASE`数据库
 ```sql
 CREATE DATABASE <数据库名称>;
