@@ -287,7 +287,7 @@ FROM Product GROUP BY product_type;
 
 #### ROLLUP - 同时得出合计和小计 ####
 
-为了满足用户的需求，标准SQL引入了`GROUPING`运算符,包含3种:
+为了满足用户的需求, 标准SQL引入了`GROUPING`运算符,包含3种:
 1. `ROLLUP`
 2. `CUBE`
 3. `GROUPING SETS`
@@ -296,8 +296,8 @@ FROM Product GROUP BY product_type;
 
 
 `ROLLUP`
-- 从语法上来说，就是将 GROUP BY 子句中的聚合键清单像 ROLLUP （ 列 1>,< 列 2>,... ）这样使用
-- 该运算符的作用，一言以蔽之，就是“一次计算出不同聚合键组合的结果”
+- 从语法上来说, 就是将 GROUP BY 子句中的聚合键清单像 ROLLUP ( 列 1>,< 列 2>,... )这样使用
+- 该运算符的作用, 一言以蔽之, 就是"一次计算出不同聚合键组合的结果"
 
 实例12: 使用`ROLLUP`同时得出合计和小计
 ```sql
@@ -310,7 +310,7 @@ GROUP BY ROLLUP(product_type);
 >   - 第二次, 就是当做没有`ROLLUP`, 分组后分别计算各组Sum
 
 
-实例13: 在`GROUP BY`中添加“登记日期”（不使用`ROLLUP` vs. 使用`ROLLUP`)
+实例13+14: 在`GROUP BY`中添加"登记日期"(不使用`ROLLUP` vs. 使用`ROLLUP`)
 ```sql
 SELECT product_type, regist_date, SUM(sale_price) AS sum_price 
 FROM Product 
@@ -329,4 +329,40 @@ GROUP BY ROLLUP(product_type, regist_date);
 ```
 
 
+#### GROUPING函数 - 让NULL更加容易分辨 ####
+
+在实例14中, 如果一个条目:
+- 比如衣服(售价4000)没有regist_date, 那么regist_date列会显示`NULL`
+- 又比如衣服(售价5000), 这个其实是衣服类的合计,regist_date也会显示`NULL`
+  - 但是这两个`NULL`意思是不一样的,如何能更好的区分呢?
+
+为了避免混淆, SQL提供了一个用来判断超级分组记录的`NULL`的特定函数 - `GROUPING`函数
+
+实例15: 使用 GROUPING 函数来判断 NULL
+```sql
+SELECT GROUPING(product_type) AS product_type,
+       GROUPING(regist_date) AS regist_date,
+       SUM(sale_price) AS sum_price FROM Product
+GROUP BY ROLLUP(product_type, regist_date);
+```
+> - 这样会把product_type和regist_date的数据全部变成`0`和`1`
+>   - `0`的意思就是这就是原始数据
+>   - `1`的意思就是`ROLLUP`之后的演算值
+
+
+实例16: 在超级分组记录的键值中插入恰当的字符串
+```sql
+SELECT CASE WHEN GROUPING(product_type) = 1
+            THEN '商品种类 合计' ELSE product_type END AS product_type,
+
+        CASE WHEN GROUPING(regist_date) = 1
+             THEN '登记日期 合计' ELSE CAST(regist_date AS VARCHAR(16)) END AS regist_date,
+
+        SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY ROLLUP(product_type, regist_date);
+```
+> - 使用case表达式把数据中的0和1作区分对待可以有效的减少`NULL`带来的误解
+
+**CAST（regist_date AS VARCHAR（16））的原因是为了保证Case表达式所有的输出都是同一类型的数据,因为登记日期合计是字符串,所以日期数据要被转型**
 
