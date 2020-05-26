@@ -295,11 +295,38 @@ FROM Product GROUP BY product_type;
 - pSQL从9.5版之后开始支持(使用语法0查看版本)
 
 
-ROLLUP
+`ROLLUP`
 - 从语法上来说，就是将 GROUP BY 子句中的聚合键清单像 ROLLUP （ 列 1>,< 列 2>,... ）这样使用
 - 该运算符的作用，一言以蔽之，就是“一次计算出不同聚合键组合的结果”
 
-实例12: 使用ROLLUP同时得出合计和小计
+实例12: 使用`ROLLUP`同时得出合计和小计
 ```sql
- 
+SELECT product_type, SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY ROLLUP(product_type);
 ```
+> - 这里使用`ROLLUP`意思就是做两次运算
+>   - 第一次, 就当没有`GROUP BY`子句当然也就不需要`SELECT product_type`, 直接得出Sum(sales_price)
+>   - 第二次, 就是当做没有`ROLLUP`, 分组后分别计算各组Sum
+
+
+实例13: 在`GROUP BY`中添加“登记日期”（不使用`ROLLUP` vs. 使用`ROLLUP`)
+```sql
+SELECT product_type, regist_date, SUM(sale_price) AS sum_price 
+FROM Product 
+GROUP BY product_type, regist_date;
+
+-- 这里意思是按照product_type和regist_date分组,相同的组把售价总和一下, 由于Product表里没有完全相同的product_type和regist_date,所以这里列出来的sum_price就是每个物品的单价
+
+SELECT product_type, regist_date, SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY ROLLUP(product_type, regist_date);
+
+-- 这里就会对未分组做一个sum, 也就是所有产品的售价的sum
+-- 然后对`GROUP BY (product_type)`分组做一个售价的sum,这样就看到了分类产品的售价sum
+-- 最后对`GROUP BY (product_type, regist_date)`形成的分组做一个售价的sum,由于这里没有完全重复的分组,所以这里没显示任何售价的sum
+-- 注意, 这里不对`GROUP BY (regist_date)`做分组,所以先后顺序是重要的
+```
+
+
+
