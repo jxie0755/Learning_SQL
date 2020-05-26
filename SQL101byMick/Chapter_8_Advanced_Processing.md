@@ -364,5 +364,5 @@ GROUP BY ROLLUP(product_type, regist_date);
 ```
 > - 使用case表达式把数据中的0和1作区分对待可以有效的减少`NULL`带来的误解
 
-**注意:** CAST（regist_date AS VARCHAR（16））的原因是为了保证Case表达式所有的输出都是同一类型的数据,因为登记日期合计是字符串,所以日期数据要被转型
+**注意:** CAST(regist_date AS VARCHAR(16))的原因是为了保证Case表达式所有的输出都是同一类型的数据,因为登记日期合计是字符串,所以日期数据要被转型
 
