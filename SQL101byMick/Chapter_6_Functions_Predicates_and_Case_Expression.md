@@ -693,7 +693,7 @@ CASE WHEN <求值表达式> THEN <表达式>
        .
        .
     ELSE <表达式>
-END
+END AS <COLUMN_NAME> 
 ```
 
 
@@ -755,7 +755,7 @@ CASE <表达式>
      .
      .
     ELSE <表达式>
-END
+END AS <COLUMN_NAME>
 ```
 
 实例extra: 实例41使用简单CASE表达式的实现
