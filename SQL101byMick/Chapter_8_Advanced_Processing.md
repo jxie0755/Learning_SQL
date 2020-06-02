@@ -368,4 +368,3 @@ GROUP BY ROLLUP(product_type, regist_date);
 
 **注意:** CAST(regist_date AS VARCHAR(16))的原因是为了保证Case表达式所有的输出都是同一类型的数据,因为登记日期合计是字符串,所以日期数据要被转型
 
-
