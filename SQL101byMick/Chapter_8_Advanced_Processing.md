@@ -369,3 +369,26 @@ GROUP BY ROLLUP(product_type, regist_date);
 **注意:** CAST(regist_date AS VARCHAR(16))的原因是为了保证Case表达式所有的输出都是同一类型的数据,因为登记日期合计是字符串,所以日期数据要被转型
 
 
+#### CUBE - 用数据来搭积木 ####
+
+- CUBE 的语法和`ROLLUP`相同，只需要将`ROLLUP`替换为`CUBE`就可以了
+
+实例17: 使用`CUBE`取得全部组合的结果
+```sql
+SELECT CASE WHEN GROUPING(product_type) = 1
+            THEN '商品种类 合计'
+            ELSE product_type END AS product_type,
+       CASE WHEN GROUPING(regist_date) = 1
+           THEN '登记日期 合计'
+            ELSE CAST(regist_date AS VARCHAR(16)) END AS regist_date,
+       SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY CUBE(product_type, regist_date);
+```
+> - 此例和实例16代码几乎完全相同,只是把`ROLLUP`替换成`CUBE`
+> - 结果是包括了实例16的全部内容,然后再多出来了几行内容
+>   - 简单的说就是`ROLLUP`对product_type和regist_date有一个先后顺序固定,只取`GROUP BY (product_type)` 然后直接`GROUP BY (product_type, regist_date)`
+>   - 而`CUBE`分别对`GROUP BY (product_type)`和`GROUP BY (regist_date)`,然后对两者一起`GROUP BY (product_type, regist_date)`
+>   - 效果类似笛卡尔乘积
+
+
