@@ -391,4 +391,3 @@ GROUP BY CUBE(product_type, regist_date);
 >   - 而`CUBE`分别对`GROUP BY (product_type)`和`GROUP BY (regist_date)`,然后对两者一起`GROUP BY (product_type, regist_date)`
 >   - 效果类似笛卡尔乘积
 
-
