@@ -392,4 +392,3 @@ GROUP BY CUBE(product_type, regist_date);
 >   - 效果类似笛卡尔乘积
 
 
-
