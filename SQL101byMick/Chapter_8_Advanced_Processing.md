@@ -365,6 +365,10 @@ FROM Product
 GROUP BY ROLLUP(product_type, regist_date);
 ```
 > - 使用case表达式把数据中的0和1作区分对待可以有效的减少`NULL`带来的误解
+> - `ROLLUP`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=0
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=1
 
 **注意:** CAST(regist_date AS VARCHAR(16))的原因是为了保证Case表达式所有的输出都是同一类型的数据,因为登记日期合计是字符串,所以日期数据要被转型
 
@@ -391,13 +395,21 @@ GROUP BY CUBE(product_type, regist_date);
 >   - 而`CUBE`分别对`GROUP BY (product_type)`和`GROUP BY (regist_date)`,然后对两者一起`GROUP BY (product_type, regist_date)`
 >     - 原来的`ROLLUP`真正使用上'商品种类 合计'那一次只是同时`GROUP BY (product_type, regist_date)`的最后合计那一次
 >     - 而CUBE里面则有了单独`GROUP BY (product_type)`的那一组
->   - 效果类似笛卡尔乘积
+>   - `CUBE`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=0
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=0 -- 此为相比`ROLLUP`多出来的
+>   - CASE1 = 1 and CASE2=1
 
 
 #### GROUPING SETS ####
 
 - `GROUPING SETS`运算符可以用于从`ROLLUP`或者`CUBE`的结果中取出部分记录。
 - 如果希望从中选取出将“商品种类”和“登记日期”各自作为聚合键的结果，或者不想得到“合计记录和使用2个聚合键的记录”时，可以使用`GROUPING SETS`
+- 与`ROLLUP`或者`CUBE`能够得到规定的结果相对，`GROUPING SETS`用于从中取出个别条件对应的不固定的结果.
+- 由于期望获得不固定结果的情况少之又少，因此与`ROLLUP`或者`CUBE`比起来，使用`GROUPING SETS`的机会也就很少了。
+
+
 
 实例18: 使用`GROUPING SETS`取得部分组合的结果
 ```sql
@@ -410,6 +422,6 @@ FROM Product
 GROUP BY GROUPING SETS (product_type, regist_date);
 ```
 > - 单纯对`GROUP BY (product_type)`和`GROUP BY (regist_date)`
->   - 也就是说把相同protype_type的做一个sum
->   - 把相同regist_date的做一个sum
->   - 没有单独数据, 也没有同时两者`GROUP BY (product_type, regist_date)`的数据
+> - `GROUPING SETS`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=0
