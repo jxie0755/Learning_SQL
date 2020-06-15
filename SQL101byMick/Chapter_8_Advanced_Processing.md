@@ -350,7 +350,7 @@ GROUP BY ROLLUP(product_type, regist_date);
 >   - `1`的意思就是`ROLLUP`之后的演算值
 
 
-实例16: 在超级分组记录的键值中插入恰当的字符串
+实例16/语法4: `ROLLUP`的使用: 在超级分组记录的键值中插入恰当的字符串
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计' ELSE product_type 
@@ -377,7 +377,7 @@ GROUP BY ROLLUP(product_type, regist_date);
 
 - CUBE 的语法和`ROLLUP`相同, 只需要将`ROLLUP`替换为`CUBE`就可以了
 
-实例17: 使用`CUBE`取得全部组合的结果
+实例17/语法5: `CUBE`的使用: 取得全部组合的结果
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计'
@@ -411,7 +411,7 @@ GROUP BY CUBE(product_type, regist_date);
 
 
 
-实例18: 使用`GROUPING SETS`取得部分组合的结果
+实例18/语法6: `GROUPING SETS`的使用: 取得部分组合的结果
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计' ELSE product_type END AS product_type,
