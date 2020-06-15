@@ -351,6 +351,10 @@ GROUP BY ROLLUP(product_type, regist_date);
 
 
 实例16/语法4: `ROLLUP`的使用: 在超级分组记录的键值中插入恰当的字符串
+> - `ROLLUP`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=0
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=1
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计' ELSE product_type 
@@ -365,10 +369,6 @@ FROM Product
 GROUP BY ROLLUP(product_type, regist_date);
 ```
 > - 使用case表达式把数据中的0和1作区分对待可以有效的减少`NULL`带来的误解
-> - `ROLLUP`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
->   - CASE1 = 0 and CASE2=0
->   - CASE1 = 0 and CASE2=1
->   - CASE1 = 1 and CASE2=1
 
 **注意:** CAST(regist_date AS VARCHAR(16))的原因是为了保证Case表达式所有的输出都是同一类型的数据,因为登记日期合计是字符串,所以日期数据要被转型
 
@@ -378,6 +378,11 @@ GROUP BY ROLLUP(product_type, regist_date);
 - CUBE 的语法和`ROLLUP`相同, 只需要将`ROLLUP`替换为`CUBE`就可以了
 
 实例17/语法5: `CUBE`的使用: 取得全部组合的结果
+> - `CUBE`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=0
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=0 -- 此为相比`ROLLUP`多出来的
+>   - CASE1 = 1 and CASE2=1
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计'
@@ -395,12 +400,6 @@ GROUP BY CUBE(product_type, regist_date);
 >   - 而`CUBE`分别对`GROUP BY (product_type)`和`GROUP BY (regist_date)`,然后对两者一起`GROUP BY (product_type, regist_date)`
 >     - 原来的`ROLLUP`真正使用上'商品种类 合计'那一次只是同时`GROUP BY (product_type, regist_date)`的最后合计那一次
 >     - 而CUBE里面则有了单独`GROUP BY (product_type)`的那一组
->   - `CUBE`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
->   - CASE1 = 0 and CASE2=0
->   - CASE1 = 0 and CASE2=1
->   - CASE1 = 1 and CASE2=0 -- 此为相比`ROLLUP`多出来的
->   - CASE1 = 1 and CASE2=1
-
 
 #### GROUPING SETS ####
 
@@ -412,6 +411,9 @@ GROUP BY CUBE(product_type, regist_date);
 
 
 实例18/语法6: `GROUPING SETS`的使用: 取得部分组合的结果
+> - `GROUPING SETS`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=0
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计' ELSE product_type END AS product_type,
@@ -422,6 +424,3 @@ FROM Product
 GROUP BY GROUPING SETS (product_type, regist_date);
 ```
 > - 单纯对`GROUP BY (product_type)`和`GROUP BY (regist_date)`
-> - `GROUPING SETS`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
->   - CASE1 = 0 and CASE2=1
->   - CASE1 = 1 and CASE2=0

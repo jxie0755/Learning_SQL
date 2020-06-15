@@ -537,6 +537,45 @@ SELECT product_name, product_type, sale_price,
 FROM Product;
 ```
 
+语法4: `ROLLUP`的使用: 在超级分组记录的键值中插入恰当的字符串
+```sql
+SELECT CASE WHEN GROUPING(product_type) = 1
+            THEN '商品种类 合计' ELSE product_type 
+        END AS product_type,
+
+        CASE WHEN GROUPING(regist_date) = 1
+             THEN '登记日期 合计' ELSE CAST(regist_date AS VARCHAR(16)) 
+         END AS regist_date,
+
+        SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY ROLLUP(product_type, regist_date);
+```
+
+语法5: `CUBE`的使用: 取得全部组合的结果
+```sql
+SELECT CASE WHEN GROUPING(product_type) = 1
+            THEN '商品种类 合计'
+            ELSE product_type END AS product_type,
+       CASE WHEN GROUPING(regist_date) = 1
+           THEN '登记日期 合计'
+            ELSE CAST(regist_date AS VARCHAR(16)) END AS regist_date,
+       SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY CUBE(product_type, regist_date);
+```
+
+语法6: `GROUPING SETS`的使用: 取得部分组合的结果
+```sql
+SELECT CASE WHEN GROUPING(product_type) = 1
+            THEN '商品种类 合计' ELSE product_type END AS product_type,
+       CASE WHEN GROUPING(regist_date) = 1
+            THEN '登记日期 合计' ELSE CAST(regist_date AS VARCHAR(16)) END AS regist_date,
+       SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY GROUPING SETS (product_type, regist_date);
+```
+
 ---
 ## Chapter 9 通过应用程序连接数据库 ##
 
