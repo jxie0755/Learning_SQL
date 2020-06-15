@@ -404,10 +404,10 @@ GROUP BY CUBE(product_type, regist_date);
 
 #### GROUPING SETS ####
 
-- `GROUPING SETS`运算符可以用于从`ROLLUP`或者`CUBE`的结果中取出部分记录. 
+- `GROUPING SETS`运算符可以用于从`ROLLUP`或者`CUBE`的结果中取出部分记录.
 - 如果希望从中选取出将"商品种类"和"登记日期"各自作为聚合键的结果, 或者不想得到"合计记录和使用2个聚合键的记录"时, 可以使用`GROUPING SETS`
 - 与`ROLLUP`或者`CUBE`能够得到规定的结果相对, `GROUPING SETS`用于从中取出个别条件对应的不固定的结果.
-- 由于期望获得不固定结果的情况少之又少, 因此与`ROLLUP`或者`CUBE`比起来, 使用`GROUPING SETS`的机会也就很少了. 
+- 由于期望获得不固定结果的情况少之又少, 因此与`ROLLUP`或者`CUBE`比起来, 使用`GROUPING SETS`的机会也就很少了.
 
 
 
