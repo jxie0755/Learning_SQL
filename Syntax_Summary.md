@@ -538,6 +538,10 @@ FROM Product;
 ```
 
 语法4: `ROLLUP`的使用: 在超级分组记录的键值中插入恰当的字符串
+> - `ROLLUP`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=0
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=1
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计' ELSE product_type 
@@ -553,6 +557,11 @@ GROUP BY ROLLUP(product_type, regist_date);
 ```
 
 语法5: `CUBE`的使用: 取得全部组合的结果
+> - `CUBE`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=0
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=0 -- 此为相比`ROLLUP`多出来的
+>   - CASE1 = 1 and CASE2=1
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计'
@@ -566,6 +575,9 @@ GROUP BY CUBE(product_type, regist_date);
 ```
 
 语法6: `GROUPING SETS`的使用: 取得部分组合的结果
+> - `GROUPING SETS`的显示特点分先后`CASE1`为整合'product_type', `CASE2`为整合regist_date, 以下case会被显示:
+>   - CASE1 = 0 and CASE2=1
+>   - CASE1 = 1 and CASE2=0
 ```sql
 SELECT CASE WHEN GROUPING(product_type) = 1
             THEN '商品种类 合计' ELSE product_type END AS product_type,
