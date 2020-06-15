@@ -23,4 +23,4 @@ by Mick
 - [Chapter 9 通过应用程序连接数据库](/SQL101byMick/Chapter_9_Connecting_to_SQL.md "")
 
 Appendix:
-- [Syntax Summary](/SQL101byMick/Syntax_Summary.md "")
+- [Syntax Summary](/Syntax_Summary.md "")
