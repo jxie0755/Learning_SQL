@@ -389,5 +389,27 @@ GROUP BY CUBE(product_type, regist_date);
 > - 结果是包括了实例16的全部内容,然后再多出来了几行内容
 >   - 简单的说就是`ROLLUP`对product_type和regist_date有一个先后顺序固定,只取`GROUP BY (product_type)` 然后直接`GROUP BY (product_type, regist_date)`
 >   - 而`CUBE`分别对`GROUP BY (product_type)`和`GROUP BY (regist_date)`,然后对两者一起`GROUP BY (product_type, regist_date)`
+>     - 原来的`ROLLUP`真正使用上'商品种类 合计'那一次只是同时`GROUP BY (product_type, regist_date)`的最后合计那一次
+>     - 而CUBE里面则有了单独`GROUP BY (product_type)`的那一组
 >   - 效果类似笛卡尔乘积
 
+
+#### GROUPING SETS ####
+
+- `GROUPING SETS`运算符可以用于从`ROLLUP`或者`CUBE`的结果中取出部分记录。
+- 如果希望从中选取出将“商品种类”和“登记日期”各自作为聚合键的结果，或者不想得到“合计记录和使用2个聚合键的记录”时，可以使用`GROUPING SETS`
+
+实例18: 使用`GROUPING SETS`取得部分组合的结果
+```sql
+SELECT CASE WHEN GROUPING(product_type) = 1
+            THEN '商品种类 合计' ELSE product_type END AS product_type,
+       CASE WHEN GROUPING(regist_date) = 1
+            THEN '登记日期 合计' ELSE CAST(regist_date AS VARCHAR(16)) END AS regist_date,
+       SUM(sale_price) AS sum_price
+FROM Product
+GROUP BY GROUPING SETS (product_type, regist_date);
+```
+> - 单纯对`GROUP BY (product_type)`和`GROUP BY (regist_date)`
+>   - 也就是说把相同protype_type的做一个sum
+>   - 把相同regist_date的做一个sum
+>   - 没有单独数据, 也没有同时两者`GROUP BY (product_type, regist_date)`的数据
