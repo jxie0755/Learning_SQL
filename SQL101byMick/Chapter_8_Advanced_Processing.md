@@ -254,7 +254,7 @@ ORDER BY ranking;
 > - 所以这是必须要加一个`ORDER BY`给这个显示出来的view排序
 
 
-### GROUPING运算符 ###
+### 8-2 GROUPING运算符 ###
 
 学习重点
 - 只使用`GROUP BY`子句和聚合函数是无法同时得出小计和合计的. 如果想要同时得到, 可以使用GROUPING运算符.
