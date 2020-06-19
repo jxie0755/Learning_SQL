@@ -655,6 +655,7 @@ WHERE NOT EXISTS (SELECT *
 > - 这是因为`EXIST`是只有1个参数的谓词
 
 
+---
 ### 6-3 CASE表达式 ###
 
 学习重点:
